@@ -800,6 +800,7 @@ body {
   width: 100%;
   margin: 0 auto;
   padding: 25px 0 49px;
+  display: flex;
 }
 .main__content {
   width: 100%;
@@ -809,6 +810,13 @@ body {
   width: 20%;
   margin: 0 auto;
   display: block;
+  flex: 1;
+  min-width: 250px;
+}
+
+.main__columns {
+  display: flex;
+  gap: 20px; 
 }
 
 .column__title {
