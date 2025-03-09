@@ -2,7 +2,7 @@ import React from "react";
 import { taskCategories } from "../../tasks";
 
 export const Card = ({ title, category, date }) => {
-  const categoryColor = taskCategories[category] || "_default"; // Если нет в списке, то дефолтный
+  const categoryColor = taskCategories[category] || "_default";
 
   return (
     <div className="cards__item">
