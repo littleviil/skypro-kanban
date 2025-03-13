@@ -8,6 +8,10 @@ import './App.css'
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [isPopUserOpen, setIsPopUserOpen] = useState(false);
+  const [isPopExitOpen, setIsPopExitOpen] = useState(false);
+  const [isPopNewCardOpen, setIsPopNewCardOpen] = useState(false);
+  const [isPopBrowseOpen, setIsPopBrowseOpen] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -18,17 +22,25 @@ function App() {
   return (
     <>
       <div className="wrapper">	
-		<PopExit />
-		<PopNewCard />
-		<PopBrowse />
-		<Header />
-		{loading ? (
-        <div className="loading">Данные загружаются...</div>
-      ) : (
-        <Main />
-      )}
-    </div>
-    <script src="js/script.js"></script>
+        {isPopExitOpen && <PopExit onClose={() => setIsPopExitOpen(false)} />}
+        {isPopNewCardOpen && <PopNewCard onClose={() => setIsPopNewCardOpen(false)} />}
+        {isPopBrowseOpen && <PopBrowse onClose={() => setIsPopBrowseOpen(false)} />}
+        {isPopUserOpen && <PopUser onClose={() => setIsPopUserOpen(false)} />}
+		    <PopExit />
+		    <PopNewCard />
+		    <PopBrowse />
+		    <Header 
+          onUserClick={() => setIsPopUserOpen(true)}
+          onExitClick={() => setIsPopExitOpen(true)}
+          onNewCardClick={() => setIsPopNewCardOpen(true)}
+          onBrowseClick={() => setIsPopBrowseOpen(true)}
+        />
+		    {loading ? (
+            <div className="loading">Данные загружаются...</div>
+          ) : (
+            <Main />
+          )}
+      </div>
     </>
   )
 }
