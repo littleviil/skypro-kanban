@@ -51,6 +51,12 @@ body {
   background-color: #F1F1F1;
 }
 
+.loading{
+  display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
 .container {
   max-width: 1260px;
   width: 100%;

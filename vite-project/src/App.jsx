@@ -1,4 +1,4 @@
-// import { useState } from 'react'
+import { useState, useEffect } from 'react';
 import { PopExit } from './compoents/popus/PopExit/PopExit'
 import { PopNewCard } from './compoents/popus/PopNewCard/PopNewCard'
 import { PopBrowse } from './compoents/popus/PopBrowse/PopBrowse'
@@ -7,7 +7,13 @@ import { Main } from './compoents/Main/Main'
 import './App.css'
 
 function App() {
-//   const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }, []);
 
   return (
     <>
@@ -16,8 +22,12 @@ function App() {
 		<PopNewCard />
 		<PopBrowse />
 		<Header />
-		<Main />	
-      </div>
+		{loading ? (
+        <div className="loading">Данные загружаются...</div>
+      ) : (
+        <Main />
+      )}
+    </div>
     <script src="js/script.js"></script>
     </>
   )
