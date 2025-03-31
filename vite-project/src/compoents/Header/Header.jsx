@@ -34,7 +34,6 @@ export const Header = ({ onNewCardClick }) => {
             </a>
             {isPopUserOpen && (
               <PopUser
-                isOpen={isPopUserOpen}
                 onClose={() => setIsPopUserOpen(false)}
               />
             )}

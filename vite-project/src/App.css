@@ -769,6 +769,7 @@ body {
   font-size: 14px;
   line-height: 20px;
   color: #565EEF;
+  min-width: fit-content;
 }
 .header__user::after {
   content: "";
