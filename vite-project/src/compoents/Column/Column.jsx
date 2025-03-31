@@ -1,3 +1,4 @@
+// Column.jsx
 import React from "react";
 import { Card } from "../Card/Card";
 import { tasks } from "../../tasks";
@@ -11,8 +12,8 @@ export const Column = ({ status }) => {
         <p>{status}</p>
       </div>
       <div className="cards">
-        {filteredTasks.map((task, index) => (
-          <Card key={index} {...task} />
+        {filteredTasks.map((task) => (
+          <Card key={task.id} title={task.title} category={task.category} date={task.date} />
         ))}
       </div>
     </div>

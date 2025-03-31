@@ -51,6 +51,12 @@ body {
   background-color: #F1F1F1;
 }
 
+.loading{
+  display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
 .container {
   max-width: 1260px;
   width: 100%;
@@ -763,6 +769,7 @@ body {
   font-size: 14px;
   line-height: 20px;
   color: #565EEF;
+  min-width: fit-content;
 }
 .header__user::after {
   content: "";
@@ -777,7 +784,7 @@ body {
   padding: 0;
 }
 .header__pop-user-set {
-  display: none;
+  display: block;
   position: absolute;
   top: 61px;
   right: 0;
