@@ -8,9 +8,9 @@ import {
   HeaderUser,
 } from './Header.styled';
 import { Container } from '../../App.styled';
-import { PopUser } from '../popus/PopUser/PopUser';
+import { PopUser } from '../popus/PopUser/PopUser'; // Fix "popus" to "popups"
 
-export const Header = ({ onNewCardClick }) => {
+export const Header = ({ onNewCardClick, onExitClick }) => {
   const [isPopUserOpen, setIsPopUserOpen] = useState(false);
 
   return (
@@ -35,11 +35,20 @@ export const Header = ({ onNewCardClick }) => {
               as="a"
               href="#user-set-target"
               className="_hover02"
-              onClick={() => setIsPopUserOpen(true)}
+              onClick={(e) => {
+                e.preventDefault(); // Prevent default anchor behavior
+                console.log('Opening PopUser');
+                setIsPopUserOpen(true);
+              }}
             >
               Ivan Ivanov
             </HeaderUser>
-            {isPopUserOpen && <PopUser onClose={() => setIsPopUserOpen(false)} />}
+            {isPopUserOpen && (
+              <PopUser
+                onClose={() => setIsPopUserOpen(false)}
+                onExitClick={onExitClick}
+              />
+            )}
           </HeaderNav>
         </HeaderBlock>
       </Container>

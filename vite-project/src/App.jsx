@@ -27,12 +27,15 @@ function App() {
       {isPopBrowseOpen && (
         <PopBrowse onClose={() => setIsPopBrowseOpen(false)} />
       )}
-      <Header onNewCardClick={() => setIsPopNewCardOpen(true)} />
+      <Header
+        onNewCardClick={() => setIsPopNewCardOpen(true)}
+        onExitClick={() => setIsPopExitOpen(true)} // Pass onExitClick to Header
+      />
       {loading ? (
         <Loading>Данные загружаются...</Loading>
       ) : (
         <Container>
-          <Main />
+          <Main onBrowseClick={() => setIsPopBrowseOpen(true)} />
         </Container>
       )}
     </Wrapper>

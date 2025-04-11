@@ -4,21 +4,26 @@ import {
   PopUserSetName,
   PopUserSetMail,
   PopUserSetTheme,
+  PopUserSetBtn,
 } from './PopUser.styled';
-import { Hover03 } from '../../../App.styled';
 
-export const PopUser = ({ onClose }) => {
+export const PopUser = ({ onClose, onExitClick }) => {
   return (
-    <PopUserSet id="user-set-target">
+    <PopUserSet id="popUserSet">
       <PopUserSetName>Ivan Ivanov</PopUserSetName>
       <PopUserSetMail>ivan.ivanov@gmail.com</PopUserSetMail>
       <PopUserSetTheme>
         <p>Темная тема</p>
-        <input type="checkbox" name="checkbox" />
+        <input type="checkbox" />
       </PopUserSetTheme>
-      <button type="button" as={Hover03} onClick={onClose}>
-        Закрыть
-      </button>
+      <PopUserSetBtn
+        onClick={() => {
+          onClose();
+          onExitClick();
+        }}
+      >
+        Выйти
+      </PopUserSetBtn>
     </PopUserSet>
   );
 };

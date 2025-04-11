@@ -48,6 +48,7 @@ export const Wrapper = styled.div`
 `;
 
 export const Loading = styled.div`
+font-family: 'Roboto', Arial, Helvetica, sans-serif;
   display: flex;
   justify-content: center;
   padding: 20px;
