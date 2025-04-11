@@ -62,6 +62,7 @@ export const HeaderBtnMainNew = styled.button`
 `;
 
 export const HeaderUser = styled.div`
+font-family: 'Roboto', Arial, Helvetica, sans-serif;
   height: 20px;
   display: flex;
   flex-wrap: nowrap;
@@ -71,6 +72,7 @@ export const HeaderUser = styled.div`
   line-height: 20px;
   color: #565EEF;
   min-width: fit-content;
+  text-decoration: none;
 
   &::after {
     content: "";

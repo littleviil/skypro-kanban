@@ -12,6 +12,9 @@ export const CardsCard = styled.div`
   padding: 10px 10px 10px 14px;
   border-radius: 10px;
   background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   &:hover {
     cursor: pointer;
@@ -40,9 +43,11 @@ export const CardTheme = styled.div`
   `}
 
   p {
+    display: contents;
     font-size: 10px;
     font-weight: 600;
     line-height: 10px;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
   }
 `;
 
@@ -70,6 +75,7 @@ export const CardContent = styled.div`
 `;
 
 export const CardTitle = styled.div`
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
@@ -96,6 +102,7 @@ export const CardDate = styled.div`
 `;
 
 export const Cards = styled.div`
+  gap: 10px;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
