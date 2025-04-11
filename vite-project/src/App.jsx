@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Wrapper, Loading, Container } from './App.styled';
 import { PopExit } from './compoents/popus/PopExit/PopExit';
 import { PopNewCard } from './compoents/popus/PopNewCard/PopNewCard';
 import { PopBrowse } from './compoents/popus/PopBrowse/PopBrowse';
-import { PopUser } from './compoents/popus/PopUser/PopUser';
 import { Header } from './compoents/Header/Header';
 import { Main } from './compoents/Main/Main';
-import './App.css';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -20,17 +19,23 @@ function App() {
   }, []);
 
   return (
-    <div className="wrapper">
+    <Wrapper>
       {isPopExitOpen && <PopExit onClose={() => setIsPopExitOpen(false)} />}
-      {isPopNewCardOpen && <PopNewCard onClose={() => setIsPopNewCardOpen(false)} />}
-      {isPopBrowseOpen && <PopBrowse onClose={() => setIsPopBrowseOpen(false)} />}
+      {isPopNewCardOpen && (
+        <PopNewCard onClose={() => setIsPopNewCardOpen(false)} />
+      )}
+      {isPopBrowseOpen && (
+        <PopBrowse onClose={() => setIsPopBrowseOpen(false)} />
+      )}
       <Header onNewCardClick={() => setIsPopNewCardOpen(true)} />
       {loading ? (
-        <div className="loading">Данные загружаются...</div>
+        <Loading>Данные загружаются...</Loading>
       ) : (
-        <Main />
+        <Container>
+          <Main />
+        </Container>
       )}
-    </div>
+    </Wrapper>
   );
 }
 
