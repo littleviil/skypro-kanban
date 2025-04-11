@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Wrapper, Loading, Container } from './App.styled';
-import { PopExit } from './compoents/popus/PopExit/PopExit';
-import { PopNewCard } from './compoents/popus/PopNewCard/PopNewCard';
-import { PopBrowse } from './compoents/popus/PopBrowse/PopBrowse';
-import { Header } from './compoents/Header/Header';
-import { Main } from './compoents/Main/Main';
+import { PopExit } from './components/popus/PopExit/PopExit';
+import { PopNewCard } from './components/popus/PopNewCard/PopNewCard';
+import { PopBrowse } from './components/popus/PopBrowse/PopBrowse';
+import { Header } from './components/Header/Header';
+import { Main } from './components/Main/Main';
 
 function App() {
   const [loading, setLoading] = useState(true);

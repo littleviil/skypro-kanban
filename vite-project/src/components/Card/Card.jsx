@@ -1,6 +1,6 @@
 // src/Card.jsx
 import React from 'react';
-import { taskCategories } from '../../tasks'; // Add this import
+import { taskCategories } from '../../tasks';
 import {
   CardsItem,
   CardsCard,
