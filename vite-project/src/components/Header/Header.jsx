@@ -8,7 +8,7 @@ import {
   HeaderUser,
 } from './Header.styled';
 import { Container } from '../../App.styled';
-import { PopUser } from '../popus/PopUser/PopUser'; // Fix "popus" to "popups"
+import { PopUser } from '../popus/PopUser/PopUser';
 
 export const Header = ({ onNewCardClick, onExitClick }) => {
   const [isPopUserOpen, setIsPopUserOpen] = useState(false);
@@ -36,7 +36,7 @@ export const Header = ({ onNewCardClick, onExitClick }) => {
               href="#user-set-target"
               className="_hover02"
               onClick={(e) => {
-                e.preventDefault(); // Prevent default anchor behavior
+                e.preventDefault();
                 console.log('Opening PopUser');
                 setIsPopUserOpen(true);
               }}

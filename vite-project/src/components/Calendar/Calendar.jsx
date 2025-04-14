@@ -1,4 +1,3 @@
-// src/Calendar.jsx
 import React from 'react';
 import {
   CalendarPage,

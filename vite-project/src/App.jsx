@@ -29,7 +29,7 @@ function App() {
       )}
       <Header
         onNewCardClick={() => setIsPopNewCardOpen(true)}
-        onExitClick={() => setIsPopExitOpen(true)} // Pass onExitClick to Header
+        onExitClick={() => setIsPopExitOpen(true)}
       />
       {loading ? (
         <Loading>Данные загружаются...</Loading>
