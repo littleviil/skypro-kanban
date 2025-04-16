@@ -68,15 +68,15 @@ export const CalendarCell = styled.div`
   font-size: 10px;
   cursor: pointer;
 
-  ${({ otherMonth }) => {
-    if (otherMonth) {
+  ${({ $otherMonth }) => {
+    if ($otherMonth) {
       return 'opacity: 0;';
     }
     return '';
   }}
 
-  ${({ active }) => {
-    if (active) {
+  ${({ $active }) => {
+    if ($active) {
       return `
         background-color: #94A6BE;
         color: #FFFFFF;
@@ -85,8 +85,8 @@ export const CalendarCell = styled.div`
     return '';
   }}
 
-  ${({ current }) => {
-    if (current) {
+  ${({ $current }) => {
+    if ($current) {
       return 'font-weight: 700;';
     }
     return '';

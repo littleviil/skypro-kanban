@@ -58,10 +58,10 @@ export const Calendar = () => {
             <CalendarDayName>вс</CalendarDayName>
           </CalendarDaysNames>
           <CalendarCells>
-            <CalendarCell otherMonth>28</CalendarCell>
-            <CalendarCell otherMonth>29</CalendarCell>
-            <CalendarCell otherMonth>30</CalendarCell>
-            <CalendarCell>31</CalendarCell>
+            <CalendarCell $otherMonth>28</CalendarCell>
+            <CalendarCell $otherMonth>29</CalendarCell>
+            <CalendarCell $otherMonth>30</CalendarCell>
+            <CalendarCell $otherMonth>31</CalendarCell>
             <CalendarCell>1</CalendarCell>
             <CalendarCell>2</CalendarCell>
             <CalendarCell>3</CalendarCell>
@@ -69,8 +69,8 @@ export const Calendar = () => {
             <CalendarCell>5</CalendarCell>
             <CalendarCell>6</CalendarCell>
             <CalendarCell>7</CalendarCell>
-            <CalendarCell current>8</CalendarCell>
-            <CalendarCell active>9</CalendarCell>
+            <CalendarCell $current>8</CalendarCell>
+            <CalendarCell $active>9</CalendarCell>
             <CalendarCell>10</CalendarCell>
             <CalendarCell>11</CalendarCell>
             <CalendarCell>12</CalendarCell>
@@ -92,16 +92,25 @@ export const Calendar = () => {
             <CalendarCell>28</CalendarCell>
             <CalendarCell>29</CalendarCell>
             <CalendarCell>30</CalendarCell>
-            <CalendarCell otherMonth>1</CalendarCell>
+            <CalendarCell $otherMonth>1</CalendarCell>
+            <CalendarCell $otherMonth>2</CalendarCell>
+            <CalendarCell $otherMonth>3</CalendarCell>
+            <CalendarCell $otherMonth>4</CalendarCell>
+            <CalendarCell $otherMonth>5</CalendarCell>
+            <CalendarCell $otherMonth>6</CalendarCell>
+            <CalendarCell $otherMonth>7</CalendarCell>
+            <CalendarCell $otherMonth>8</CalendarCell>
           </CalendarCells>
         </CalendarContent>
-        <input type="hidden" id="datepick_value" value="08.09.2023" />
+        <input type="hidden" id="datepick_value" value="09.09.2023" />
         <CalendarPeriod>
           <CalendarP className="date-end">
-            Срок исполнения: <span className="date-control">09.09.23</span>
+            Срок исполнения: <span className="date-control">10.09.23</span>
           </CalendarP>
         </CalendarPeriod>
       </CalendarBlock>
     </CalendarPage>
   );
 };
+
+export default Calendar;

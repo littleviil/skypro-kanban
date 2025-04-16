@@ -4,7 +4,7 @@ import { Cards } from '../Card/Card.styled';
 import { Card } from '../Card/Card';
 import { tasks } from '../../tasks';
 
-export const Column = ({ status }) => {
+export const Column = ({ status, onBrowseClick }) => {
   const filteredTasks = tasks.filter((task) => task.status === status);
 
   return (
@@ -19,9 +19,12 @@ export const Column = ({ status }) => {
             title={task.title}
             category={task.category}
             date={task.date}
+            onBrowseClick={onBrowseClick}
           />
         ))}
       </Cards>
     </MainColumn>
   );
 };
+
+export default Column;

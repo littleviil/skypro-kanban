@@ -5,18 +5,25 @@ import { PopNewCard } from './components/popus/PopNewCard/PopNewCard';
 import { PopBrowse } from './components/popus/PopBrowse/PopBrowse';
 import { Header } from './components/Header/Header';
 import { Main } from './components/Main/Main';
+import './App.css'
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [isPopExitOpen, setIsPopExitOpen] = useState(false);
   const [isPopNewCardOpen, setIsPopNewCardOpen] = useState(false);
   const [isPopBrowseOpen, setIsPopBrowseOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 3000);
   }, []);
+
+  const openPopBrowse = (task) => {
+    setSelectedTask(task);
+    setIsPopBrowseOpen(true);
+  };
 
   return (
     <Wrapper>
@@ -25,7 +32,13 @@ function App() {
         <PopNewCard onClose={() => setIsPopNewCardOpen(false)} />
       )}
       {isPopBrowseOpen && (
-        <PopBrowse onClose={() => setIsPopBrowseOpen(false)} />
+        <PopBrowse
+          task={selectedTask}
+          onClose={() => {
+            setIsPopBrowseOpen(false);
+            setSelectedTask(null);
+          }}
+        />
       )}
       <Header
         onNewCardClick={() => setIsPopNewCardOpen(true)}
@@ -35,7 +48,7 @@ function App() {
         <Loading>Данные загружаются...</Loading>
       ) : (
         <Container>
-          <Main onBrowseClick={() => setIsPopBrowseOpen(true)} />
+          <Main onBrowseClick={openPopBrowse} />
         </Container>
       )}
     </Wrapper>

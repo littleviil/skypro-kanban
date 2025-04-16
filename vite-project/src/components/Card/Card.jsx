@@ -11,8 +11,10 @@ import {
   CardDate,
 } from './Card.styled';
 
-export const Card = ({ title, category, date }) => {
+export const Card = ({ title, category, date, onBrowseClick }) => {
   const categoryColor = taskCategories[category] || 'gray';
+
+  const task = { title, category, date };
 
   return (
     <CardsItem>
@@ -21,13 +23,11 @@ export const Card = ({ title, category, date }) => {
           <CardTheme theme={categoryColor}>
             <p>{category}</p>
           </CardTheme>
-          <a href="#popBrowse" target="_self">
-            <CardBtn>
-              <div></div>
-              <div></div>
-              <div></div>
-            </CardBtn>
-          </a>
+          <CardBtn onClick={() => onBrowseClick(task)}>
+            <div></div>
+            <div></div>
+            <div></div>
+          </CardBtn>
         </CardGroup>
         <CardContent>
           <CardTitle as="h3">{title}</CardTitle>
@@ -41,7 +41,7 @@ export const Card = ({ title, category, date }) => {
             >
               <g clipPath="url(#clip0_1_415)">
                 <path
-                  d="M10.5625 2.03125H2.4375C1.7644 2.03125 1.21875 2.5769 1.21875 3.25V10.5625C1.21875 11.2356 1.7644 11.7812 2.4375 11.7812H10.5625C11.2356 11.7812 11.7812 11.2356 11.7812 10.5625V3.25C11.7812 2.5769 11.2356 2.03125 10.5625 2.03125Z"
+                  d="M10.5625 2.03125H2.4375C1.7644 2.03125 1.21875 2.5769 1.21875 3.25V10.5625C1.21875 11.2356 1.7644 11.7812 2.4375 11.7812H10.5625C11.2356 11.7812 11.7812 11.2356 10.5625 10.5625V3.25C11.7812 2.5769 11.2356 2.03125 10.5625 2.03125Z"
                   stroke="#94A6BE"
                   strokeWidth="0.8"
                   strokeLinejoin="round"
@@ -67,3 +67,5 @@ export const Card = ({ title, category, date }) => {
     </CardsItem>
   );
 };
+
+export default Card;
