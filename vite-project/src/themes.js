@@ -16,3 +16,8 @@ export const themes = {
     color: '#FFFFFF',
   },
 };
+
+export const theme = {
+  primaryButtonColor: '#565EEF',
+  hoverBgColor: '#33399b',
+};

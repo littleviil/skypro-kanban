@@ -44,7 +44,7 @@ export const CardTheme = styled.div`
 
   p {
     display: contents;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
     line-height: 10px;
     font-family: 'Roboto', Arial, Helvetica, sans-serif;

@@ -28,16 +28,14 @@ export const Header = ({ onNewCardClick, onExitClick }) => {
             </a>
           </HeaderLogo>
           <HeaderNav style={{ position: 'relative' }}>
-            <HeaderBtnMainNew className="_hover01" onClick={onNewCardClick}>
+            <HeaderBtnMainNew onClick={onNewCardClick}>
               Создать новую задачу
             </HeaderBtnMainNew>
             <HeaderUser
               as="a"
               href="#user-set-target"
-              className="_hover02"
               onClick={(e) => {
                 e.preventDefault();
-                console.log('Opening PopUser');
                 setIsPopUserOpen(true);
               }}
             >

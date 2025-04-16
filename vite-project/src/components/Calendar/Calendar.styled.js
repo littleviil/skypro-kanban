@@ -20,6 +20,13 @@ export const CalendarP = styled.p`
   }
 `;
 
+export const DateEnd = styled(CalendarP)`
+`;
+
+export const DateControl = styled.span`
+  color: #000000;
+`;
+
 export const CalendarBlock = styled.div`
   display: block;
 `;

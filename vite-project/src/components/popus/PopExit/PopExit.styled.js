@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { themes } from '../../../themes';
 
 export const PopExitPage = styled.div`
   display: none;
@@ -69,7 +70,7 @@ export const PopExitFormGroup = styled.div`
 export const PopExitYes = styled.button`
   width: 153px;
   height: 30px;
-  background-color: #565EEF;
+  background-color: ${themes.primaryButtonColor};
   border-radius: 4px;
   border: none;
   outline: none;
@@ -98,6 +99,10 @@ export const PopExitYes = styled.button`
     margin-right: 0;
     margin-bottom: 10px;
   }
+
+  &:hover {
+    background-color: ${themes.hoverBgColor};
+  }
 `;
 
 export const PopExitNo = styled.button`
@@ -105,7 +110,7 @@ export const PopExitNo = styled.button`
   height: 30px;
   background-color: transparent;
   border-radius: 4px;
-  border: 0.7px solid var(--palette-navy-60, #565EEF);
+  border: 0.7px solid ${themes.primaryButtonColor};
   outline: none;
   display: flex;
   align-items: center;
@@ -114,12 +119,12 @@ export const PopExitNo = styled.button`
   line-height: 21px;
   font-weight: 500;
   letter-spacing: -0.14px;
-  color: #FFFFFF;
+  color:${themes.primaryButtonColor};
 
   a {
     width: 100%;
     height: 100%;
-    color: #565EEF;
+    color:${themes.primaryButtonColor};
     display: flex;
     align-items: center;
     justify-content: center;

@@ -14,6 +14,7 @@ import {
   CalendarCell,
   CalendarPeriod,
   CalendarP,
+  DateControl,
 } from './Calendar.styled';
 import { Subttl } from '../../App.styled';
 
@@ -105,7 +106,7 @@ export const Calendar = () => {
         <input type="hidden" id="datepick_value" value="09.09.2023" />
         <CalendarPeriod>
           <CalendarP className="date-end">
-            Срок исполнения: <span className="date-control">10.09.23</span>
+            Срок исполнения: <DateControl>10.09.23</DateControl>
           </CalendarP>
         </CalendarPeriod>
       </CalendarBlock>

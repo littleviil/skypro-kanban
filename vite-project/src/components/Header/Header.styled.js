@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { theme } from '../../themes';
 
 export const HeaderPage = styled.header`
   width: 100%;
@@ -33,19 +34,24 @@ export const HeaderNav = styled.nav`
 `;
 
 export const HeaderBtnMainNew = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 178px;
   height: 30px;
   border-radius: 4px;
-  background-color: #565EEF;
-  color: #FFFFFF;
+  background-color: ${theme.primaryButtonColor};
+  color: #fff;
   border: none;
   font-size: 14px;
   line-height: 1;
   font-weight: 500;
   margin-right: 20px;
+  cursor: pointer;
+  outline: none;
 
-  a {
-    color: #FFFFFF;
+  &:hover {
+    background-color: ${theme.hoverBgColor};
   }
 
   @media screen and (max-width: 495px) {
@@ -58,32 +64,45 @@ export const HeaderBtnMainNew = styled.button`
     height: 40px;
     border-radius: 4px;
     margin-right: 0;
-  }
+ }
 `;
 
-export const HeaderUser = styled.div`
-font-family: 'Roboto', Arial, Helvetica, sans-serif;
-  height: 20px;
+export const HeaderUser = styled.a`
   display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: center;
   font-size: 14px;
-  line-height: 20px;
-  color: #565EEF;
-  min-width: fit-content;
+  font-weight: 500;
   text-decoration: none;
+  color: ${theme.primaryButtonColor};
 
   &::after {
-    content: "";
+    content: '';
     display: block;
     width: 6px;
     height: 6px;
-    border-radius: 1px;
-    border-left: 1.9px solid #565EEF;
-    border-bottom: 1.9px solid #565EEF;
+    border-left: 1.5px solid #000;
+    border-bottom: 1.5px solid #000;
     transform: rotate(-45deg);
-    margin: -6px 0 0 5px;
-    padding: 0;
+    margin-left: 8px;
+    margin-top: 2px;
   }
+
+  &:hover {
+    color: ${theme.hoverBgColor};
+
+    &::after {
+      border-left-color: ${theme.hoverBgColor};
+      border-bottom-color: ${theme.hoverBgColor};
+    }
+  }
+  @media screen and (max-width: 495px) {
+    z-index: 3;
+    position: fixed;
+    left: 16px;
+    bottom: 30px;
+    top: auto;
+    width: calc(100vw - 32px);
+    height: 40px;
+    border-radius: 4px;
+    margin-right: 0;
+ }
 `;

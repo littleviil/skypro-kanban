@@ -8,7 +8,6 @@ import {
   PopExitYes,
   PopExitNo,
 } from './PopExit.styled';
-import { Hover01, Hover03 } from '../../../App.styled';
 
 export const PopExit = () => {
   return (
@@ -20,10 +19,10 @@ export const PopExit = () => {
           </PopExitTtl>
           <form id="formExit" action="#">
             <PopExitFormGroup>
-              <PopExitYes as={Hover01} id="exitYes">
+              <PopExitYes id="exitYes">
                 <a href="modal/signin.html">Да, выйти</a>
               </PopExitYes>
-              <PopExitNo as={Hover03} id="exitNo">
+              <PopExitNo id="exitNo">
                 <a href="main.html">Нет, остаться</a>
               </PopExitNo>
             </PopExitFormGroup>
