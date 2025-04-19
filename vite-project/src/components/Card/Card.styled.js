@@ -35,7 +35,11 @@ export const CardTheme = styled.div`
   width: auto;
   height: 20px;
   padding: 5px 14px;
+  padding-bottom: 10px;
   border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   ${({ theme }) => `
     background-color: ${themes[theme].background};

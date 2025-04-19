@@ -1,48 +1,4 @@
-* {
-    font-family: 'Roboto', Arial, Helvetica, sans-serif !important;
-  }
-  
-  body {
-    font-family: 'Roboto', Arial, Helvetica, sans-serif !important;
-  }
-
-._hover01:hover {
-    background-color: #33399b;
-  }
-  
-  ._hover03:hover {
-    background-color: #33399b;
-    color: #FFFFFF;
-  }
-  ._hover03:hover a {
-    color: #FFFFFF;
-  }
-  
-  ._orange {
-    background-color: #FFE4C2;
-    color: #FF6D00;
-  }
-  
-  ._green {
-    background-color: #B4FDD1;
-    color: #06B16E;
-  }
-  
-  ._purple {
-    background-color: #E9D4FF;
-    color: #9A48F1;
-  }
-  
-  ._gray {
-    background: #94A6BE;
-    color: #FFFFFF;
-  }
-  
-  ._active-category {
-    opacity: 1 !important;
-  }
-  
-  .pop-new-card {
+.pop-new-card {
     width: 100%;
     min-width: 375px;
     height: 100%;
@@ -476,9 +432,10 @@
     color: #94A6BE;
     padding-right: 17.5px;
     padding-left: 17.5px;
-    padding-top: 2px;
-    margin-right: 7px;
-    margin-bottom: 7px;
+    padding-top: 10px;
+    margin-bottom: 18px;
+    margin-top: 7px;
+    padding-bottom: 10px;
   }
   
   .status__theme p {

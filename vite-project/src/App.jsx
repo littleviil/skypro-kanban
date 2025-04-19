@@ -5,6 +5,7 @@ import { PopNewCard } from './components/popus/PopNewCard/PopNewCard';
 import { PopBrowse } from './components/popus/PopBrowse/PopBrowse';
 import { Header } from './components/Header/Header';
 import { Main } from './components/Main/Main';
+import GlobalStyles from './GlobalStyles';
 import './App.css'
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
   };
 
   return (
+    <>
+    <GlobalStyles />
     <Wrapper>
       {isPopExitOpen && <PopExit onClose={() => setIsPopExitOpen(false)} />}
       {isPopNewCardOpen && (
@@ -52,6 +55,7 @@ function App() {
         </Container>
       )}
     </Wrapper>
+    </>
   );
 }
 

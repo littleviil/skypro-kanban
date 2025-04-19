@@ -1,14 +1,12 @@
 import { createGlobalStyle } from 'styled-components';
-import { theme } from './theme';
+import { themes } from './themes';
 
 const GlobalStyles = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #EAEEF6
   }
 
   *:before,
@@ -38,14 +36,15 @@ const GlobalStyles = createGlobalStyle`
     height: 100%;
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
     color: #000000;
+    background-color: #EAEEF6
   }
   
   ._hover01:hover {
-    background-color: ${theme.hoverBgColor};
+    background-color: ${themes.hoverBgColor};
   }
 
   ._hover03:hover {
-    background-color: ${theme.hoverBgColor};
+    background-color: ${themes.hoverBgColor};
     color: #FFFFFF;
 
     a {
