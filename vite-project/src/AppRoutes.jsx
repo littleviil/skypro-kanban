@@ -18,7 +18,7 @@ function AppRoutes({ isAuth, setIsAuth }) {
         <Route path="/card/edit/:id" element={<EditCardPage />} />
       </Route>
       <Route path="/login" element={<LoginPage setIsAuth={setIsAuth} />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/register" element={<RegisterPage setIsAuth={setIsAuth} />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

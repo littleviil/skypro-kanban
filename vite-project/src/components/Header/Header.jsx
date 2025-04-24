@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   HeaderPage,
@@ -8,9 +9,11 @@ import {
   HeaderUser,
 } from './Header.styled';
 import { Container } from '../../App.styled';
+import { PopUser } from '../popus/PopUser/PopUser';
 
 export const Header = ({ onNewCardClick, setIsAuth }) => {
   const navigate = useNavigate();
+  const [isPopUserOpen, setIsPopUserOpen] = useState(false);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -36,9 +39,22 @@ export const Header = ({ onNewCardClick, setIsAuth }) => {
             <HeaderBtnMainNew onClick={onNewCardClick}>
               Создать новую задачу
             </HeaderBtnMainNew>
-            <HeaderUser as="a" href="#logout" onClick={handleLogout}>
-              Выйти
+            <HeaderUser
+              as="a"
+              href="#user-set-target"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsPopUserOpen(true);
+              }}
+            >
+              Lenoooliym
             </HeaderUser>
+            {isPopUserOpen && (
+              <PopUser
+                onClose={() => setIsPopUserOpen(false)}
+                onExitClick={handleLogout}
+              />
+            )}
           </HeaderNav>
         </HeaderBlock>
       </Container>
