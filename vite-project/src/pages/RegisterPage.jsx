@@ -1,13 +1,16 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AuthForm from '../components/AuthForm';
 
 function RegisterPage({ setIsAuth }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
   });
   const [error, setError] = useState('');
+  const [errorFields, setErrorFields] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,26 +28,37 @@ function RegisterPage({ setIsAuth }) {
   const handleRegister = (e) => {
     e.preventDefault();
 
+    setError('');
+    setErrorFields({});
+
+    let newErrorFields = {};
     if (!formData.name) {
       setError('Пожалуйста, введите имя');
-      return;
+      newErrorFields.name = true;
     }
     if (!validateEmail(formData.email)) {
       setError('Некорректный адрес электронной почты');
-      return;
+      newErrorFields.email = true;
     }
     if (!formData.password || formData.password.length < 6) {
       setError('Пароль должен содержать минимум 6 символов');
+      newErrorFields.password = true;
+    }
+    if (Object.keys(newErrorFields).length > 0) {
+      setErrorFields(newErrorFields);
       return;
     }
 
     if (formData.email === 'ivan.ivanov@gmail.com') {
       setError('Этот email уже зарегистрирован');
+      setErrorFields({ email: true });
       return;
     }
 
     setError('');
+    setErrorFields({});
     setIsAuth(true);
+    navigate('/');
   };
 
   return (
@@ -54,6 +68,7 @@ function RegisterPage({ setIsAuth }) {
       formData={formData}
       onChange={handleChange}
       error={error}
+      errorFields={errorFields}
       onSubmit={handleRegister}
     />
   );

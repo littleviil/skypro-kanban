@@ -4,6 +4,7 @@ import { PopNewCard } from '../components/popus/PopNewCard/PopNewCard';
 import { PopBrowse } from '../components/popus/PopBrowse/PopBrowse';
 import { Header } from '../components/Header/Header';
 import { Main } from '../components/Main/Main';
+import { Container, Loading } from '../App.styled';
 
 function MainPage({ setIsAuth }) {
   const [loading, setLoading] = useState(true);

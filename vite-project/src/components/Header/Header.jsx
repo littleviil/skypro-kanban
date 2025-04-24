@@ -15,8 +15,7 @@ export const Header = ({ onNewCardClick, setIsAuth }) => {
   const navigate = useNavigate();
   const [isPopUserOpen, setIsPopUserOpen] = useState(false);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
+  const handleLogout = () => {
     setIsAuth(false);
     navigate('/login');
   };

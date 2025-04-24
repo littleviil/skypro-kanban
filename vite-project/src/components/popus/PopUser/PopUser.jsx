@@ -18,8 +18,8 @@ export const PopUser = ({ onClose, onExitClick }) => {
       </PopUserSetTheme>
       <PopUserSetBtn
         onClick={() => {
-          onClose();
           onExitClick();
+          onClose();
         }}
       >
         Выйти
