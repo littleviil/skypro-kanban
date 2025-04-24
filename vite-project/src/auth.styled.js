@@ -6,7 +6,7 @@ const GlobalAuthStyles = createGlobalStyle`
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f5f7fa;
+    background-color: #EAEEF6;
   }
 
   .modal {
@@ -23,13 +23,16 @@ const GlobalAuthStyles = createGlobalStyle`
     font-weight: bold;
     text-align: center;
     margin-bottom: 20px;
-    color: #007bff;
+    color:#565EEF;
   }
 
   .wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    width: 368px;
+    height: 329px;
   }
 
   .title {
@@ -41,10 +44,14 @@ const GlobalAuthStyles = createGlobalStyle`
 
   .form {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .input-wrapper {
     margin-bottom: 20px;
+    width: 248px;
   }
 
   .auth-input {
@@ -54,11 +61,12 @@ const GlobalAuthStyles = createGlobalStyle`
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
+    height: 30px;
   }
 
   .auth-input:focus {
     outline: none;
-    border-color: #007bff;
+    border-color:#565EEF;
   }
 
   .auth-input.error {
@@ -66,18 +74,19 @@ const GlobalAuthStyles = createGlobalStyle`
   }
 
   .button-enter {
-    width: 100%;
+    width: 248px;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #565EEF;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+
   }
 
   .button-enter:hover {
-    background-color: #0056b3;
+    background-color:#565EEF;
   }
 
   .error {
@@ -99,7 +108,7 @@ const GlobalAuthStyles = createGlobalStyle`
   }
 
   .form-group a {
-    color: #007bff;
+    color:#565EEF;
     text-decoration: none;
   }
 
