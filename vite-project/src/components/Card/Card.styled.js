@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { themes } from '../../themes';
+import { themes, theme } from '../../themes';
 
 export const CardsItem = styled.div`
   width: 100%;
@@ -111,4 +111,28 @@ export const Cards = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
+`;
+
+export const Button = styled.button`
+  background-color: ${theme.primaryButtonColor};
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px;
+  &:hover {
+    background-color: ${theme.hoverBgColor};
+  }
+`;
+
+export const CardWrapper = styled.div`
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 `;

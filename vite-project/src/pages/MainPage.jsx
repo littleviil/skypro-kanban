@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PopExit } from '../components/popus/PopExit/PopExit';
-import { PopNewCard } from '../components/popus/PopNewCard/PopNewCard';
 import { PopBrowse } from '../components/popus/PopBrowse/PopBrowse';
-import { Header } from '../components/Header/Header';
 import { Main } from '../components/Main/Main';
 import { Container, Loading } from '../App.styled';
 
 function MainPage({ setIsAuth }) {
   const [loading, setLoading] = useState(true);
   const [isPopExitOpen, setIsPopExitOpen] = useState(false);
-  const [isPopNewCardOpen, setIsPopNewCardOpen] = useState(false);
   const [isPopBrowseOpen, setIsPopBrowseOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
@@ -24,11 +23,18 @@ function MainPage({ setIsAuth }) {
     setIsPopBrowseOpen(true);
   };
 
+  const handleLogout = () => {
+    setIsAuth(false);
+    navigate('/login');
+  };
+
   return (
     <>
-      {isPopExitOpen && <PopExit onClose={() => setIsPopExitOpen(false)} />}
-      {isPopNewCardOpen && (
-        <PopNewCard onClose={() => setIsPopNewCardOpen(false)} />
+      {isPopExitOpen && (
+        <PopExit
+          onClose={() => setIsPopExitOpen(false)}
+          onLogout={handleLogout}
+        />
       )}
       {isPopBrowseOpen && (
         <PopBrowse
@@ -43,10 +49,6 @@ function MainPage({ setIsAuth }) {
         <Loading>Данные загружаются...</Loading>
       ) : (
         <Container>
-          <Header
-            onNewCardClick={() => setIsPopNewCardOpen(true)}
-            setIsAuth={setIsAuth}
-          />
           <Main onBrowseClick={openPopBrowse} />
         </Container>
       )}

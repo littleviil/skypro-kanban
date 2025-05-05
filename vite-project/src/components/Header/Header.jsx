@@ -1,17 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  HeaderPage,
-  HeaderBlock,
-  HeaderLogo,
-  HeaderNav,
-  HeaderBtnMainNew,
-  HeaderUser,
-} from './Header.styled';
+import { HeaderPage, HeaderBlock, HeaderLogo, HeaderNav, HeaderBtnMainNew, HeaderUser } from './Header.styled';
 import { Container } from '../../App.styled';
 import { PopUser } from '../popus/PopUser/PopUser';
 
-export const Header = ({ onNewCardClick, setIsAuth }) => {
+export const Header = ({ onNewCardClick, setIsAuth, isAuthPage }) => {
   const navigate = useNavigate();
   const [isPopUserOpen, setIsPopUserOpen] = useState(false);
 
@@ -19,6 +12,32 @@ export const Header = ({ onNewCardClick, setIsAuth }) => {
     setIsAuth(false);
     navigate('/login');
   };
+
+  const togglePopUser = (e) => {
+    e.preventDefault();
+    setIsPopUserOpen((prev) => !prev);
+  };
+
+  if (isAuthPage) {
+    return (
+      <HeaderPage>
+        <Container>
+          <HeaderBlock>
+            <HeaderLogo className="_show _light">
+              <a href="" target="_self">
+                <img src="images/logo.png" alt="logo" />
+              </a>
+            </HeaderLogo>
+            <HeaderLogo className="_dark">
+              <a href="" target="_self">
+                <img src="images/logo_dark.png" alt="logo" />
+              </a>
+            </HeaderLogo>
+          </HeaderBlock>
+        </Container>
+      </HeaderPage>
+    );
+  }
 
   return (
     <HeaderPage>
@@ -41,10 +60,7 @@ export const Header = ({ onNewCardClick, setIsAuth }) => {
             <HeaderUser
               as="a"
               href="#user-set-target"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsPopUserOpen(true);
-              }}
+              onClick={togglePopUser}
             >
               Lenoooliym
             </HeaderUser>
