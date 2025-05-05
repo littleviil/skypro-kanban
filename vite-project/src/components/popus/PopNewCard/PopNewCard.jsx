@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Calendar } from "../../Calendar/Calendar";
 import { taskCategories } from '../../../tasks';
 
-export const PopNewCard = ({ onClose }) => {
+const PopNewCard = ({ onClose }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -99,3 +99,5 @@ export const PopNewCard = ({ onClose }) => {
     </div>
   );
 };
+
+export default PopNewCard;

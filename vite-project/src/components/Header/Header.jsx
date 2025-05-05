@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HeaderPage, HeaderBlock, HeaderLogo, HeaderNav, HeaderBtnMainNew, HeaderUser } from './Header.styled';
 import { Container } from '../../App.styled';
-import { PopUser } from '../popus/PopUser/PopUser';
+import PopUser from '../popus/PopUser/PopUser';
 
 export const Header = ({ onNewCardClick, setIsAuth, isAuthPage }) => {
   const navigate = useNavigate();

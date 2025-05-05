@@ -1,7 +1,7 @@
 import React from 'react';
 import { Calendar } from "../../Calendar/Calendar";
 
-export const PopBrowse = ({ task, onClose }) => {
+const PopBrowse = ({ task, onClose }) => {
   return (
     <div className="pop-browse" id="popBrowse">
       <div className="pop-browse__container">
@@ -91,3 +91,5 @@ export const PopBrowse = ({ task, onClose }) => {
     </div>
   );
 };
+
+export default PopBrowse;

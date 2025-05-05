@@ -7,7 +7,7 @@ import {
   PopUserSetBtn,
 } from './PopUser.styled';
 
-export const PopUser = ({ onClose, onExitClick }) => {
+const PopUser = ({ onClose, onExitClick }) => {
   return (
     <PopUserSet id="popUserSet">
       <PopUserSetName>Ivan Ivanov</PopUserSetName>
@@ -27,3 +27,5 @@ export const PopUser = ({ onClose, onExitClick }) => {
     </PopUserSet>
   );
 };
+
+export default PopUser;

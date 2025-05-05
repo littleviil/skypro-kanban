@@ -9,7 +9,7 @@ import {
   PopExitNo,
 } from './PopExit.styled';
 
-export const PopExit = ({ onClose, onLogout }) => {
+const PopExit = ({ onClose, onLogout }) => {
   return (
     <PopExitPage id="popExit">
       <PopExitContainer>
@@ -32,3 +32,5 @@ export const PopExit = ({ onClose, onLogout }) => {
     </PopExitPage>
   );
 };
+
+export default PopExit;

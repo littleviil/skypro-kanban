@@ -2,13 +2,12 @@ import { Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import CardPage from './pages/CardPage';
 import EditCardPage from './pages/EditCardPage';
 import NewCardPage from './pages/NewCardPage';
 import NotFoundPage from './pages/NotFoundPage';
 import PrivateRoute from './components/PrivateRoute';
-import { PopNewCard } from './components/popus/PopNewCard/PopNewCard';
-import { PopBrowse } from './components/popus/PopBrowse/PopBrowse';
+import PopNewCard from './components/popus/PopNewCard/PopNewCard';
+import PopBrowse from './components/popus/PopBrowse/PopBrowse';
 
 function AppRoutes({ isAuth, setIsAuth }) {
   return (

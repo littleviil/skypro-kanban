@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PopExit } from '../components/popus/PopExit/PopExit';
-import { PopBrowse } from '../components/popus/PopBrowse/PopBrowse';
-import { Main } from '../components/Main/Main';
+import PopExit from '../components/popus/PopExit/PopExit';
+import PopBrowse from '../components/popus/PopBrowse/PopBrowse';
+import Main from '../components/Main/Main';
 import { Container, Loading } from '../App.styled';
 
 function MainPage({ setIsAuth }) {

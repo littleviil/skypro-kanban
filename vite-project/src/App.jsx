@@ -5,7 +5,7 @@ import GlobalStyles from './GlobalStyles';
 import GlobalAuthStyles from './auth.styled';
 import './App.css';
 import { Header } from './components/Header/Header';
-import { PopNewCard } from './components/popus/PopNewCard/PopNewCard';
+import PopNewCard from './components/popus/PopNewCard/PopNewCard';
 import { useLocation } from 'react-router-dom';
 
 function App() {
