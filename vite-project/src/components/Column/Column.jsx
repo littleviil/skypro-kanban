@@ -16,9 +16,7 @@ export const Column = ({ status, onBrowseClick }) => {
         {filteredTasks.map((task) => (
           <Card
             key={task.id}
-            title={task.title}
-            category={task.category}
-            date={task.date}
+            task={task}
             onBrowseClick={onBrowseClick}
           />
         ))}

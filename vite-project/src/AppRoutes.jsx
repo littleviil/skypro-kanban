@@ -6,17 +6,13 @@ import EditCardPage from './pages/EditCardPage';
 import NewCardPage from './pages/NewCardPage';
 import NotFoundPage from './pages/NotFoundPage';
 import PrivateRoute from './components/PrivateRoute';
-import PopNewCard from './components/popus/PopNewCard/PopNewCard';
-import PopBrowse from './components/popus/PopBrowse/PopBrowse';
 
 function AppRoutes({ isAuth, setIsAuth }) {
   return (
     <Routes>
       <Route element={<PrivateRoute isAuth={isAuth} />}>
-        <Route path="/" element={<MainPage setIsAuth={setIsAuth} />}>
-          <Route path="new" element={<PopNewCard onClose={() => window.history.back()} />} />
-          <Route path="card/:id" element={<PopBrowse onClose={() => window.history.back()} />} />
-        </Route>
+        <Route path="/" element={<MainPage setIsAuth={setIsAuth} />} />
+        <Route path="/card/:id" element={<EditCardPage />} />
         <Route path="/card/add" element={<NewCardPage />} />
         <Route path="/card/edit/:id" element={<EditCardPage />} />
       </Route>

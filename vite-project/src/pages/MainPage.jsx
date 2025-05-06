@@ -19,8 +19,7 @@ function MainPage({ setIsAuth }) {
   }, []);
 
   const openPopBrowse = (task) => {
-    setSelectedTask(task);
-    setIsPopBrowseOpen(true);
+    navigate(`/card/${task.id}`);
   };
 
   const handleLogout = () => {

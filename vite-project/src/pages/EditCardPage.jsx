@@ -1,5 +1,5 @@
-import PopBrowse from "../components/popus/PopBrowse/PopBrowse";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from 'react-router-dom';
+import PopBrowse from '../components/popus/PopBrowse/PopBrowse';
 import { tasks } from '../tasks';
 
 const EditCardPage = () => {
@@ -8,7 +8,7 @@ const EditCardPage = () => {
   const task = tasks.find((task) => task.id === parseInt(id));
 
   const handleClose = () => {
-    navigate(-1);
+    navigate('/');
   };
 
   if (!task) {
@@ -16,12 +16,8 @@ const EditCardPage = () => {
   }
 
   return (
-    <div>
-      <p>ID карточки: {id}</p>
-      <PopBrowse
-        task={task}
-        onClose={handleClose}
-      />
+    <div className="page-container">
+      <PopBrowse task={task} onClose={handleClose} />
     </div>
   );
 };
