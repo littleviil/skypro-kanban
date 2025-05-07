@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 import PopExit from '../components/popus/PopExit/PopExit';
 import PopBrowse from '../components/popus/PopBrowse/PopBrowse';
 import Main from '../components/Main/Main';
@@ -49,6 +49,7 @@ function MainPage({ setIsAuth }) {
       ) : (
         <Container>
           <Main onBrowseClick={openPopBrowse} />
+          <Outlet />
         </Container>
       )}
     </>

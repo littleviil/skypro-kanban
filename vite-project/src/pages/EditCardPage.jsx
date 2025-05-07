@@ -5,18 +5,20 @@ import { tasks } from '../tasks';
 const EditCardPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const task = tasks.find((task) => task.id === parseInt(id));
+  const taskId = parseInt(id);
+  const task = tasks.find((task) => task.id === taskId);
 
   const handleClose = () => {
     navigate('/');
   };
 
-  if (!task) {
-    return <div>Задача не найдена</div>;
+  if (!task || isNaN(taskId)) {
+    navigate('/');
+    return null;
   }
 
   return (
-    <div className="page-container">
+    <div className="modal-overlay">
       <PopBrowse task={task} onClose={handleClose} />
     </div>
   );

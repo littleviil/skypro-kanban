@@ -11,10 +11,10 @@ function AppRoutes({ isAuth, setIsAuth }) {
   return (
     <Routes>
       <Route element={<PrivateRoute isAuth={isAuth} />}>
-        <Route path="/" element={<MainPage setIsAuth={setIsAuth} />} />
-        <Route path="/card/:id" element={<EditCardPage />} />
-        <Route path="/card/add" element={<NewCardPage />} />
-        <Route path="/card/edit/:id" element={<EditCardPage />} />
+        <Route path="/" element={<MainPage setIsAuth={setIsAuth} />}>
+          <Route path="card/:id" element={<EditCardPage />} />
+          <Route path="card/add" element={<NewCardPage />} />
+        </Route>
       </Route>
       <Route path="/login" element={<LoginPage setIsAuth={setIsAuth} />} />
       <Route path="/register" element={<RegisterPage setIsAuth={setIsAuth} />} />
