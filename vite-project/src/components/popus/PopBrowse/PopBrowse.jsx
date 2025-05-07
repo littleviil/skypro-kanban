@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar } from '../../Calendar/Calendar';
+import { taskCategories, statusThemes } from '../../../tasks';
+import { themes } from '../../../themes';
 
 const PopBrowse = ({ task, onClose }) => {
   const navigate = useNavigate();
@@ -14,34 +16,34 @@ const PopBrowse = ({ task, onClose }) => {
     onClose();
   };
 
+  const statusCategoryColor = statusThemes[task?.status] || 'gray';
+  const statusTheme = themes[statusCategoryColor] || themes.gray;
+
+  const taskCategoryColor = taskCategories[task?.category] || 'gray';
+  const taskTheme = themes[taskCategoryColor] || themes.gray;
+
   return (
     <div className="pop-browse" id="popBrowse">
       <div className="pop-browse__container">
         <div className="pop-browse__block">
           <div className="pop-browse__content">
             <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">{task?.title || 'Название задачи'}</h3>
-              <div className={`categories__theme theme-top _${task?.category?.toLowerCase() || 'orange'} _active-category`}>
-                <p className={`_${task?.category?.toLowerCase() || 'orange'}`}>{task?.category || 'Web Design'}</p>
+              <h3
+                className="pop-browse__ttl"
+              >
+                Название задачи
+              </h3>
+              <div className={`categories__theme theme-top _${taskCategoryColor} _active-category`}>
+                <p className={`_${taskCategoryColor}`}>{task?.category || 'Web Design'}</p>
               </div>
             </div>
             <div className="pop-browse__status status">
               <p className="status__p subttl">Статус</p>
               <div className="status__themes">
-                <div className={`status__theme ${task?.status === 'Без статуса' ? '' : '_hide'}`}>
-                  <p>Без статуса</p>
-                </div>
-                <div className={`status__theme ${task?.status === 'Нужно сделать' ? '_gray' : '_hide'}`}>
-                  <p className="_gray">Нужно сделать</p>
-                </div>
-                <div className={`status__theme ${task?.status === 'В работе' ? '' : '_hide'}`}>
-                  <p>В работе</p>
-                </div>
-                <div className={`status__theme ${task?.status === 'Тестирование' ? '' : '_hide'}`}>
-                  <p>Тестирование</p>
-                </div>
-                <div className={`status__theme ${task?.status === 'Готово' ? '' : '_hide'}`}>
-                  <p>Готово</p>
+                <div
+                  className="status__theme"
+                >
+                  <p>{task?.status || 'Без статуса'}</p>
                 </div>
               </div>
             </div>
@@ -65,8 +67,8 @@ const PopBrowse = ({ task, onClose }) => {
             </div>
             <div className="theme-down__categories theme-down">
               <p className="categories__p subttl">Категория</p>
-              <div className={`categories__theme _${task?.category?.toLowerCase() || 'orange'} _active-category`}>
-                <p className={`_${task?.category?.toLowerCase() || 'orange'}`}>{task?.category || 'Web Design'}</p>
+              <div className={`categories__theme _${taskCategoryColor} _active-category`}>
+                <p className={`_${taskCategoryColor}`}>{task?.category || 'Web Design'}</p>
               </div>
             </div>
             <div className="pop-browse__btn-browse">

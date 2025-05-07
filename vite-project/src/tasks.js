@@ -16,3 +16,13 @@ export const taskCategories = {
   "Research": "green", 
   "Copywriting": "purple",
 };
+
+export const taskStatuses = [...new Set(tasks.map(task => task.status))];
+
+export const statusThemes = {
+  'Без статуса': 'gray',
+  'Нужно сделать': 'orange',
+  'В работе': 'purple',
+  'Тестирование': 'green',
+  'Готово': 'green',
+};

@@ -7,6 +7,7 @@ const PopNewCard = ({ onClose }) => {
     title: '',
     description: '',
     category: 'Web Design',
+    status: 'Без статуса',
   });
 
   const handleChange = (e) => {
@@ -26,6 +27,7 @@ const PopNewCard = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Создание задачи:', formData);
     onClose();
   };
 
