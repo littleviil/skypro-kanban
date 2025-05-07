@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar } from '../../Calendar/Calendar';
-import { taskCategories, statusThemes } from '../../../tasks';
-import { themes } from '../../../themes';
+import { taskCategories } from '../../../tasks';
 
 const PopBrowse = ({ task, onClose }) => {
   const navigate = useNavigate();
@@ -16,11 +15,7 @@ const PopBrowse = ({ task, onClose }) => {
     onClose();
   };
 
-  const statusCategoryColor = statusThemes[task?.status] || 'gray';
-  const statusTheme = themes[statusCategoryColor] || themes.gray;
-
   const taskCategoryColor = taskCategories[task?.category] || 'gray';
-  const taskTheme = themes[taskCategoryColor] || themes.gray;
 
   return (
     <div className="pop-browse" id="popBrowse">
