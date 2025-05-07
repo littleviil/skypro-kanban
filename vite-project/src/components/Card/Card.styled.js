@@ -7,8 +7,8 @@ export const CardsItem = styled.div`
 `;
 
 export const CardsCard = styled.div`
-  width: 100%;
-  height: 113px;
+  width: 220px;
+  height: 130px;
   padding: 10px 10px 10px 14px;
   border-radius: 10px;
   background: #ffffff;
@@ -106,7 +106,6 @@ export const CardDate = styled.div`
 `;
 
 export const Cards = styled.div`
-  gap: 10px;
   width: 100%;
   display: flex;
   flex-wrap: wrap;

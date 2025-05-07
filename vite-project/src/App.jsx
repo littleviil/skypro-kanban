@@ -19,11 +19,12 @@ function App() {
     <>
       <GlobalStyles />
       <GlobalAuthStyles />
-      <Header
-        onNewCardClick={() => setIsPopNewCardOpen(true)}
-        setIsAuth={setIsAuth}
-        isAuthPage={isAuthPage}
-      />
+      {!isAuthPage && (
+        <Header
+          onNewCardClick={() => setIsPopNewCardOpen(true)}
+          setIsAuth={setIsAuth}
+        />
+      )}
       {isPopNewCardOpen && (
         <PopNewCard onClose={() => setIsPopNewCardOpen(false)} />
       )}

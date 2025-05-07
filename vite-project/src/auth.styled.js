@@ -10,12 +10,18 @@ const GlobalAuthStyles = createGlobalStyle`
   }
 
   .modal {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: #FFFFFF;
+    padding: 50px 60px;
+    border-radius: 10px;
+    box-shadow: 0 4px 67px -12px rgba(0, 0, 0, 0.13);
+    border: 0.7px solid #D4DBE5;
     width: 100%;
-    max-width: 400px;
+    max-width: 368px;
+    height: 329px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .logo {
@@ -23,7 +29,7 @@ const GlobalAuthStyles = createGlobalStyle`
     font-weight: bold;
     text-align: center;
     margin-bottom: 20px;
-    color:#565EEF;
+    color: #565EEF;
   }
 
   .wrapper {
@@ -50,7 +56,6 @@ const GlobalAuthStyles = createGlobalStyle`
   }
 
   .input-wrapper {
-    margin-bottom: 20px;
     width: 248px;
   }
 
@@ -58,35 +63,58 @@ const GlobalAuthStyles = createGlobalStyle`
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
+    border: 1px solid #94A6BE66;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 150%;
     height: 30px;
+    box-sizing: border-box;
+  }
+
+  .auth-input::placeholder {
+    color: #94A6BE66;
+    opacity: 1;
   }
 
   .auth-input:focus {
     outline: none;
-    border-color:#565EEF;
+    border-color: #565EEF;
+    color: #565EEF;
+    border: 1px solid #94A6BE66;
+  }
+
+  .auth-input:focus::placeholder {
+    color: transparent;
   }
 
   .auth-input.error {
     border-color: #ff0000;
+    color: #ff0000;
+  }
+
+  .auth-input.error::placeholder {
+    color: #ff0000;
+    opacity: 1;
   }
 
   .button-enter {
     width: 248px;
-    padding: 10px;
     background-color: #565EEF;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
-
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 150%;
+    height: 30px;
+    margin-top: 20px;
+    box-sizing: border-box;
   }
 
   .button-enter:hover {
-    background-color:#565EEF;
+    background-color: #565EEF;
   }
 
   .error {
@@ -104,12 +132,17 @@ const GlobalAuthStyles = createGlobalStyle`
   .form-group p {
     margin: 0;
     font-size: 14px;
-    color: #666;
+    font-weight: 400;
+    line-height: 150%;
+    color: #94A6BE66;
   }
 
   .form-group a {
-    color:#565EEF;
+    color:#94A6BE66;
     text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 150%;
   }
 
   .form-group a:hover {
