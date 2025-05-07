@@ -79,8 +79,8 @@ const GlobalAuthStyles = createGlobalStyle`
 
   .auth-input:focus {
     outline: none;
-    border-color: #565EEF;
-    color: #565EEF;
+    border-color: #94A6BE66;
+    color: #000000;
     border: 1px solid #94A6BE66;
   }
 
@@ -89,13 +89,24 @@ const GlobalAuthStyles = createGlobalStyle`
   }
 
   .auth-input.error {
-    border-color: #ff0000;
-    color: #ff0000;
+    border-color: #F84D4D;
+    color: #F84D4D;
   }
 
   .auth-input.error::placeholder {
-    color: #ff0000;
+    color: #F84D4D;
     opacity: 1;
+  }
+
+  .error-message {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    color: #F84D4D;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 150%;
+    margin-top: 5px;
   }
 
   .button-enter {
@@ -113,15 +124,23 @@ const GlobalAuthStyles = createGlobalStyle`
     box-sizing: border-box;
   }
 
-  .button-enter:hover {
+  .button-enter:disabled {
+    background-color: #94A6BE; 
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .button-enter:hover:not(:disabled) {
     background-color: #565EEF;
   }
 
   .error {
-    color: #ff0000;
-    font-size: 14px;
+    color: #F84D4D;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 150%;
     text-align: center;
-    margin-bottom: 10px;
+    width: 248px;
   }
 
   .form-group {

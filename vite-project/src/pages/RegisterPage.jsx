@@ -18,6 +18,8 @@ function RegisterPage({ setIsAuth }) {
       ...prev,
       [name]: value,
     }));
+    setErrorFields((prev) => ({ ...prev, [name]: false }));
+    setError('');
   };
 
   const validateEmail = (email) => {
