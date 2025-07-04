@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthForm from '../components/AuthForm';
+import { loginUser } from '../services/auth';
 
 function LoginPage({ setIsAuth }) {
   const navigate = useNavigate();
@@ -9,7 +10,6 @@ function LoginPage({ setIsAuth }) {
     password: '',
   });
   const [error, setError] = useState('');
-  const [errorFields, setErrorFields] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,55 +17,42 @@ function LoginPage({ setIsAuth }) {
       ...prev,
       [name]: value,
     }));
-    setErrorFields((prev) => ({ ...prev, [name]: false }));
     setError('');
   };
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
     setError('');
-    setErrorFields({});
 
-    let newErrorFields = {};
-    if (!validateEmail(formData.email)) {
-      setError('Некорректный адрес электронной почты');
-      newErrorFields.email = true;
-    }
-    if (!formData.password || formData.password.length < 6) {
-      setError('Пароль должен содержать минимум 6 символов');
-      newErrorFields.password = true;
-    }
-    if (Object.keys(newErrorFields).length > 0) {
-      setErrorFields(newErrorFields);
+    const { email, password } = formData;
+    if (!email || !password) {
+      setError('Пожалуйста, заполните все поля');
       return;
     }
 
-    if (formData.email === 'ivan.ivanov@gmail.com' && formData.password !== '123456') {
-      setError('Некорректные данные');
-      setErrorFields({ email: true, password: true });
-      return;
-    }
+    console.log('Отправляемые данные:', { login: email, password });
 
-    setError('');
-    setErrorFields({});
-    setIsAuth(true);
-    navigate('/');
+    try {
+      const response = await loginUser({
+        login: email,
+        password,
+      });
+      console.log('Ответ сервера:', response);
+      setIsAuth(true);
+      navigate('/');
+    } catch (err) {
+      console.error('Ошибка:', err);
+      setError(err?.message || 'Ошибка авторизации');
+    }
   };
 
   return (
     <AuthForm
       isSignUp={false}
       setIsAuth={setIsAuth}
-      formData={{ ...formData, name: '' }}
+      formData={formData}
       onChange={handleChange}
       error={error}
-      errorFields={errorFields}
       onSubmit={handleLogin}
     />
   );

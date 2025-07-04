@@ -1,33 +1,49 @@
-import axios from "axios";
+import axios from 'axios';
 
-const API_URL = "https://wedev-api.sky.pro/api/user";
+const API_URL = 'https://wedev-api.sky.pro/api';
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-export async function signIn(userData) {
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => Promise.reject(error));
+
+export async function registerUser({ name, login, password }) {
   try {
-    const data = await axios.post(API_URL + "/login", userData, {
-      headers: {
-        "Content-Type": "",
-      },
+    const response = await api.post('/user', {
+      name,
+      login,
+      password,
     });
-    return data.data.user;
+    return response.data;
   } catch (error) {
-    throw new Error(error.response.data.error);
+    throw error.response?.data?.error || 'Ошибка регистрации';
   }
 }
 
-export async function signUp({ name, login, password }) {
+export async function loginUser({ login, password }) {
   try {
-    const data = await axios.post(
-      API_URL,
-      { login, name, password },
-      {
-        headers: {
-          "Content-Type": "",
-        },
-      }
-    );
-    return data.data.user;
+    const response = await api.post('/user/login', {
+      login,
+      password,
+    });
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+    }
+    return response.data;
   } catch (error) {
-    throw new Error(error.response.data.error);
+    throw error.response?.data?.error || 'Ошибка входа';
   }
+}
+
+export function logout() {
+  localStorage.removeItem('token');
 }
