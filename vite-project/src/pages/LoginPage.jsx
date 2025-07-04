@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthForm from '../components/AuthForm';
-import { loginUser } from '../services/auth';
+import { signIn } from '../services/auth'; // Импортируем из вашего файла
 
 function LoginPage({ setIsAuth }) {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function LoginPage({ setIsAuth }) {
       ...prev,
       [name]: value,
     }));
-    setError('');
+    setError(''); // Очищаем ошибку при изменении поля
   };
 
   const handleLogin = async (e) => {
@@ -33,16 +33,16 @@ function LoginPage({ setIsAuth }) {
     console.log('Отправляемые данные:', { login: email, password });
 
     try {
-      const response = await loginUser({
+      const user = await signIn({
         login: email,
         password,
       });
-      console.log('Ответ сервера:', response);
+      console.log('Ответ сервера:', user);
       setIsAuth(true);
       navigate('/');
     } catch (err) {
       console.error('Ошибка:', err);
-      setError(err?.message || 'Ошибка авторизации');
+      setError(err.message || 'Ошибка авторизации');
     }
   };
 

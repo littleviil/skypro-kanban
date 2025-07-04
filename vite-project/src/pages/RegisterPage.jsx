@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthForm from '../components/AuthForm';
+import { signUp } from '../services/auth'; // Импортируем из вашего файла
 
 function RegisterPage({ setIsAuth }) {
   const navigate = useNavigate();
@@ -10,7 +11,6 @@ function RegisterPage({ setIsAuth }) {
     password: '',
   });
   const [error, setError] = useState('');
-  const [errorFields, setErrorFields] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,49 +18,34 @@ function RegisterPage({ setIsAuth }) {
       ...prev,
       [name]: value,
     }));
-    setErrorFields((prev) => ({ ...prev, [name]: false }));
-    setError('');
+    setError(''); // Очищаем ошибку при изменении поля
   };
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-
     setError('');
-    setErrorFields({});
 
-    let newErrorFields = {};
-    if (!formData.name) {
-      setError('Пожалуйста, введите имя');
-      newErrorFields.name = true;
-    }
-    if (!validateEmail(formData.email)) {
-      setError('Некорректный адрес электронной почты');
-      newErrorFields.email = true;
-    }
-    if (!formData.password || formData.password.length < 6) {
-      setError('Пароль должен содержать минимум 6 символов');
-      newErrorFields.password = true;
-    }
-    if (Object.keys(newErrorFields).length > 0) {
-      setErrorFields(newErrorFields);
+    const { name, email, password } = formData;
+    if (!name || !email || !password) {
+      setError('Пожалуйста, заполните все поля');
       return;
     }
 
-    if (formData.email === 'ivan.ivanov@gmail.com') {
-      setError('Этот email уже зарегистрирован');
-      setErrorFields({ email: true });
-      return;
-    }
+    console.log('Отправляемые данные:', { name, login: email, password });
 
-    setError('');
-    setErrorFields({});
-    setIsAuth(true);
-    navigate('/');
+    try {
+      const user = await signUp({
+        name,
+        login: email,
+        password,
+      });
+      console.log('Ответ сервера:', user);
+      setIsAuth(true);
+      navigate('/');
+    } catch (err) {
+      console.error('Ошибка:', err);
+      setError(err.message || 'Ошибка регистрации');
+    }
   };
 
   return (
@@ -70,7 +55,6 @@ function RegisterPage({ setIsAuth }) {
       formData={formData}
       onChange={handleChange}
       error={error}
-      errorFields={errorFields}
       onSubmit={handleRegister}
     />
   );
