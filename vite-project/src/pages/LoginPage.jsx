@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthForm from '../components/AuthForm';
-import { signIn } from '../services/auth'; // Импортируем из вашего файла
+import { signIn } from '../services/auth';
 
 function LoginPage({ setIsAuth }) {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function LoginPage({ setIsAuth }) {
       ...prev,
       [name]: value,
     }));
-    setError(''); // Очищаем ошибку при изменении поля
+    setError('');
   };
 
   const handleLogin = async (e) => {

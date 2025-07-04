@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthForm from '../components/AuthForm';
-import { signUp } from '../services/auth'; // Импортируем из вашего файла
+import { signUp } from '../services/auth';
 
 function RegisterPage({ setIsAuth }) {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ function RegisterPage({ setIsAuth }) {
       ...prev,
       [name]: value,
     }));
-    setError(''); // Очищаем ошибку при изменении поля
+    setError('');
   };
 
   const handleRegister = async (e) => {
