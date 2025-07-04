@@ -3,7 +3,7 @@ import { MainPage, MainBlock } from './Main.styled';
 import { Container } from '../../App.styled';
 import { Column } from '../Column/Column';
 
-export const Main = ({ onBrowseClick }) => {
+export const Main = ({ tasks, onBrowseClick }) => {
   const statuses = [
     'Без статуса',
     'Нужно сделать',
@@ -17,7 +17,7 @@ export const Main = ({ onBrowseClick }) => {
       <Container>
         <MainBlock>
           {statuses.map((status, index) => (
-            <Column key={index} status={status} onBrowseClick={onBrowseClick} />
+            <Column key={index} status={status} onBrowseClick={onBrowseClick} tasks={tasks} />
           ))}
         </MainBlock>
       </Container>

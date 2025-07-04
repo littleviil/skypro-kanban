@@ -11,7 +11,6 @@ const PopBrowse = ({ task, onClose }) => {
   };
 
   const handleDelete = () => {
-    console.log('Удаление задачи:', task.id);
     onClose();
   };
 

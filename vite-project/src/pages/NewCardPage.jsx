@@ -1,6 +1,7 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PopNewCard from "../components/popus/PopNewCard/PopNewCard";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import axios from 'axios';
 
 const NewCardPage = () => {
   const navigate = useNavigate();
@@ -8,14 +9,31 @@ const NewCardPage = () => {
     title: '',
     description: '',
     category: 'Web Design',
+    status: 'Без статуса',
+    date: new Date().toLocaleDateString('ru-RU'),
   });
 
   const handleClose = () => {
     navigate(-1);
   };
 
-  const handleSubmit = () => {
-    navigate('/');
+  const handleSubmit = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    try {
+      await axios.post('https://wedev-api.sky.pro/api/kanban', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      navigate('/');
+    } catch (error) {
+      console.error('Ошибка создания задачи:', error.message);
+    }
   };
 
   return (

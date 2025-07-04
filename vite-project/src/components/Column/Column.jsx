@@ -2,9 +2,8 @@ import React from 'react';
 import { MainColumn, ColumnTitle } from './Column.styled';
 import { Cards } from '../Card/Card.styled';
 import { Card } from '../Card/Card';
-import { tasks } from '../../tasks';
 
-export const Column = ({ status, onBrowseClick }) => {
+export const Column = ({ status, onBrowseClick, tasks }) => {
   const filteredTasks = tasks.filter((task) => task.status === status);
 
   return (
@@ -14,11 +13,7 @@ export const Column = ({ status, onBrowseClick }) => {
       </ColumnTitle>
       <Cards>
         {filteredTasks.map((task) => (
-          <Card
-            key={task.id}
-            task={task}
-            onBrowseClick={onBrowseClick}
-          />
+          <Card key={task.id} task={task} onBrowseClick={onBrowseClick} />
         ))}
       </Cards>
     </MainColumn>

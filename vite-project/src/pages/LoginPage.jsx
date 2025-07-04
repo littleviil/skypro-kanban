@@ -17,7 +17,7 @@ function LoginPage({ setIsAuth }) {
       ...prev,
       [name]: value,
     }));
-    setError('');
+    setError(''); 
   };
 
   const handleLogin = async (e) => {
@@ -30,8 +30,6 @@ function LoginPage({ setIsAuth }) {
       return;
     }
 
-    console.log('Отправляемые данные:', { login: email, password });
-
     try {
       const user = await signIn({
         login: email,
@@ -41,7 +39,6 @@ function LoginPage({ setIsAuth }) {
       setIsAuth(true);
       navigate('/');
     } catch (err) {
-      console.error('Ошибка:', err);
       setError(err.message || 'Ошибка авторизации');
     }
   };

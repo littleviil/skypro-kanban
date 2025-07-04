@@ -11,6 +11,7 @@ function RegisterPage({ setIsAuth }) {
     password: '',
   });
   const [error, setError] = useState('');
+  const [errorFields, setErrorFields] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,33 +19,48 @@ function RegisterPage({ setIsAuth }) {
       ...prev,
       [name]: value,
     }));
+    setErrorFields((prev) => ({ ...prev, [name]: false }));
     setError('');
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setError('');
 
-    const { name, email, password } = formData;
-    if (!name || !email || !password) {
-      setError('Пожалуйста, заполните все поля');
+    setError('');
+    setErrorFields({});
+
+    let newErrorFields = {};
+    if (!formData.name) {
+      setError('Пожалуйста, введите имя');
+      newErrorFields.name = true;
+    }
+    if (!validateEmail(formData.email)) {
+      setError('Некорректный адрес электронной почты');
+      newErrorFields.email = true;
+    }
+    if (!formData.password || formData.password.length < 6) {
+      setError('Пароль должен содержать минимум 6 символов');
+      newErrorFields.password = true;
+    }
+    if (Object.keys(newErrorFields).length > 0) {
+      setErrorFields(newErrorFields);
       return;
     }
 
-    console.log('Отправляемые данные:', { name, login: email, password });
-
     try {
-      const user = await signUp({
-        name,
-        login: email,
-        password,
-      });
-      console.log('Ответ сервера:', user);
+      console.log('Отправляемые данные для регистрации:', { name: formData.name, login: formData.email, password: formData.password });
+      const user = await signUp({ name: formData.name, login: formData.email, password: formData.password });
+      console.log('Ответ от сервера:', user);
       setIsAuth(true);
       navigate('/');
     } catch (err) {
-      console.error('Ошибка:', err);
-      setError(err.message || 'Ошибка регистрации');
+      setError(err.message || 'Не удалось зарегистрироваться');
+      setErrorFields({ name: true, email: true, password: true });
     }
   };
 
@@ -55,6 +71,7 @@ function RegisterPage({ setIsAuth }) {
       formData={formData}
       onChange={handleChange}
       error={error}
+      errorFields={errorFields}
       onSubmit={handleRegister}
     />
   );
