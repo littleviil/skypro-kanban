@@ -21,27 +21,31 @@ function LoginPage({ setIsAuth }) {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
+  e.preventDefault();
+  setError('');
 
-    const { email, password } = formData;
-    if (!email || !password) {
-      setError('Пожалуйста, заполните все поля');
-      return;
-    }
+  const { email, password } = formData;
+  if (!email || !password) {
+    setError('Пожалуйста, заполните все поля');
+    return;
+  }
 
-    try {
-      const user = await signIn({
-        login: email,
-        password,
-      });
-      console.log('Ответ сервера:', user);
-      setIsAuth(true);
-      navigate('/');
-    } catch (err) {
-      setError(err.message || 'Ошибка авторизации');
-    }
-  };
+  try {
+    const user = await signIn({
+      login: email,
+      password,
+    });
+
+    localStorage.setItem('token', user.token);
+    localStorage.setItem('name', user.name);
+    localStorage.setItem('email', email);
+
+    setIsAuth(true);
+    navigate('/');
+  } catch (err) {
+    setError(err.message || 'Ошибка авторизации');
+  }
+};
 
   return (
     <AuthForm

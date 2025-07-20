@@ -44,6 +44,8 @@ function MainPage({ setIsAuth }) {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('name');
+    localStorage.removeItem('email');
     setIsAuth(false);
     navigate('/login');
   };

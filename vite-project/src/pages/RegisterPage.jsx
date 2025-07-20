@@ -30,7 +30,6 @@ function RegisterPage({ setIsAuth }) {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
     setError('');
     setErrorFields({});
 
@@ -53,14 +52,25 @@ function RegisterPage({ setIsAuth }) {
     }
 
     try {
-      console.log('Отправляемые данные для регистрации:', { name: formData.name, login: formData.email, password: formData.password });
-      const user = await signUp({ name: formData.name, login: formData.email, password: formData.password });
-      console.log('Ответ от сервера:', user);
+      const user = await signUp({
+        name: formData.name,
+        login: formData.email,
+        password: formData.password,
+      });
+
+      localStorage.setItem('token', user.token);
+      localStorage.setItem('name', user.name);
+      localStorage.setItem('email', formData.email);
+
       setIsAuth(true);
       navigate('/');
     } catch (err) {
       setError(err.message || 'Не удалось зарегистрироваться');
-      setErrorFields({ name: true, email: true, password: true });
+      setErrorFields({
+        name: true,
+        email: true,
+        password: true,
+      });
     }
   };
 
