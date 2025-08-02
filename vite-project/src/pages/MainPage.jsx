@@ -21,22 +21,30 @@ function MainPage({ setIsAuth }) {
     if (!token) {
       setError('Пользователь не авторизован. Токен отсутствует.');
       setLoading(false);
+      navigate('/login');
       return;
     }
+
     try {
       setLoading(true);
       const data = await getTasks('MainPage', token);
       setTasks(data);
+      setError('');
     } catch (err) {
-      setError(err.message);
+      console.error('Ошибка загрузки задач:', err.message);
+      setError('Не удалось загрузить задачи');
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, [token, navigate]);
 
   useEffect(() => {
-    getTasksData();
-  }, [getTasksData]);
+    if (!token) {
+      navigate('/login');
+    } else {
+      getTasksData();
+    }
+  }, [token, getTasksData, navigate]);
 
   const openPopBrowse = (task) => {
     navigate(`/card/${task.id}`);
