@@ -1,55 +1,53 @@
-import axios from "axios";
+const API_URL = 'https://wedev-api.sky.pro/api/kanban';
+// const KANBAN_API_URL = `${API_URL}/kanban`;
 
-const API_BASE_URL = "https://wedev-api.sky.pro/api";
-const KANBAN_API_URL = `${API_BASE_URL}/kanban`;
+export async function createKanbanTask(taskData) {
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const token = userInfo?.token;
 
-const validateJSON = (data) => {
+  if (!token) throw new Error("Нет токена. Пользователь не авторизован.");
+
   try {
-    if (typeof data === "string") {
-      const parsed = JSON.parse(data);
-      if (parsed && typeof parsed === "object") {
-        return parsed;
-      }
-      throw new Error("Parsed JSON is not an object");
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(taskData),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      console.error("Ошибка при создании задачи:", result);
+      throw new Error(result?.error || "Ошибка при создании задачи");
     }
-    return data;
-  } catch (e) {
-    throw new Error(`Invalid JSON: ${e.message}`);
+
+    return result;
+  } catch (error) {
+    console.error("Ошибка при создании задачи:", error);
+    throw error;
   }
-};
+}
 
-const handleApiError = (error) => {
-  if (error.response) {
-    try {
-      const errorData = validateJSON(error.response.data);
-      const message =
-        errorData.message ||
-        errorData.error ||
-        `HTTP Error ${error.response.status}`;
-      throw new Error(message);
-    } catch {
-      throw new Error(`Server error: ${error.response.status}`);
+
+export async function fetchKanbanTasks(token) {
+  try {
+    const response = await fetch(API_URL, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Ошибка при загрузке задач');
     }
+
+    const data = await response.json();
+    return data.tasks || [];
+  } catch (error) {
+    console.error('Ошибка при получении задач:', error);
+    throw error;
   }
-  throw error;
-};
-
-const kanbanAPI = {
-  fetchTasks: async ({ token }) => {
-    try {
-      const response = await axios.get(KANBAN_API_URL, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        transformResponse: [validateJSON],
-      });
-      return validateJSON(response.data).tasks || [];
-    } catch (error) {
-      throw handleApiError(error);
-    }
-  },
-};
-
-export const fetchKanbanTasks = kanbanAPI.fetchTasks;
+}

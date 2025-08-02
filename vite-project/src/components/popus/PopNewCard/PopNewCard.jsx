@@ -1,33 +1,21 @@
-import React, { useState } from 'react';
-import { Calendar } from "../../Calendar/Calendar";
-import { taskCategories } from '../../../tasks';
+import React from "react";
+import { taskCategories } from "../../../tasks";
 
-const PopNewCard = ({ onClose }) => {
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    category: 'Web Design',
-    status: 'Без статуса',
-  });
-
+const PopNewCard = ({ onClose, onSubmit, formData, setFormData }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCategorySelect = (category) => {
-    setFormData((prev) => ({
-      ...prev,
-      category,
-    }));
+    setFormData((prev) => ({ ...prev, category }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onClose();
+    if (onSubmit) {
+      onSubmit();
+    }
   };
 
   return (
@@ -73,10 +61,12 @@ const PopNewCard = ({ onClose }) => {
                   />
                 </div>
               </form>
+
               <div className="pop-new-card__calendar calendar">
                 <Calendar />
               </div>
             </div>
+
             <div className="pop-new-card__categories categories">
               <p className="categories__p subttl">Категория</p>
               <div className="categories__themes">
@@ -91,6 +81,7 @@ const PopNewCard = ({ onClose }) => {
                 ))}
               </div>
             </div>
+
             <button className="form-new__create _hover01" id="btnCreate" onClick={handleSubmit}>
               Создать задачу
             </button>
