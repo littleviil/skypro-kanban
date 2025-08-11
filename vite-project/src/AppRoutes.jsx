@@ -3,17 +3,24 @@ import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import EditCardPage from './pages/EditCardPage';
-import NewCardPage from './pages/NewCardPage';
 import NotFoundPage from './pages/NotFoundPage';
 import PrivateRoute from './components/PrivateRoute';
 
-function AppRoutes({ isAuth, setIsAuth }) {
+function AppRoutes({ isAuth, setIsAuth, tasks, refreshTasks }) {
   return (
     <Routes>
       <Route element={<PrivateRoute isAuth={isAuth} />}>
-        <Route path="/" element={<MainPage setIsAuth={setIsAuth} />}>
+        <Route
+          path="/"
+          element={
+            <MainPage
+              setIsAuth={setIsAuth}
+              tasks={tasks}
+              refreshTasks={refreshTasks}
+            />
+          }
+        >
           <Route path="card/:id" element={<EditCardPage />} />
-          <Route path="card/add" element={<NewCardPage />} />
         </Route>
       </Route>
       <Route path="/login" element={<LoginPage setIsAuth={setIsAuth} />} />

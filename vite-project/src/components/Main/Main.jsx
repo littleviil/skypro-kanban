@@ -16,8 +16,13 @@ export const Main = ({ tasks, onBrowseClick }) => {
     <MainPage>
       <Container>
         <MainBlock>
-          {statuses.map((status, index) => (
-            <Column key={index} status={status} onBrowseClick={onBrowseClick} tasks={tasks} />
+          {statuses.map((status) => (
+            <Column
+              key={status}
+              status={status}
+              onBrowseClick={onBrowseClick}
+              tasks={tasks}
+            />
           ))}
         </MainBlock>
       </Container>

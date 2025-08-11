@@ -12,7 +12,10 @@ import {
 } from './Card.styled';
 
 export const Card = ({ task, onBrowseClick }) => {
-  const categoryColor = taskCategories[task.category] || 'gray';
+
+  const categoryKey = task.category ?? task.topic ?? '';
+  const categoryColor = taskCategories[categoryKey] || 'gray';
+  console.log('Category:', task.category, 'Mapped color:', categoryColor);
 
   return (
     <CardsItem>

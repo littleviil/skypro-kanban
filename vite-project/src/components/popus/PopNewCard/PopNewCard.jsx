@@ -1,7 +1,22 @@
 import React from "react";
-import { taskCategories } from "../../../tasks";
+import { Calendar } from "../../Calendar/Calendar";
+import { taskCategories } from '../../../tasks';
+import { createKanbanTask } from '../../../services/api';
 
-const PopNewCard = ({ onClose, onSubmit, formData, setFormData }) => {
+const statusesList = [
+  'Без статуса',
+  'Нужно сделать',
+  'В работе',
+  'Тестирование',
+  'Готово',
+];
+
+const PopNewCard = ({
+  formData,
+  setFormData,
+  onClose,
+  refreshTasks,
+}) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -11,10 +26,28 @@ const PopNewCard = ({ onClose, onSubmit, formData, setFormData }) => {
     setFormData((prev) => ({ ...prev, category }));
   };
 
-  const handleSubmit = (e) => {
+  const handleStatusSelect = (status) => {
+    setFormData((prev) => ({ ...prev, status }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (onSubmit) {
-      onSubmit();
+    try {
+      const payload = {
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        status: formData.status,
+        date: formData.date,
+      };
+
+      await createKanbanTask(payload);
+      if (refreshTasks) {
+        await refreshTasks();
+      }
+      onClose();
+    } catch (error) {
+      console.error('Ошибка создания задачи:', error.message);
     }
   };
 
@@ -35,9 +68,15 @@ const PopNewCard = ({ onClose, onSubmit, formData, setFormData }) => {
               ✕
             </a>
             <div className="pop-new-card__wrap">
-              <form className="pop-new-card__form form-new" id="formNewCard" onSubmit={handleSubmit}>
+              <form
+                className="pop-new-card__form form-new"
+                id="formNewCard"
+                onSubmit={handleSubmit}
+              >
                 <div className="form-new__block">
-                  <label htmlFor="formTitle" className="subttl">Название задачи</label>
+                  <label htmlFor="formTitle" className="subttl">
+                    Название задачи
+                  </label>
                   <input
                     className="form-new__input"
                     type="text"
@@ -50,7 +89,9 @@ const PopNewCard = ({ onClose, onSubmit, formData, setFormData }) => {
                   />
                 </div>
                 <div className="form-new__block">
-                  <label htmlFor="textArea" className="subttl">Описание задачи</label>
+                  <label htmlFor="textArea" className="subttl">
+                    Описание задачи
+                  </label>
                   <textarea
                     className="form-new__area"
                     name="description"
@@ -73,7 +114,9 @@ const PopNewCard = ({ onClose, onSubmit, formData, setFormData }) => {
                 {Object.keys(taskCategories).map((category) => (
                   <div
                     key={category}
-                    className={`categories__theme _${taskCategories[category]} ${formData.category === category ? '_active-category' : ''}`}
+                    className={`categories__theme _${taskCategories[category]} ${
+                      formData.category === category ? "_active-category" : ""
+                    }`}
                     onClick={() => handleCategorySelect(category)}
                   >
                     <p className={`_${taskCategories[category]}`}>{category}</p>
@@ -82,7 +125,26 @@ const PopNewCard = ({ onClose, onSubmit, formData, setFormData }) => {
               </div>
             </div>
 
-            <button className="form-new__create _hover01" id="btnCreate" onClick={handleSubmit}>
+            <div className="pop-new-card__status status">
+              <p className="status__p subttl">Статус</p>
+              <div className="status__themes">
+                {statusesList.map((status) => (
+                  <div
+                    key={status}
+                    className={`status__theme ${formData.status === status ? "_active-status" : ""}`}
+                    onClick={() => handleStatusSelect(status)}
+                  >
+                    <p>{status}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button
+              className="form-new__create _hover01"
+              id="btnCreate"
+              onClick={handleSubmit}
+            >
               Создать задачу
             </button>
           </div>

@@ -15,7 +15,9 @@ export const taskCategories = {
   "Web Design": "orange",
   "Research": "green", 
   "Copywriting": "purple",
+  "Без категории": "gray", 
 };
+
 
 export const taskStatuses = [...new Set(tasks.map(task => task.status))];
 

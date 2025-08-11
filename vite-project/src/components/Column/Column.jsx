@@ -13,7 +13,7 @@ export const Column = ({ status, onBrowseClick, tasks }) => {
       </ColumnTitle>
       <Cards>
         {filteredTasks.map((task) => (
-          <Card key={task.id} task={task} onBrowseClick={onBrowseClick} />
+          <Card key={task.id || task._id} task={task} onBrowseClick={onBrowseClick} />
         ))}
       </Cards>
     </MainColumn>
