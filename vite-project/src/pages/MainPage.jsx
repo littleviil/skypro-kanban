@@ -4,8 +4,9 @@ import PopExit from '../components/popus/PopExit/PopExit';
 import PopBrowse from '../components/popus/PopBrowse/PopBrowse';
 import Main from '../components/Main/Main';
 import { Container, Loading } from '../App.styled';
+import { taskCategories } from '../tasks';
 
-function MainPage({ setIsAuth, tasks, refreshTasks }) {
+function MainPage({ setIsAuth, tasks, setTasks, refreshTasks }) {
   const [loading, setLoading] = useState(true);
   const [isPopExitOpen, setIsPopExitOpen] = useState(false);
   const [isPopBrowseOpen, setIsPopBrowseOpen] = useState(false);
@@ -22,16 +23,22 @@ function MainPage({ setIsAuth, tasks, refreshTasks }) {
       (async () => {
         try {
           setLoading(true);
-          await refreshTasks(); // грузим задачи из App
+          const newTasks = await refreshTasks();
+          console.log('Extracted tasks:', newTasks);
+          const normalizedTasks = Array.isArray(newTasks) ? newTasks : [];
+          console.log('Normalized tasks:', normalizedTasks);
+          console.log('Unique categories:', [...new Set(normalizedTasks.map(task => task.category))]);
+          setTasks(normalizedTasks);
           setError('');
-        } catch {
+        } catch (err) {
+          console.error('Error loading tasks:', err);
           setError('Не удалось загрузить задачи');
         } finally {
           setLoading(false);
         }
       })();
     }
-  }, [token, navigate, refreshTasks]);
+  }, [token, navigate, refreshTasks, setTasks]);
 
   const openPopBrowse = (task) => {
     setSelectedTask(task);
@@ -51,7 +58,7 @@ function MainPage({ setIsAuth, tasks, refreshTasks }) {
       {isPopExitOpen && (
         <PopExit onClose={() => setIsPopExitOpen(false)} onLogout={handleLogout} />
       )}
-      {isPopBrowseOpen && (
+      {isPopBrowseOpen && selectedTask && (
         <PopBrowse
           task={selectedTask}
           onClose={() => {

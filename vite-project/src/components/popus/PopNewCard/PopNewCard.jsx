@@ -3,13 +3,13 @@ import { Calendar } from "../../Calendar/Calendar";
 import { taskCategories } from '../../../tasks';
 import { createKanbanTask } from '../../../services/api';
 
-const statusesList = [
-  'Без статуса',
-  'Нужно сделать',
-  'В работе',
-  'Тестирование',
-  'Готово',
-];
+// const statusesList = [
+//   'Без статуса',
+//   'Нужно сделать',
+//   'В работе',
+//   'Тестирование',
+//   'Готово',
+// ];
 
 const PopNewCard = ({
   formData,
@@ -26,9 +26,9 @@ const PopNewCard = ({
     setFormData((prev) => ({ ...prev, category }));
   };
 
-  const handleStatusSelect = (status) => {
-    setFormData((prev) => ({ ...prev, status }));
-  };
+  // const handleStatusSelect = (status) => {
+  //   setFormData((prev) => ({ ...prev, status }));
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -120,21 +120,6 @@ const PopNewCard = ({
                     onClick={() => handleCategorySelect(category)}
                   >
                     <p className={`_${taskCategories[category]}`}>{category}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="pop-new-card__status status">
-              <p className="status__p subttl">Статус</p>
-              <div className="status__themes">
-                {statusesList.map((status) => (
-                  <div
-                    key={status}
-                    className={`status__theme ${formData.status === status ? "_active-status" : ""}`}
-                    onClick={() => handleStatusSelect(status)}
-                  >
-                    <p>{status}</p>
                   </div>
                 ))}
               </div>

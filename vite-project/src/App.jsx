@@ -41,28 +41,44 @@ function App() {
   }
 
   const refreshTasks = useCallback(async () => {
-    if (!token) return;
+    if (!token) return [];
     try {
       const data = await fetchKanbanTasks(token);
-
-      const normalized = data.map(task => {
+      console.log('Данные с сервера:', data);
+      const tasksArray = Array.isArray(data) ? data : data.tasks || [];
+      const normalized = tasksArray.map(task => {
         const normalizedStatus = capitalizeFirstLetter(task.status || 'Без статуса');
+        // Временная логика для определения категории
+        let category;
+        if (task.category) {
+          category = capitalizeFirstLetter(task.category);
+        } else {
+          const titleLower = task.title ? task.title.toLowerCase() : '';
+          if (titleLower.includes('дизайн') || titleLower.includes('design')) {
+            category = 'Web Design';
+          } else if (titleLower.includes('копирайт') || titleLower.includes('writing')) {
+            category = 'Copywriting';
+          } else if (titleLower.includes('исслед') || titleLower.includes('research')) {
+            category = 'Research';
+          } else {
+            category = 'Без категории';
+          }
+        }
         return {
           ...task,
-          category: task.category
-            ? capitalizeFirstLetter(task.category)
-            : task.topic
-              ? capitalizeFirstLetter(task.topic)
-              : 'Без категории',
+          category,
           status: statusesList.includes(normalizedStatus)
             ? normalizedStatus
             : 'Без статуса',
         };
       });
-
+      console.log('Normalized tasks in App:', normalized);
+      console.log('Unique categories in App:', [...new Set(normalized.map(task => task.category))]);
       setTasks(normalized);
+      return normalized;
     } catch (error) {
       console.error('Ошибка при загрузке задач:', error);
+      return [];
     }
   }, [token]);
 
@@ -112,6 +128,7 @@ function App() {
           isAuth={isAuth}
           setIsAuth={setIsAuth}
           tasks={tasks}
+          setTasks={setTasks}
           refreshTasks={refreshTasks}
         />
       </Wrapper>

@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import { Calendar } from '../../Calendar/Calendar';
 import { taskCategories } from '../../../tasks';
 
-const statusesList = [
-  'Без статуса',
-  'Нужно сделать',
-  'В работе',
-  'Тестирование',
-  'Готово',
-];
+// const statusesList = [
+//   'Без статуса',
+//   'Нужно сделать',
+//   'В работе',
+//   'Тестирование',
+//   'Готово',
+// ];
 
 const PopBrowse = ({ task, onClose }) => {
   const [editedTask, setEditedTask] = useState(task);
@@ -48,15 +47,15 @@ const PopBrowse = ({ task, onClose }) => {
             <div className="pop-browse__status status">
               <p className="status__p subttl">Статус</p>
               <div className="status__themes">
-                {statusesList.map((status) => (
+                {editedTask.status && (
                   <div
-                    key={status}
-                    className={`status__theme ${editedTask.status === status ? "_active-status" : ""}`}
-                    onClick={() => handleStatusChange(status)}
+                    key={editedTask.status}
+                    className="status__theme _active-status"
+                    onClick={() => handleStatusChange(editedTask.status)}
                   >
-                    <p>{status}</p>
+                    <p>{editedTask.status}</p>
                   </div>
-                ))}
+                )}
               </div>
             </div>
 

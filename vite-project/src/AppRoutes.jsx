@@ -6,7 +6,7 @@ import EditCardPage from './pages/EditCardPage';
 import NotFoundPage from './pages/NotFoundPage';
 import PrivateRoute from './components/PrivateRoute';
 
-function AppRoutes({ isAuth, setIsAuth, tasks, refreshTasks }) {
+function AppRoutes({ isAuth, setIsAuth, tasks, setTasks, refreshTasks }) {
   return (
     <Routes>
       <Route element={<PrivateRoute isAuth={isAuth} />}>
@@ -16,6 +16,7 @@ function AppRoutes({ isAuth, setIsAuth, tasks, refreshTasks }) {
             <MainPage
               setIsAuth={setIsAuth}
               tasks={tasks}
+              setTasks={setTasks}
               refreshTasks={refreshTasks}
             />
           }
