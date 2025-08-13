@@ -1,15 +1,7 @@
 import React from "react";
 import { Calendar } from "../../Calendar/Calendar";
-import { taskCategories } from '../../../tasks';
-import { createKanbanTask } from '../../../services/api';
-
-// const statusesList = [
-//   'Без статуса',
-//   'Нужно сделать',
-//   'В работе',
-//   'Тестирование',
-//   'Готово',
-// ];
+import { taskCategories } from "../../../tasks";
+import { createKanbanTask } from "../../../services/api";
 
 const PopNewCard = ({
   formData,
@@ -26,19 +18,15 @@ const PopNewCard = ({
     setFormData((prev) => ({ ...prev, category }));
   };
 
-  // const handleStatusSelect = (status) => {
-  //   setFormData((prev) => ({ ...prev, status }));
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const payload = {
-        title: formData.title,
-        description: formData.description,
+        title: formData.title.trim(),
+        description: formData.description.trim(),
         category: formData.category,
         status: formData.status,
-        date: formData.date,
+        date: new Date(formData.date || Date.now()).toISOString(),
       };
 
       await createKanbanTask(payload);
@@ -47,7 +35,7 @@ const PopNewCard = ({
       }
       onClose();
     } catch (error) {
-      console.error('Ошибка создания задачи:', error.message);
+      console.error("Ошибка создания задачи:", error.message || error);
     }
   };
 

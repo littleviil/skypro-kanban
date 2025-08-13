@@ -26,12 +26,13 @@ function App() {
     description: '',
     category: 'Web Design',
     status: 'Без статуса',
-    date: new Date().toLocaleDateString('ru-RU'),
+    date: new Date().toISOString(), // ISO формат
   });
   const [tasks, setTasks] = useState([]);
 
   const location = useLocation();
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
+  const isAuthPage =
+    location.pathname === '/login' || location.pathname === '/register';
 
   const token = localStorage.getItem('token');
 
@@ -44,11 +45,9 @@ function App() {
     if (!token) return [];
     try {
       const data = await fetchKanbanTasks(token);
-      console.log('Данные с сервера:', data);
       const tasksArray = Array.isArray(data) ? data : data.tasks || [];
-      const normalized = tasksArray.map(task => {
+      const normalized = tasksArray.map((task) => {
         const normalizedStatus = capitalizeFirstLetter(task.status || 'Без статуса');
-        // Временная логика для определения категории
         let category;
         if (task.category) {
           category = capitalizeFirstLetter(task.category);
@@ -72,8 +71,6 @@ function App() {
             : 'Без статуса',
         };
       });
-      console.log('Normalized tasks in App:', normalized);
-      console.log('Unique categories in App:', [...new Set(normalized.map(task => task.category))]);
       setTasks(normalized);
       return normalized;
     } catch (error) {
@@ -106,7 +103,7 @@ function App() {
               description: '',
               category: 'Web Design',
               status: 'Без статуса',
-              date: new Date().toLocaleDateString('ru-RU'),
+              date: new Date().toISOString(), // ISO при создании
             });
             setIsPopNewCardOpen(true);
           }}
