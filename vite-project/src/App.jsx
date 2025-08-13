@@ -26,7 +26,7 @@ function App() {
     description: '',
     category: 'Web Design',
     status: 'Без статуса',
-    date: new Date().toISOString(), // ISO формат
+    date: new Date().toISOString(),
   });
   const [tasks, setTasks] = useState([]);
 
@@ -103,7 +103,7 @@ function App() {
               description: '',
               category: 'Web Design',
               status: 'Без статуса',
-              date: new Date().toISOString(), // ISO при создании
+              date: new Date().toISOString(),
             });
             setIsPopNewCardOpen(true);
           }}

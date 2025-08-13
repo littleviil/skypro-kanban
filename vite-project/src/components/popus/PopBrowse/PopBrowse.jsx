@@ -2,14 +2,6 @@ import React, { useState } from 'react';
 import { Calendar } from '../../Calendar/Calendar';
 import { taskCategories } from '../../../tasks';
 
-// const statusesList = [
-//   'Без статуса',
-//   'Нужно сделать',
-//   'В работе',
-//   'Тестирование',
-//   'Готово',
-// ];
-
 const PopBrowse = ({ task, onClose }) => {
   const [editedTask, setEditedTask] = useState(task);
 

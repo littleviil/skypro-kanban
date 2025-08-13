@@ -1,5 +1,4 @@
 const API_URL = 'https://wedev-api.sky.pro/api/kanban';
-// const KANBAN_API_URL = `${API_URL}/kanban`;
 
 export async function createKanbanTask(taskData) {
   const token = localStorage.getItem("token");
@@ -17,7 +16,6 @@ export async function createKanbanTask(taskData) {
     const result = await response.json();
 
     if (!response.ok) {
-      console.error("Ошибка при создании задачи:", result);
       throw new Error(result?.error || "Ошибка при создании задачи");
     }
 
@@ -43,7 +41,6 @@ export async function fetchKanbanTasks(token) {
     }
 
     const data = await response.json();
-    console.log("Данные с сервера:", data); 
     return data.tasks || [];
   } catch (error) {
     console.error('Ошибка при получении задач:', error);

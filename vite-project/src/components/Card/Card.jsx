@@ -15,10 +15,7 @@ export const Card = ({ task, onBrowseClick }) => {
 
   const categoryKey = task.topic || "Без категории";
   const categoryColor = taskCategories[categoryKey] || 'gray';
-
-  console.log('Task:', task);
-  console.log('Category:', task.category, 'Topic:', task.topic, 'CategoryKey:', categoryKey, 'Mapped color:', categoryColor);
-
+  
   return (
     <CardsItem>
       <CardsCard>

@@ -24,10 +24,7 @@ function MainPage({ setIsAuth, tasks, setTasks, refreshTasks }) {
         try {
           setLoading(true);
           const newTasks = await refreshTasks();
-          console.log('Extracted tasks:', newTasks);
           const normalizedTasks = Array.isArray(newTasks) ? newTasks : [];
-          console.log('Normalized tasks:', normalizedTasks);
-          console.log('Unique categories:', [...new Set(normalizedTasks.map(task => task.category))]);
           setTasks(normalizedTasks);
           setError('');
         } catch (err) {

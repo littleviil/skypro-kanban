@@ -18,7 +18,6 @@ const NewCardPage = () => {
     if (!token) return [];
     try {
       const data = await fetchKanbanTasks(token);
-      console.log('Список задач обновлён:', data);
       return data;
     } catch (error) {
       console.error('Ошибка при загрузке задач:', error);
