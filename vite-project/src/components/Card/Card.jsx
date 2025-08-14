@@ -21,7 +21,7 @@ export const Card = ({ task, onBrowseClick }) => {
       <CardsCard>
         <CardGroup>
           <CardTheme theme={categoryColor}>
-            <p>{task.category}</p>
+            <p>{task.topic}</p>
           </CardTheme>
           <CardBtn onClick={() => onBrowseClick(task)}>
             <div></div>

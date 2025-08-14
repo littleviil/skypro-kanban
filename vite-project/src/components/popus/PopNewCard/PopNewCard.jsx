@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Calendar } from "../../Calendar/Calendar";
 import { taskCategories } from "../../../tasks";
 import { createKanbanTask } from "../../../services/api";
+import { formatISO } from "date-fns";
 
 const PopNewCard = ({
   formData,
@@ -9,6 +10,8 @@ const PopNewCard = ({
   onClose,
   refreshTasks,
 }) => {
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -18,24 +21,43 @@ const PopNewCard = ({
     setFormData((prev) => ({ ...prev, category }));
   };
 
+  const handleDateChange = (selectedDate) => {
+    setFormData((prev) => ({
+      ...prev,
+      date: selectedDate
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.title.trim()) {
+      setError("Введите название задачи");
+      return;
+    }
+
+    if (!formData.description.trim()) {
+      setError("Введите описание задачи");
+      return;
+    }
+
     try {
+      setError("");
+
       const payload = {
         title: formData.title.trim(),
         description: formData.description.trim(),
         category: formData.category,
         status: formData.status,
-        date: new Date(formData.date || Date.now()).toISOString(),
+        date: formatISO(new Date(formData.date)), // ISO формат
       };
 
       await createKanbanTask(payload);
-      if (refreshTasks) {
-        await refreshTasks();
-      }
+      await refreshTasks();
       onClose();
     } catch (error) {
-      console.error("Ошибка создания задачи:", error.message || error);
+      console.error("Ошибка создания задачи:", error);
+      setError(error.message || "Не удалось создать задачу");
     }
   };
 
@@ -55,12 +77,15 @@ const PopNewCard = ({
             >
               ✕
             </a>
+
             <div className="pop-new-card__wrap">
               <form
                 className="pop-new-card__form form-new"
                 id="formNewCard"
                 onSubmit={handleSubmit}
               >
+                {error && <p style={{ color: "red" }}>{error}</p>}
+
                 <div className="form-new__block">
                   <label htmlFor="formTitle" className="subttl">
                     Название задачи
@@ -76,6 +101,7 @@ const PopNewCard = ({
                     autoFocus
                   />
                 </div>
+
                 <div className="form-new__block">
                   <label htmlFor="textArea" className="subttl">
                     Описание задачи
@@ -92,7 +118,10 @@ const PopNewCard = ({
               </form>
 
               <div className="pop-new-card__calendar calendar">
-                <Calendar />
+                <Calendar
+                  value={formData.date}
+                  onChange={handleDateChange}
+                />
               </div>
             </div>
 

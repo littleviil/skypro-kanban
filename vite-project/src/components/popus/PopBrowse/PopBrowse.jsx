@@ -13,12 +13,22 @@ const PopBrowse = ({ task, onClose }) => {
     setEditedTask((prev) => ({ ...prev, description: e.target.value }));
   };
 
+  const handleDateChange = (newDate) => {
+    if (!newDate) return;
+    setEditedTask((prev) => ({
+      ...prev,
+      date: new Date(newDate).toISOString(), // формат для API
+    }));
+  };
+
   const handleSave = () => {
     console.log("Сохраняем", editedTask);
+    // здесь отправляем PUT/PATCH запрос на API с editedTask
     onClose();
   };
 
   const handleDelete = () => {
+    // здесь отправляем DELETE запрос на API
     onClose();
   };
 
@@ -65,8 +75,13 @@ const PopBrowse = ({ task, onClose }) => {
                   ></textarea>
                 </div>
               </form>
+
+              {/* Привязанный календарь */}
               <div className="pop-new-card__calendar calendar">
-                <Calendar />
+                <Calendar
+                  value={editedTask.date ? new Date(editedTask.date) : new Date()}
+                  onChange={handleDateChange}
+                />
               </div>
             </div>
 
@@ -79,17 +94,30 @@ const PopBrowse = ({ task, onClose }) => {
 
             <div className="pop-browse__btn-browse">
               <div className="btn-group">
-                <button className="btn-browse__edit _btn-bor _hover03" onClick={handleSave}>
+                <button
+                  type="button"
+                  className="btn-browse__edit _btn-bor _hover03"
+                  onClick={handleSave}
+                >
                   Сохранить
                 </button>
-                <button className="btn-browse__delete _btn-bor _hover03" onClick={handleDelete}>
+                <button
+                  type="button"
+                  className="btn-browse__delete _btn-bor _hover03"
+                  onClick={handleDelete}
+                >
                   Удалить задачу
                 </button>
               </div>
-              <button className="btn-browse__close _btn-bg _hover01" onClick={onClose}>
+              <button
+                type="button"
+                className="btn-browse__close _btn-bg _hover01"
+                onClick={onClose}
+              >
                 Закрыть
               </button>
             </div>
+
           </div>
         </div>
       </div>
