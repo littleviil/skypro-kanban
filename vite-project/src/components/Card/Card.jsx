@@ -60,7 +60,15 @@ export const Card = ({ task, onBrowseClick }) => {
                 </clipPath>
               </defs>
             </svg>
-            <p>{task.date}</p>
+            <p>
+              {task.date
+                ? new Date(task.date).toLocaleDateString('ru-RU', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: '2-digit',
+                  })
+                : ''}
+            </p>
           </CardDate>
         </CardContent>
       </CardsCard>
