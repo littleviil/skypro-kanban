@@ -49,7 +49,7 @@ const PopNewCard = ({
         description: formData.description.trim(),
         category: formData.category,
         status: formData.status,
-        date: formatISO(new Date(formData.date)), // ISO формат
+        date: formatISO(new Date(formData.date)),
       };
 
       await createKanbanTask(payload);

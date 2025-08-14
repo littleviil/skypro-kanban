@@ -17,18 +17,16 @@ const PopBrowse = ({ task, onClose }) => {
     if (!newDate) return;
     setEditedTask((prev) => ({
       ...prev,
-      date: new Date(newDate).toISOString(), // формат для API
+      date: new Date(newDate).toISOString(),
     }));
   };
 
   const handleSave = () => {
     console.log("Сохраняем", editedTask);
-    // здесь отправляем PUT/PATCH запрос на API с editedTask
     onClose();
   };
 
   const handleDelete = () => {
-    // здесь отправляем DELETE запрос на API
     onClose();
   };
 
@@ -76,7 +74,6 @@ const PopBrowse = ({ task, onClose }) => {
                 </div>
               </form>
 
-              {/* Привязанный календарь */}
               <div className="pop-new-card__calendar calendar">
                 <Calendar
                   value={editedTask.date ? new Date(editedTask.date) : new Date()}
