@@ -4,7 +4,6 @@ import PopExit from '../components/popus/PopExit/PopExit';
 import PopBrowse from '../components/popus/PopBrowse/PopBrowse';
 import Main from '../components/Main/Main';
 import { Container, Loading } from '../App.styled';
-import { taskCategories } from '../tasks';
 
 function MainPage({ setIsAuth, tasks, setTasks, refreshTasks }) {
   const [loading, setLoading] = useState(true);
