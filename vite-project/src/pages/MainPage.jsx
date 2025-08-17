@@ -1,34 +1,37 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
-import PopExit from '../components/popus/PopExit/PopExit';
-import PopBrowse from '../components/popus/PopBrowse/PopBrowse';
-import Main from '../components/Main/Main';
-import { Container, Loading } from '../App.styled';
+import { useEffect, useState, useContext } from "react";
+import { useNavigate, Outlet } from "react-router-dom";
+import PopExit from "../components/popus/PopExit/PopExit";
+import PopBrowse from "../components/popus/PopBrowse/PopBrowse";
+import Main from "../components/Main/Main";
+import { Container, Loading } from "../App.styled";
+import { TaskContext } from "../context/TaskContext";
+import { AuthContext } from "../context/AuthContext";
 
-function MainPage({ setIsAuth, tasks, setTasks, refreshTasks }) {
+function MainPage() {
   const [loading, setLoading] = useState(true);
   const [isPopExitOpen, setIsPopExitOpen] = useState(false);
   const [isPopBrowseOpen, setIsPopBrowseOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
-  const token = localStorage.getItem('token');
+  const { tasks, setTasks, refreshTasks } = useContext(TaskContext);
+  const { setIsAuth, token } = useContext(AuthContext);
 
   useEffect(() => {
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     } else {
       (async () => {
         try {
           setLoading(true);
-          const newTasks = await refreshTasks();
-          const normalizedTasks = Array.isArray(newTasks) ? newTasks : [];
-          setTasks(normalizedTasks);
-          setError('');
+          const newTasks = await refreshTasks(token);
+          setTasks(Array.isArray(newTasks) ? newTasks : []);
+          setError("");
         } catch (err) {
-          console.error('Error loading tasks:', err);
-          setError('Не удалось загрузить задачи');
+          console.error("Error loading tasks:", err);
+          setError("Не удалось загрузить задачи");
         } finally {
           setLoading(false);
         }
@@ -42,11 +45,11 @@ function MainPage({ setIsAuth, tasks, setTasks, refreshTasks }) {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('name');
-    localStorage.removeItem('email');
+    localStorage.removeItem("token");
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
     setIsAuth(false);
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
