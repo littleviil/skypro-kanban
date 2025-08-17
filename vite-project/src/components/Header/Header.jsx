@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   HeaderPage,
   HeaderBlock,
@@ -8,22 +8,42 @@ import {
   HeaderUser,
 } from './Header.styled';
 import { Container } from '../../App.styled';
-import { PopUser } from '../popus/PopUser/PopUser';
+import PopUser from '../popus/PopUser/PopUser';
 
-export const Header = ({ onNewCardClick, onExitClick }) => {
+export const Header = ({ onNewCardClick, setIsAuth }) => {
   const [isPopUserOpen, setIsPopUserOpen] = useState(false);
+  const [userName, setUserName] = useState('Пользователь');
+
+  useEffect(() => {
+    const name = localStorage.getItem('name');
+    if (name) {
+      setUserName(name);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('name');
+    localStorage.removeItem('email');
+    setIsAuth(false);
+  };
+
+  const togglePopUser = (e) => {
+    e.preventDefault();
+    setIsPopUserOpen((prev) => !prev);
+  };
 
   return (
     <HeaderPage>
       <Container>
         <HeaderBlock>
           <HeaderLogo className="_show _light">
-            <a href="" target="_self">
+            <a href="/" target="_self">
               <img src="images/logo.png" alt="logo" />
             </a>
           </HeaderLogo>
           <HeaderLogo className="_dark">
-            <a href="" target="_self">
+            <a href="/" target="_self">
               <img src="images/logo_dark.png" alt="logo" />
             </a>
           </HeaderLogo>
@@ -34,17 +54,14 @@ export const Header = ({ onNewCardClick, onExitClick }) => {
             <HeaderUser
               as="a"
               href="#user-set-target"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsPopUserOpen(true);
-              }}
+              onClick={togglePopUser}
             >
-              Ivan Ivanov
+              {userName}
             </HeaderUser>
             {isPopUserOpen && (
               <PopUser
                 onClose={() => setIsPopUserOpen(false)}
-                onExitClick={onExitClick}
+                onExitClick={handleLogout}
               />
             )}
           </HeaderNav>

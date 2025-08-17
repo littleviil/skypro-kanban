@@ -1,60 +1,134 @@
-import { useState, useEffect } from 'react';
-import { Wrapper, Loading, Container } from './App.styled';
-import { PopExit } from './components/popus/PopExit/PopExit';
-import { PopNewCard } from './components/popus/PopNewCard/PopNewCard';
-import { PopBrowse } from './components/popus/PopBrowse/PopBrowse';
-import { Header } from './components/Header/Header';
-import { Main } from './components/Main/Main';
+import { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Wrapper } from './App.styled';
+import AppRoutes from './AppRoutes';
 import GlobalStyles from './GlobalStyles';
-import './App.css'
+import GlobalAuthStyles from './auth.styled';
+import './App.css';
+import { Header } from './components/Header/Header';
+import PopNewCard from './components/popus/PopNewCard/PopNewCard';
+import { fetchKanbanTasks } from './services/api';
+
+const statusesList = [
+  'Без статуса',
+  'Нужно сделать',
+  'В работе',
+  'Тестирование',
+  'Готово',
+];
 
 function App() {
-  const [loading, setLoading] = useState(true);
-  const [isPopExitOpen, setIsPopExitOpen] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const [isPopNewCardOpen, setIsPopNewCardOpen] = useState(false);
-  const [isPopBrowseOpen, setIsPopBrowseOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    category: 'Web Design',
+    status: 'Без статуса',
+    date: new Date().toISOString(),
+  });
+  const [tasks, setTasks] = useState([]);
+
+  const location = useLocation();
+  const isAuthPage =
+    location.pathname === '/login' || location.pathname === '/register';
+
+  const token = localStorage.getItem('token');
+
+  function capitalizeFirstLetter(str) {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+
+  const refreshTasks = useCallback(async () => {
+    if (!token) return [];
+    try {
+      const data = await fetchKanbanTasks(token);
+      const tasksArray = Array.isArray(data) ? data : data.tasks || [];
+      const normalized = tasksArray.map((task) => {
+        const normalizedStatus = capitalizeFirstLetter(task.status || 'Без статуса');
+        let category;
+        if (task.category) {
+          category = capitalizeFirstLetter(task.category);
+        } else {
+          const titleLower = task.title ? task.title.toLowerCase() : '';
+          if (titleLower.includes('дизайн') || titleLower.includes('design')) {
+            category = 'Web Design';
+          } else if (titleLower.includes('копирайт') || titleLower.includes('writing')) {
+            category = 'Copywriting';
+          } else if (titleLower.includes('исслед') || titleLower.includes('research')) {
+            category = 'Research';
+          } else {
+            category = 'Без категории';
+          }
+        }
+        return {
+          ...task,
+          category,
+          status: statusesList.includes(normalizedStatus)
+            ? normalizedStatus
+            : 'Без статуса',
+        };
+      });
+      setTasks(normalized);
+      return normalized;
+    } catch (error) {
+      console.error('Ошибка при загрузке задач:', error);
+      return [];
+    }
+  }, [token]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }, []);
+    const storedToken = localStorage.getItem('token');
+    setIsAuth(!!storedToken);
+    setAuthChecked(true);
+    if (storedToken) {
+      refreshTasks();
+    }
+  }, [refreshTasks]);
 
-  const openPopBrowse = (task) => {
-    setSelectedTask(task);
-    setIsPopBrowseOpen(true);
-  };
+  if (!authChecked) return null;
 
   return (
     <>
-    <GlobalStyles />
-    <Wrapper>
-      {isPopExitOpen && <PopExit onClose={() => setIsPopExitOpen(false)} />}
-      {isPopNewCardOpen && (
-        <PopNewCard onClose={() => setIsPopNewCardOpen(false)} />
-      )}
-      {isPopBrowseOpen && (
-        <PopBrowse
-          task={selectedTask}
-          onClose={() => {
-            setIsPopBrowseOpen(false);
-            setSelectedTask(null);
+      <GlobalStyles />
+      <GlobalAuthStyles />
+
+      {!isAuthPage && isAuth && (
+        <Header
+          onNewCardClick={() => {
+            setFormData({
+              title: '',
+              description: '',
+              category: 'Web Design',
+              status: 'Без статуса',
+              date: new Date().toISOString(),
+            });
+            setIsPopNewCardOpen(true);
           }}
+          setIsAuth={setIsAuth}
         />
       )}
-      <Header
-        onNewCardClick={() => setIsPopNewCardOpen(true)}
-        onExitClick={() => setIsPopExitOpen(true)}
-      />
-      {loading ? (
-        <Loading>Данные загружаются...</Loading>
-      ) : (
-        <Container>
-          <Main onBrowseClick={openPopBrowse} />
-        </Container>
+
+      {isPopNewCardOpen && (
+        <PopNewCard
+          formData={formData}
+          setFormData={setFormData}
+          onClose={() => setIsPopNewCardOpen(false)}
+          refreshTasks={refreshTasks}
+        />
       )}
-    </Wrapper>
+
+      <Wrapper>
+        <AppRoutes
+          isAuth={isAuth}
+          setIsAuth={setIsAuth}
+          tasks={tasks}
+          setTasks={setTasks}
+          refreshTasks={refreshTasks}
+        />
+      </Wrapper>
     </>
   );
 }

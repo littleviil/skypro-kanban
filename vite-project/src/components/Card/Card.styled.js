@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { themes } from '../../themes';
+import { themes, theme } from '../../themes';
 
 export const CardsItem = styled.div`
   width: 100%;
@@ -7,8 +7,8 @@ export const CardsItem = styled.div`
 `;
 
 export const CardsCard = styled.div`
-  width: 100%;
-  height: 113px;
+  width: 220px;
+  height: 130px;
   padding: 10px 10px 10px 14px;
   border-radius: 10px;
   background: #ffffff;
@@ -48,7 +48,7 @@ export const CardTheme = styled.div`
 
   p {
     display: contents;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 600;
     line-height: 10px;
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
@@ -106,9 +106,32 @@ export const CardDate = styled.div`
 `;
 
 export const Cards = styled.div`
-  gap: 10px;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
+`;
+
+export const Button = styled.button`
+  background-color: ${theme.primaryButtonColor};
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px;
+  &:hover {
+    background-color: ${theme.hoverBgColor};
+  }
+`;
+
+export const CardWrapper = styled.div`
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 `;

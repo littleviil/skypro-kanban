@@ -11,17 +11,17 @@ import {
   CardDate,
 } from './Card.styled';
 
-export const Card = ({ title, category, date, onBrowseClick }) => {
-  const categoryColor = taskCategories[category] || 'gray';
+export const Card = ({ task, onBrowseClick }) => {
 
-  const task = { title, category, date };
-
+  const categoryKey = task.topic || "Без категории";
+  const categoryColor = taskCategories[categoryKey] || 'gray';
+  
   return (
     <CardsItem>
       <CardsCard>
         <CardGroup>
           <CardTheme theme={categoryColor}>
-            <p>{category}</p>
+            <p>{task.topic}</p>
           </CardTheme>
           <CardBtn onClick={() => onBrowseClick(task)}>
             <div></div>
@@ -30,7 +30,7 @@ export const Card = ({ title, category, date, onBrowseClick }) => {
           </CardBtn>
         </CardGroup>
         <CardContent>
-          <CardTitle as="h3">{title}</CardTitle>
+          <CardTitle as="h3">{task.title}</CardTitle>
           <CardDate>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +60,15 @@ export const Card = ({ title, category, date, onBrowseClick }) => {
                 </clipPath>
               </defs>
             </svg>
-            <p>{date}</p>
+            <p>
+              {task.date
+                ? new Date(task.date).toLocaleDateString('ru-RU', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: '2-digit',
+                  })
+                : ''}
+            </p>
           </CardDate>
         </CardContent>
       </CardsCard>

@@ -8,7 +8,7 @@ export const MainPage = styled.div`
 export const MainBlock = styled.div`
   width: 100%;
   margin: 0 auto;
-  padding: 25px 0 49px;
+  padding: 40px 0 49px;
   display: flex;
 
   @media screen and (max-width: 1200px) {

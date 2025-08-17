@@ -9,7 +9,7 @@ import {
   PopExitNo,
 } from './PopExit.styled';
 
-export const PopExit = () => {
+const PopExit = ({ onClose, onLogout }) => {
   return (
     <PopExitPage id="popExit">
       <PopExitContainer>
@@ -19,11 +19,11 @@ export const PopExit = () => {
           </PopExitTtl>
           <form id="formExit" action="#">
             <PopExitFormGroup>
-              <PopExitYes id="exitYes">
-                <a href="modal/signin.html">Да, выйти</a>
+              <PopExitYes id="exitYes" onClick={(e) => { e.preventDefault(); onLogout(); onClose(); }}>
+                <a href="#">Да, выйти</a>
               </PopExitYes>
-              <PopExitNo id="exitNo">
-                <a href="main.html">Нет, остаться</a>
+              <PopExitNo id="exitNo" onClick={(e) => { e.preventDefault(); onClose(); }}>
+                <a href="#">Нет, остаться</a>
               </PopExitNo>
             </PopExitFormGroup>
           </form>
@@ -32,3 +32,5 @@ export const PopExit = () => {
     </PopExitPage>
   );
 };
+
+export default PopExit;
