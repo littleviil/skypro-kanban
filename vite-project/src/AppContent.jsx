@@ -23,6 +23,8 @@ function AppContent() {
   const { isAuth, setIsAuth } = useContext(AuthContext);
   const { setTasks } = useContext(TaskContext);
 
+    console.log("🔑 isAuth:", isAuth);
+
   const [authChecked, setAuthChecked] = useState(false);
   const [isPopNewCardOpen, setIsPopNewCardOpen] = useState(false);
   const [formData, setFormData] = useState({

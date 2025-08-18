@@ -1,10 +1,11 @@
 import { useState, useContext } from "react";
+import { Navigate } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
 import { signUp } from "../services/auth";
 import { AuthContext } from "../context/AuthContext";
 
 function RegisterPage() {
-  const { setIsAuth } = useContext(AuthContext);
+  const { isAuth, setIsAuth } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -73,6 +74,9 @@ function RegisterPage() {
       });
     }
   };
+
+  // 🔥 если уже авторизован → перебрасываем на главную
+  if (isAuth) return <Navigate to="/" replace />;
 
   return (
     <AuthForm

@@ -1,23 +1,18 @@
 import { useState, useContext } from "react";
+import { Navigate } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
 import { signIn } from "../services/auth";
 import { AuthContext } from "../context/AuthContext";
 
 function LoginPage() {
-  const { setIsAuth } = useContext(AuthContext);
+  const { isAuth, setIsAuth } = useContext(AuthContext);
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     setError("");
   };
 
@@ -32,11 +27,7 @@ function LoginPage() {
     }
 
     try {
-      const user = await signIn({
-        login: email,
-        password,
-      });
-
+      const user = await signIn({ login: email, password });
       localStorage.setItem("token", user.token);
       localStorage.setItem("name", user.name);
       localStorage.setItem("email", email);
@@ -46,6 +37,9 @@ function LoginPage() {
       setError(err.message || "Ошибка авторизации");
     }
   };
+
+  // ✅ Если уже авторизован → сразу на главную
+  if (isAuth) return <Navigate to="/" replace />;
 
   return (
     <AuthForm
