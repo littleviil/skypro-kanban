@@ -75,7 +75,6 @@ function RegisterPage() {
     }
   };
 
-  // 🔥 если уже авторизован → перебрасываем на главную
   if (isAuth) return <Navigate to="/" replace />;
 
   return (

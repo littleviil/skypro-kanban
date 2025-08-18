@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { Calendar } from '../../Calendar/Calendar';
-import { taskCategories } from '../../../tasks';
+import React, { useState, useContext } from "react";
+import { Calendar } from "../../Calendar/Calendar";
+import { taskCategories } from "../../../tasks";
+import { TaskContext } from "../../../context/TaskContext";
 
 const PopBrowse = ({ task, onClose }) => {
+  const { editTask, removeTask } = useContext(TaskContext);
   const [editedTask, setEditedTask] = useState(task);
 
   const handleStatusChange = (status) => {
@@ -21,16 +23,25 @@ const PopBrowse = ({ task, onClose }) => {
     }));
   };
 
-  const handleSave = () => {
-    console.log("Сохраняем", editedTask);
-    onClose();
+  const handleSave = async () => {
+    try {
+      await editTask(editedTask._id, editedTask);
+      onClose();
+    } catch (err) {
+      console.error("Ошибка сохранения:", err);
+    }
   };
 
-  const handleDelete = () => {
-    onClose();
+  const handleDelete = async () => {
+    try {
+      await removeTask(task._id);
+      onClose();
+    } catch (err) {
+      console.error("Ошибка удаления:", err);
+    }
   };
 
-  const taskCategoryColor = taskCategories[editedTask?.category] || 'gray';
+  const taskCategoryColor = taskCategories[editedTask?.category] || "gray";
 
   return (
     <div className="pop-browse" id="popBrowse">
@@ -38,36 +49,46 @@ const PopBrowse = ({ task, onClose }) => {
         <div className="pop-browse__block">
           <div className="pop-browse__content">
             <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">{editedTask?.title || 'Название задачи'}</h3>
-              <div className={`categories__theme theme-top _${taskCategoryColor} _active-category`}>
-                <p className={`_${taskCategoryColor}`}>{editedTask?.category || 'Web Design'}</p>
+              <h3 className="pop-browse__ttl">
+                {editedTask?.title || "Название задачи"}
+              </h3>
+              <div
+                className={`categories__theme theme-top _${taskCategoryColor} _active-category`}
+              >
+                <p className={`_${taskCategoryColor}`}>
+                  {editedTask?.category || "Web Design"}
+                </p>
               </div>
             </div>
-
             <div className="pop-browse__status status">
               <p className="status__p subttl">Статус</p>
               <div className="status__themes">
-                {editedTask.status && (
-                  <div
-                    key={editedTask.status}
-                    className="status__theme _active-status"
-                    onClick={() => handleStatusChange(editedTask.status)}
-                  >
-                    <p>{editedTask.status}</p>
-                  </div>
+                {["Без статуса", "Нужно сделать", "В работе", "Тестирование", "Готово"].map(
+                  (status) => (
+                    <div
+                      key={status}
+                      className={`status__theme ${
+                        editedTask.status === status ? "_active-status" : ""
+                      }`}
+                      onClick={() => handleStatusChange(status)}
+                    >
+                      <p>{status}</p>
+                    </div>
+                  )
                 )}
               </div>
             </div>
-
             <div className="pop-browse__wrap">
               <form className="pop-browse__form form-browse" id="formBrowseCard">
                 <div className="form-browse__block">
-                  <label htmlFor="textArea01" className="subttl">Описание задачи</label>
+                  <label htmlFor="textArea01" className="subttl">
+                    Описание задачи
+                  </label>
                   <textarea
                     className="form-browse__area"
                     name="description"
                     id="textArea01"
-                    value={editedTask?.description || ''}
+                    value={editedTask?.description || ""}
                     onChange={handleDescriptionChange}
                     placeholder="Введите описание задачи..."
                   ></textarea>
@@ -81,14 +102,16 @@ const PopBrowse = ({ task, onClose }) => {
                 />
               </div>
             </div>
-
             <div className="theme-down__categories theme-down">
               <p className="categories__p subttl">Категория</p>
-              <div className={`categories__theme _${taskCategoryColor} _active-category`}>
-                <p className={`_${taskCategoryColor}`}>{editedTask?.category || 'Web Design'}</p>
+              <div
+                className={`categories__theme _${taskCategoryColor} _active-category`}
+              >
+                <p className={`_${taskCategoryColor}`}>
+                  {editedTask?.category || "Web Design"}
+                </p>
               </div>
             </div>
-
             <div className="pop-browse__btn-browse">
               <div className="btn-group">
                 <button
@@ -114,7 +137,6 @@ const PopBrowse = ({ task, onClose }) => {
                 Закрыть
               </button>
             </div>
-
           </div>
         </div>
       </div>

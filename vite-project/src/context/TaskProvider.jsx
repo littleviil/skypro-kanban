@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { TaskContext } from "./TaskContext";
-import { fetchKanbanTasks } from "../services/api";
+import { fetchKanbanTasks, deleteKanbanTask, updateKanbanTask } from "../services/api";
 
 const statusesList = [
   "Без статуса",
@@ -29,9 +29,7 @@ export const TaskProvider = ({ children }) => {
       const data = await fetchKanbanTasks(token);
       const tasksArray = Array.isArray(data) ? data : data.tasks || [];
       const normalized = tasksArray.map((task) => {
-        const normalizedStatus = capitalizeFirstLetter(
-          task.status || "Без статуса"
-        );
+        const normalizedStatus = capitalizeFirstLetter(task.status || "Без статуса");
         let category;
         if (task.category) {
           category = capitalizeFirstLetter(task.category);
@@ -39,15 +37,9 @@ export const TaskProvider = ({ children }) => {
           const titleLower = task.title ? task.title.toLowerCase() : "";
           if (titleLower.includes("дизайн") || titleLower.includes("design")) {
             category = "Web Design";
-          } else if (
-            titleLower.includes("копирайт") ||
-            titleLower.includes("writing")
-          ) {
+          } else if (titleLower.includes("копирайт") || titleLower.includes("writing")) {
             category = "Copywriting";
-          } else if (
-            titleLower.includes("исслед") ||
-            titleLower.includes("research")
-          ) {
+          } else if (titleLower.includes("исслед") || titleLower.includes("research")) {
             category = "Research";
           } else {
             category = "Без категории";
@@ -73,6 +65,24 @@ export const TaskProvider = ({ children }) => {
     }
   }, [token]);
 
+  const removeTask = async (id) => {
+    try {
+      await deleteKanbanTask(id);
+      await refreshTasks();
+    } catch (err) {
+      console.error("Ошибка удаления задачи:", err);
+    }
+  };
+
+  const editTask = async (id, updates) => {
+    try {
+      await updateKanbanTask(id, updates);
+      await refreshTasks();
+    } catch (err) {
+      console.error("Ошибка обновления задачи:", err);
+    }
+  };
+
   useEffect(() => {
     if (token) {
       refreshTasks();
@@ -80,7 +90,9 @@ export const TaskProvider = ({ children }) => {
   }, [token, refreshTasks]);
 
   return (
-    <TaskContext.Provider value={{ tasks, setTasks, loading, error, refreshTasks }}>
+    <TaskContext.Provider
+      value={{ tasks, setTasks, loading, error, refreshTasks, removeTask, editTask }}
+    >
       {children}
     </TaskContext.Provider>
   );

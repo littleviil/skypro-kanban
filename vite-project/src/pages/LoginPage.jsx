@@ -38,7 +38,6 @@ function LoginPage() {
     }
   };
 
-  // ✅ Если уже авторизован → сразу на главную
   if (isAuth) return <Navigate to="/" replace />;
 
   return (
