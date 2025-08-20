@@ -37,7 +37,7 @@ const PopBrowse = ({ task, onClose }) => {
     }
   };
 
-  const taskCategoryColor = taskCategories[editedTask?.category] || "gray";
+  const taskCategoryColor = taskCategories[editedTask?.topic] || "gray";
 
   return (
     <div className="pop-browse" id="popBrowse">
@@ -52,7 +52,7 @@ const PopBrowse = ({ task, onClose }) => {
                 className={`categories__theme theme-top _${taskCategoryColor} _active-category`}
               >
                 <p className={`_${taskCategoryColor}`}>
-                  {editedTask?.category || "Без категории"}
+                  {editedTask?.topic || "Без категории"}
                 </p>
               </div>
             </div>
@@ -100,7 +100,7 @@ const PopBrowse = ({ task, onClose }) => {
                 className={`categories__theme _${taskCategoryColor} _active-category`}
               >
                 <p className={`_${taskCategoryColor}`}>
-                  {editedTask?.category || "Без категории"}
+                  {editedTask?.topic || "Без категории"}
                 </p>
               </div>
             </div>

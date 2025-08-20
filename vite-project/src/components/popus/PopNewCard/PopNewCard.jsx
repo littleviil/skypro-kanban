@@ -47,7 +47,7 @@ const PopNewCard = ({
       const payload = {
         title: formData.title.trim(),
         description: formData.description.trim(),
-        category: formData.category,
+        topic: formData.category,
         status: formData.status,
         date: formatISO(new Date(formData.date)),
       };

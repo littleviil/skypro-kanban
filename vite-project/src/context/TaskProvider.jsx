@@ -15,65 +15,58 @@ const STATUS_UI = {
   DONE: "Готово",
 };
 
+const CATEGORY_UI = ["Web Design", "Copywriting", "Research", "Без категории"];
+
+const STATUS_API_TO_UI = {
+  "no-status": STATUS_UI.NO_STATUS,
+  "nostatus": STATUS_UI.NO_STATUS,
+  "todo": STATUS_UI.TODO,
+  "in-progress": STATUS_UI.IN_PROGRESS,
+  "inprogress": STATUS_UI.IN_PROGRESS,
+  "testing": STATUS_UI.TESTING,
+  "done": STATUS_UI.DONE,
+};
+
+const STATUS_UI_TO_API = {
+  [STATUS_UI.NO_STATUS]: "no-status",
+  [STATUS_UI.TODO]: "todo",
+  [STATUS_UI.IN_PROGRESS]: "in-progress",
+  [STATUS_UI.TESTING]: "testing",
+  [STATUS_UI.DONE]: "done",
+};
+
 const statusApiToUi = (apiStatus) => {
-  const key = (apiStatus || "").toLowerCase();
-  switch (key) {
-    case "no-status":
-    case "nostatus":
-      return STATUS_UI.NO_STATUS;
-    case "todo":
-      return STATUS_UI.TODO;
-    case "in-progress":
-    case "inprogress":
-      return STATUS_UI.IN_PROGRESS;
-    case "testing":
-      return STATUS_UI.TESTING;
-    case "done":
-      return STATUS_UI.DONE;
-    default:
-      return STATUS_UI.NO_STATUS;
-  }
+  const key = (apiStatus || "").toLowerCase().trim();
+  return STATUS_API_TO_UI[key] || STATUS_UI.NO_STATUS;
 };
 
 const statusUiToApi = (uiStatus) => {
-  switch (uiStatus) {
-    case STATUS_UI.NO_STATUS:
-      return "no-status";
-    case STATUS_UI.TODO:
-      return "todo";
-    case STATUS_UI.IN_PROGRESS:
-      return "in-progress";
-    case STATUS_UI.TESTING:
-      return "testing";
-    case STATUS_UI.DONE:
-      return "done";
-    default:
-      return "no-status";
-  }
+  return STATUS_UI_TO_API[uiStatus] || "no-status";
 };
 
-const CATEGORY_UI = ["Web Design", "Copywriting", "Research", "Без категории"];
+const CATEGORY_API_TO_UI = {
+  "web design": "Web Design",
+  "design": "Web Design",
+  "copywriting": "Copywriting",
+  "research": "Research",
+  "no-category": "Без категории",
+  "": "Без категории",
+};
+
+const CATEGORY_UI_TO_API = {
+  "Web Design": "web design",
+  "Copywriting": "copywriting",
+  "Research": "research",
+  "Без категории": "",
+};
 
 const categoryApiToUi = (apiCategory) => {
-  const v = (apiCategory || "").toLowerCase().trim();
-  if (v === "web design" || v === "design") return "Web Design";
-  if (v === "copywriting") return "Copywriting";
-  if (v === "research") return "Research";
-  return "Без категории";
+  const key = (apiCategory || "").toLowerCase().replace("_", " ").trim();
+  return CATEGORY_API_TO_UI[key] || "Без категории";
 };
 
 const categoryUiToApi = (uiCategory) => {
-  switch (uiCategory) {
-    case "Web Design":
-      return "web design";
-    case "Copywriting":
-      return "copywriting";
-    case "Research":
-      return "research";
-    case "Без категории":
-    default:
-      return ""; 
-  }
+  return CATEGORY_UI_TO_API[uiCategory] ?? "";
 };
 
 export const TaskProvider = ({ children }) => {
@@ -84,24 +77,10 @@ export const TaskProvider = ({ children }) => {
   const token = useMemo(() => localStorage.getItem("token"), []);
 
   const normalizeTaskFromApi = (task) => {
-    const status = statusApiToUi(task.status);
-    let category = "Без категории";
-
-    if (task.category) {
-      category = categoryApiToUi(task.category);
-    } else if (task.title) {
-      const t = task.title.toLowerCase();
-      if (t.includes("дизайн") || t.includes("design")) category = "Web Design";
-      else if (t.includes("копирайт") || t.includes("writing"))
-        category = "Copywriting";
-      else if (t.includes("исслед") || t.includes("research"))
-        category = "Research";
-    }
-
     return {
       ...task,
-      status,
-      category,
+      status: statusApiToUi(task.status),
+      category: categoryApiToUi(task.topic),
     };
   };
 
@@ -139,7 +118,7 @@ export const TaskProvider = ({ children }) => {
       const updatesApi = {
         ...updatesUi,
         status: statusUiToApi(updatesUi.status),
-        category: categoryUiToApi(updatesUi.category),
+        topic: categoryUiToApi(updatesUi.category),
       };
 
       if (updatesUi.date) {
@@ -159,7 +138,7 @@ export const TaskProvider = ({ children }) => {
         title: newTaskUi.title?.trim() || "",
         description: newTaskUi.description || "",
         status: statusUiToApi(newTaskUi.status || STATUS_UI.TODO),
-        category: categoryUiToApi(newTaskUi.category || "Без категории"),
+        topic: categoryUiToApi(newTaskUi.category || "Без категории"),
         date: newTaskUi.date ? new Date(newTaskUi.date).toISOString() : undefined,
       };
 
