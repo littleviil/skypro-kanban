@@ -432,7 +432,7 @@
 
   .status__theme {
     cursor: pointer;
-    padding: 10px 17.5px;
+    padding: 10px 15px;
     border: 0.7px solid rgba(148, 166, 190, 0.4);
     border-radius: 24px;
     background-color: transparent;
