@@ -13,7 +13,7 @@ import {
 
 export const Card = ({ task, onBrowseClick }) => {
 
-  const categoryKey = task.topic || "Без категории";
+  const categoryKey = task.category || "Без категории";
   const categoryColor = taskCategories[categoryKey] || 'gray';
   
   return (

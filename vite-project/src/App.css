@@ -424,28 +424,34 @@
   
   .status__themes {
     display: flex;
+    gap: 7px;
     flex-wrap: wrap;
     align-items: flex-start;
     justify-content: flex-start;
   }
-  
+
   .status__theme {
-    border-radius: 24px;
+    cursor: pointer;
+    padding: 10px 17.5px;
     border: 0.7px solid rgba(148, 166, 190, 0.4);
-    color: #ffffff;
-    background-color: #94A6BE;
-    padding-right: 17.5px;
-    padding-left: 17.5px;
-    padding-top: 10px;
-    margin-bottom: 18px;
+    border-radius: 24px;
+    background-color: transparent;
+    color: #94a6be;
     margin-top: 7px;
-    padding-bottom: 10px;
-  }
-  
-  .status__theme p {
+    margin-bottom: 18px;
     font-size: 14px;
     line-height: 1;
     letter-spacing: -0.14px;
+    transition: all 0.2s ease;
+  }
+
+  .status__theme p {
+    margin: 0;
+  }
+
+  .status__theme._active {
+    background-color: #94a6be;
+    color: #fff;
   }
   
   ._btn-bor {
