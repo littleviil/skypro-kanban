@@ -11,7 +11,7 @@ const PopBrowse = ({ task, onClose }) => {
   const [draft, setDraft] = useState(task);
 
   const taskId = task?.id ?? task?._id;
-  console.log("Deleting taskId:", taskId);
+  // console.log("Deleting taskId:", taskId);
 
   useEffect(() => {
     setViewTask(task);
