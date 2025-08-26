@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { MainPage, MainBlock } from './Main.styled';
 import { Container } from '../../App.styled';
 import { Column } from '../Column/Column';
 
-export const Main = ({ tasks, loading, onBrowseClick }) => {
-  const [showContent, setShowContent] = useState(false);
+export const Main = ({ tasks, onBrowseClick }) => {
   const statuses = [
     'Без статуса',
     'Нужно сделать',
@@ -20,19 +19,6 @@ export const Main = ({ tasks, loading, onBrowseClick }) => {
     'Тестирование': 'testing',
     'Готово': 'done',
   };
-
-
-  useEffect(() => {
-    if (!loading) {
-      const timer = setTimeout(() => setShowContent(true), 400);
-      return () => clearTimeout(timer);
-    } else {
-      setShowContent(false);
-    }
-  }, [loading]);
-
-
-  if (loading || !showContent) return <p></p>;
 
   return (
     <MainPage>

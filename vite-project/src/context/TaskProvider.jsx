@@ -91,7 +91,6 @@ export const TaskProvider = ({ children }) => {
     } catch (err) {
       console.error(err);
       setError("Не удалось загрузить задачи");
-      setTasks([]);
       return [];
     } finally {
       setLoading(false);

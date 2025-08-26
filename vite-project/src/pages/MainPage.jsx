@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import PopExit from "../components/popus/PopExit/PopExit";
 import PopBrowse from "../components/popus/PopBrowse/PopBrowse";
@@ -10,12 +10,20 @@ function MainPage() {
   const [isPopExitOpen, setIsPopExitOpen] = useState(false);
   const [isPopBrowseOpen, setIsPopBrowseOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-  const navigate = useNavigate();
+  const [initialLoading, setInitialLoading] = useState(true);
 
-  const { tasks, loading, error } = useContext(TaskContext);
+  const navigate = useNavigate();
+  const { tasks, error, refreshTasks } = useContext(TaskContext);
 
   const token = localStorage.getItem("token");
-  if (!token) navigate("/login");
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    refreshTasks().finally(() => setInitialLoading(false));
+  }, [token, navigate, refreshTasks]);
 
   const openPopBrowse = (task) => {
     setSelectedTask(task);
@@ -29,12 +37,14 @@ function MainPage() {
     navigate("/login");
   };
 
-  if (loading || tasks === null) return <Loading>Данные загружаются...</Loading>;
+  if (initialLoading) return <Loading>Данные загружаются...</Loading>;
   if (error) return <div>{error}</div>;
 
   return (
     <>
-      {isPopExitOpen && <PopExit onClose={() => setIsPopExitOpen(false)} onLogout={handleLogout} />}
+      {isPopExitOpen && (
+        <PopExit onClose={() => setIsPopExitOpen(false)} onLogout={handleLogout} />
+      )}
       {isPopBrowseOpen && selectedTask && (
         <PopBrowse
           task={selectedTask}
