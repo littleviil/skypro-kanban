@@ -1,24 +1,20 @@
 import React from 'react';
 import { taskCategories } from '../../tasks';
 import {
-  CardsItem, CardsCard, CardGroup, CardTheme, CardBtn, CardContent, CardTitle, CardDate,
+  CardsItem,
+  CardsCard,
+  CardGroup,
+  CardTheme,
+  CardBtn,
+  CardContent,
+  CardTitle,
+  CardDate,
 } from './Card.styled';
 
 export const Card = ({ task, onBrowseClick }) => {
-  const getCategoryKey = (topic) => {
-    if (!topic) return "Без категории";
-    const normalized = topic.trim().toLowerCase();
-    switch (normalized) {
-      case "web design": return "Web Design";
-      case "research": return "Research";
-      case "copywriting": return "Copywriting";
-      default: return "Без категории";
-    }
-  };
-
-  const categoryKey = getCategoryKey(task.topic);
+  const categoryKey = task.categoryUi || "Без категории";
   const categoryColor = taskCategories[categoryKey] || 'gray';
-  // console.log(task);
+  console.log(task);
 
   return (
     <CardsItem>

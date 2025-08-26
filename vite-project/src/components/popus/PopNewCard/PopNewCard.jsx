@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Calendar } from "../../Calendar/Calendar";
 import { taskCategories } from "../../../tasks";
-import { createKanbanTask } from "../../../services/api";
-import { formatISO } from "date-fns";
+import { TaskContext } from "../../../context/TaskContext";
 
-const PopNewCard = ({
-  formData,
-  setFormData,
-  onClose,
-  refreshTasks,
-}) => {
+const PopNewCard = ({ onClose }) => {
+  const { addTask, STATUS_UI, CATEGORY_UI } = useContext(TaskContext);
+
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    status: STATUS_UI.TODO,
+    category: CATEGORY_UI[0],
+    date: new Date(),
+  });
+
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -21,11 +25,9 @@ const PopNewCard = ({
     setFormData((prev) => ({ ...prev, category }));
   };
 
-  const handleDateChange = (selectedDate) => {
-    setFormData((prev) => ({
-      ...prev,
-      date: selectedDate
-    }));
+  const handleDateChange = (date) => {
+    if (!date) return;
+    setFormData((prev) => ({ ...prev, date: new Date(date) }));
   };
 
   const handleSubmit = async (e) => {
@@ -35,7 +37,6 @@ const PopNewCard = ({
       setError("Введите название задачи");
       return;
     }
-
     if (!formData.description.trim()) {
       setError("Введите описание задачи");
       return;
@@ -44,20 +45,19 @@ const PopNewCard = ({
     try {
       setError("");
 
-      const payload = {
+      const newTaskUi = {
         title: formData.title.trim(),
         description: formData.description.trim(),
-        topic: formData.category,
         status: formData.status,
-        date: formatISO(new Date(formData.date)),
+        category: formData.category,
+        date: formData.date,
       };
 
-      await createKanbanTask(payload);
-      await refreshTasks();
+      await addTask(newTaskUi);
       onClose();
-    } catch (error) {
-      console.error("Ошибка создания задачи:", error);
-      setError(error.message || "Не удалось создать задачу");
+    } catch (err) {
+      console.error("Ошибка создания задачи:", err);
+      setError(err.message || "Не удалось создать задачу");
     }
   };
 
@@ -99,6 +99,7 @@ const PopNewCard = ({
                     onChange={handleChange}
                     placeholder="Введите название задачи..."
                     autoFocus
+                    required
                   />
                 </div>
 
@@ -113,22 +114,20 @@ const PopNewCard = ({
                     value={formData.description}
                     onChange={handleChange}
                     placeholder="Введите описание задачи..."
+                    required
                   />
                 </div>
               </form>
 
               <div className="pop-new-card__calendar calendar">
-                <Calendar
-                  value={formData.date}
-                  onChange={handleDateChange}
-                />
+                <Calendar value={formData.date} onChange={handleDateChange} />
               </div>
             </div>
 
             <div className="pop-new-card__categories categories">
               <p className="categories__p subttl">Категория</p>
               <div className="categories__themes">
-                {Object.keys(taskCategories).map((category) => (
+                {CATEGORY_UI.map((category) => (
                   <div
                     key={category}
                     className={`categories__theme _${taskCategories[category]} ${
@@ -143,8 +142,8 @@ const PopNewCard = ({
             </div>
 
             <button
+              type="submit"
               className="form-new__create _hover01"
-              id="btnCreate"
               onClick={handleSubmit}
             >
               Создать задачу

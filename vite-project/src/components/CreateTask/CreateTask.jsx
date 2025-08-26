@@ -8,47 +8,66 @@ const CreateTask = ({ onCreated }) => {
   const [form, setForm] = useState({
     title: "",
     description: "",
-    status: STATUS_UI.TODO,       
-    category: "Web Design",   
+    status: STATUS_UI.TODO,
+    category: "Web Design",
     date: new Date(),
   });
 
+  const [error, setError] = useState("");
+
   const onChange = (e) => {
     const { name, value } = e.target;
-    setForm((p) => ({ ...p, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const onDateChange = (newDate) => {
     if (!newDate) return;
-    setForm((p) => ({ ...p, date: new Date(newDate) }));
+    setForm((prev) => ({ ...prev, date: newDate }));
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!form.title.trim()) return;
 
-    await addTask({
-      title: form.title.trim(),
-      description: form.description,
-      status: form.status,
-      category: form.category,
-      date: form.date,
-    });
+    if (!form.title.trim()) {
+      setError("Введите название задачи");
+      return;
+    }
+    if (!form.description.trim()) {
+      setError("Введите описание задачи");
+      return;
+    }
 
-    setForm({
-      title: "",
-      description: "",
-      status: STATUS_UI.TODO,
-      category: "Web Design",
-      date: new Date(),
-    });
+    try {
+      setError("");
 
-    if (typeof onCreated === "function") onCreated();
+      await addTask({
+        title: form.title.trim(),
+        description: form.description.trim(),
+        status: form.status,
+        category: form.category,
+        date: form.date instanceof Date ? form.date.toISOString() : form.date,
+      });
+
+      setForm({
+        title: "",
+        description: "",
+        status: STATUS_UI.TODO,
+        category: "Web Design",
+        date: new Date(),
+      });
+
+      if (typeof onCreated === "function") onCreated();
+    } catch (err) {
+      console.error("Ошибка создания задачи:", err);
+      setError(err.message || "Не удалось создать задачу");
+    }
   };
 
   return (
     <div className="create-task">
       <form onSubmit={onSubmit} className="create-task__form">
+        {error && <p style={{ color: "red" }}>{error}</p>}
+
         <div className="form-field">
           <label className="subttl">Заголовок</label>
           <input
@@ -70,6 +89,7 @@ const CreateTask = ({ onCreated }) => {
             placeholder="Введите описание задачи"
             value={form.description}
             onChange={onChange}
+            required
           />
         </div>
 

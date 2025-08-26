@@ -15,7 +15,7 @@ export const STATUS_UI = {
   DONE: "Готово",
 };
 
-export const CATEGORY_UI = ["Web Design", "Copywriting", "Research", "Без категории"];
+export const CATEGORY_UI = ["Web Design", "Copywriting", "Research"];
 
 const STATUS_UI_TO_API = {
   [STATUS_UI.NO_STATUS]: "no-status",
@@ -29,39 +29,49 @@ const STATUS_API_TO_UI = Object.fromEntries(
   Object.entries(STATUS_UI_TO_API).map(([k, v]) => [v, k])
 );
 
-const CATEGORY_API_TO_UI = {
-  "web design": "Web Design",
-  "copywriting": "Copywriting",
-  "research": "Research",
-  "no-category": "Без категории",
-  "": "Без категории",
-};
-
 const CATEGORY_UI_TO_API = {
   "Web Design": "web design",
   "Copywriting": "copywriting",
   "Research": "research",
-  "Без категории": "",
 };
 
+const normalizeCategory = (topic) => {
+  if (!topic) return "Web Design";
+  const lower = topic.toLowerCase();
+  switch(lower) {
+    case "web design": return "Web Design";
+    case "copywriting": return "Copywriting";
+    case "research": return "Research";
+    default: return "Web Design";
+  }
+};
+
+
 const statusUiToApi = (uiStatus) => STATUS_UI_TO_API[uiStatus] ?? "no-status";
-const categoryUiToApi = (uiCategory) => CATEGORY_UI_TO_API[uiCategory] ?? "";
+const categoryUiToApi = (uiCategory) => CATEGORY_UI_TO_API[uiCategory] ?? "web design";
 
 const normalizeTaskFromApi = (task) => {
   const statusApi = (task.status || "no-status").toLowerCase();
   const statusUi = STATUS_API_TO_UI[statusApi] || STATUS_UI.NO_STATUS;
-  const categoryUi = CATEGORY_API_TO_UI[(task.topic || "").toLowerCase()] || "Без категории";
+
+  const dateValue =
+    task.date instanceof Date
+      ? task.date
+      : task.date
+      ? new Date(task.date)
+      : new Date();
 
   return {
-    ...task,
     id: task.id ?? task._id,
+    title: task.title ?? task.name ?? "",
+    description: task.description ?? "",
     statusApi,
     statusUi,
-    topicApi: task.topic || "",
-    categoryUi,
+    topicApi: task.topic ?? "",
+    categoryUi: normalizeCategory(task.topic),
+    date: dateValue,
   };
 };
-
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -93,57 +103,57 @@ export const TaskProvider = ({ children }) => {
   }, [token, refreshTasks]);
 
   const removeTask = async (id) => {
-    await deleteKanbanTask(id);
-    setTasks((prev) => prev.filter((t) => String(t.id) !== String(id)));
-  };
+  if (!id) {
+    console.error("removeTask called with undefined id");
+    return;
+  }
+  await deleteKanbanTask(id);
+  setTasks((prev) => prev.filter((t) => String(t.id) !== String(id)));
+};
 
   const editTask = async (id, updatesUi) => {
-  // Для API
-  const updatesApi = {
-    ...updatesUi,
-    status: statusUiToApi(updatesUi.status),
-    topic: categoryUiToApi(updatesUi.category ?? updatesUi.topic), // API формат
+    const updatesApi = {
+      title: updatesUi.title?.trim() ?? "",
+      description: updatesUi.description ?? "",
+      status: statusUiToApi(updatesUi.status),
+      topic: categoryUiToApi(updatesUi.category),
+      date: updatesUi.date ? new Date(updatesUi.date).toISOString() : undefined,
+    };
+
+    await updateKanbanTask(id, updatesApi);
+
+    const updatedTask = normalizeTaskFromApi({
+      ...updatesApi,
+      id,
+    });
+
+    setTasks((prev) =>
+      prev.map((t) => (String(t.id ?? t._id) === String(id) ? updatedTask : t))
+    );
+
+    return updatedTask;
   };
-
-  if (updatesUi.date) updatesApi.date = new Date(updatesUi.date).toISOString();
-
-  // Отправляем на сервер
-  await updateKanbanTask(id, updatesApi);
-
-  // Для UI используем нормализацию API
-  const originalTask = tasks.find((t) => String(t.id ?? t._id) === String(id));
-  const updatedTask = normalizeTaskFromApi({
-    ...originalTask,
-    ...updatesApi, // передаем как пришло из API
-  });
-
-  setTasks((prev) =>
-    prev.map((t) => (String(t.id ?? t._id) === String(id) ? updatedTask : t))
-  );
-
-  return updatedTask;
-};
 
   const addTask = async (newTaskUi) => {
     const payload = {
-      title: (newTaskUi.title || "").trim(),
-      description: newTaskUi.description || "",
-      status: statusUiToApi(newTaskUi.status ?? STATUS_UI.NO_STATUS),
-      topic: categoryUiToApi(newTaskUi.category ?? "Без категории"),
-      date: newTaskUi.date ? new Date(newTaskUi.date).toISOString() : undefined,
-    };
+    title: newTaskUi.title.trim(),
+    description: newTaskUi.description,
+    status: statusUiToApi(newTaskUi.status),
+    topic: categoryUiToApi(newTaskUi.category),
+    date: newTaskUi.date ? new Date(newTaskUi.date).toISOString() : undefined,
+  };
 
     const createdTask = await createKanbanTask(payload);
 
-    const normalizedTask = normalizeTaskFromApi({
-      ...createdTask,
-      status: createdTask.status || payload.status,
-      topic: createdTask.topic || payload.topic,
-    });
+    const normalized = normalizeTaskFromApi({
+    ...createdTask,
+    title: createdTask.title || payload.title,
+    topic: createdTask.topic ?? payload.topic, 
+  });
 
-    setTasks((prev) => [...prev, normalizedTask]);
-    return normalizedTask;
-  };
+  setTasks((prev) => [...prev, normalized]);
+  return normalized;
+};
 
   return (
     <TaskContext.Provider
