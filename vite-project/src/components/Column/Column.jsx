@@ -1,14 +1,12 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { MainColumn, ColumnTitle } from './Column.styled';
 import { Cards } from '../Card/Card.styled';
 import { Card } from '../Card/Card';
 
-export const Column = ({ status, onBrowseClick, tasks = [] }) => {
-  const filteredTasks = useMemo(() => {
-    return tasks.filter((task) =>
-      task?.status?.trim().toLowerCase() === status.trim().toLowerCase()
-    );
-  }, [tasks, status]);
+export const Column = ({ status, onBrowseClick, tasks = [], statusMap }) => {
+  const filteredTasks = tasks.filter(
+    (task) => task.statusApi === statusMap[status]
+  );
 
   return (
     <MainColumn>
@@ -17,11 +15,7 @@ export const Column = ({ status, onBrowseClick, tasks = [] }) => {
       </ColumnTitle>
       <Cards>
         {filteredTasks.map((task, index) => (
-          <Card
-            key={task.id ?? task._id ?? index}
-            task={task}
-            onBrowseClick={onBrowseClick}
-          />
+          <Card key={task.id ?? task._id ?? index} task={task} onBrowseClick={onBrowseClick} />
         ))}
       </Cards>
     </MainColumn>

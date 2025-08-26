@@ -3,7 +3,7 @@ import { Calendar } from "../../Calendar/Calendar";
 import { TaskContext } from "../../../context/TaskContext";
 import { taskCategories } from "../../../tasks";
 
-const getId = (t) => (t?.id ?? t?._id);
+const getId = (t) => t?.id ?? t?._id;
 const sameId = (a, b) => String(a) === String(b);
 
 const PopBrowse = ({ task, onClose }) => {
@@ -12,30 +12,51 @@ const PopBrowse = ({ task, onClose }) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [viewTask, setViewTask] = useState(task);
-  const [draft, setDraft] = useState(task);
+  const [draft, setDraft] = useState({
+    title: task.title || "",
+    description: task.description || "",
+    status: task.statusUi || STATUS_UI.NO_STATUS,
+    category: task.categoryUi || "Без категории",
+    date: task.date ? new Date(task.date) : null,
+  });
 
+  // Обновляем viewTask и draft при изменении tasks
   useEffect(() => {
     const fresh = tasks.find((t) => sameId(getId(t), taskId));
     if (fresh) {
       setViewTask(fresh);
-      if (!isEditing) setDraft(fresh);
+      if (!isEditing) {
+        setDraft({
+          title: fresh.title || "",
+          description: fresh.description || "",
+          status: fresh.statusUi || STATUS_UI.NO_STATUS,
+          category: fresh.categoryUi || "Без категории",
+          date: fresh.date ? new Date(fresh.date) : null,
+        });
+      }
     }
   }, [tasks, taskId, isEditing]);
 
-  useEffect(() => {
-    console.log("[PB] opened", { id: taskId, view: viewTask });
-  }, [taskId, viewTask]);
-
   const startEdit = () => {
-    setDraft(viewTask);
+    setDraft({
+      title: viewTask.title || "",
+      description: viewTask.description || "",
+      status: viewTask.statusUi || STATUS_UI.NO_STATUS,
+      category: viewTask.categoryUi || "Без категории",
+      date: viewTask.date ? new Date(viewTask.date) : null,
+    });
     setIsEditing(true);
-    console.log("[PB] startEdit", viewTask);
   };
 
   const handleCancel = () => {
-    setDraft(viewTask);
+    setDraft({
+      title: viewTask.title || "",
+      description: viewTask.description || "",
+      status: viewTask.statusUi || STATUS_UI.NO_STATUS,
+      category: viewTask.categoryUi || "Без категории",
+      date: viewTask.date ? new Date(viewTask.date) : null,
+    });
     setIsEditing(false);
-    console.log("[PB] cancel ->", viewTask);
   };
 
   const updateDraft = (field, value) => {
@@ -44,17 +65,30 @@ const PopBrowse = ({ task, onClose }) => {
 
   const handleSave = async () => {
     try {
-      console.time("[PB] save");
-      const updated = await editTask(taskId, draft);
+      // Формируем payload только с нужными полями
+      const payload = {
+        title: draft.title,
+        description: draft.description,
+        status: draft.status,
+        category: draft.category,
+        date: draft.date,
+      };
+
+      const updated = await editTask(taskId, payload);
+
       if (updated) {
         setViewTask(updated);
-        setDraft(updated);
+        setDraft({
+          title: updated.title,
+          description: updated.description,
+          status: updated.statusUi,
+          category: updated.categoryUi,
+          date: updated.date ? new Date(updated.date) : null,
+        });
       }
       setIsEditing(false);
-      console.log("[PB] saved", { id: taskId, updated });
-      console.timeEnd("[PB] save");
     } catch (err) {
-      console.error("[PB] save error", err);
+      console.error("[PopBrowse] Save error:", err);
     }
   };
 
@@ -63,17 +97,19 @@ const PopBrowse = ({ task, onClose }) => {
       await removeTask(taskId);
       onClose();
     } catch (err) {
-      console.error("[PB] delete error", err);
+      console.error("[PopBrowse] Delete error:", err);
     }
   };
 
-  const taskCategoryColor = taskCategories[viewTask?.topic?.replace(/\b\w/g, c => c.toUpperCase())] || "gray";
+  const taskCategoryColor =
+    taskCategories[viewTask?.topic?.replace(/\b\w/g, (c) => c.toUpperCase())] || "gray";
 
   return (
     <div className="pop-browse" id="popBrowse">
       <div className="pop-browse__container">
         <div className="pop-browse__block">
           <div className="pop-browse__content">
+            {/* Заголовок и категория */}
             <div className="pop-browse__top-block">
               <h3 className="pop-browse__ttl">{viewTask?.title || "Название задачи"}</h3>
               <div className={`categories__theme theme-top _${taskCategoryColor} _active-category`}>
@@ -81,30 +117,32 @@ const PopBrowse = ({ task, onClose }) => {
               </div>
             </div>
 
+            {/* Статус */}
             <div className="pop-browse__status status">
               <p className="status__p subttl">Статус</p>
               <div className="status__themes">
-                {isEditing ? (
-                  Object.values(STATUS_UI).map((st) => {
-                    const active = draft.status === st;
-                    return (
-                      <div
-                        key={st}
+                {isEditing
+                  ? Object.values(STATUS_UI).map((st) => {
+                      const active = draft.status === st;
+                      return (
+                        <div
+                          key={st}
                           className={`status__theme ${active ? "_active" : ""}`}
-                        onClick={() => updateDraft("status", st)}
-                      >
-                        <p>{st}</p>
+                          onClick={() => updateDraft("status", st)}
+                        >
+                          <p>{st}</p>
+                        </div>
+                      );
+                    })
+                  : (
+                      <div className="status__theme _active">
+                        <p>{viewTask?.statusUi || STATUS_UI.NO_STATUS}</p>
                       </div>
-                    );
-                  })
-                ) : (
-                  <div className="status__theme _active">
-                    <p>{viewTask?.status || STATUS_UI.NO_STATUS}</p>
-                  </div>
-                )}
+                    )}
               </div>
             </div>
 
+            {/* Описание и календарь */}
             <div className="pop-browse__wrap">
               <form className="pop-browse__form form-browse" id="formBrowseCard">
                 <div className="form-browse__block">
@@ -113,26 +151,22 @@ const PopBrowse = ({ task, onClose }) => {
                     className="form-browse__area"
                     name="description"
                     id="textArea01"
-                    value={(isEditing ? draft?.description : viewTask?.description) || ""}
+                    value={draft.description}
                     onChange={(e) => updateDraft("description", e.target.value)}
                     placeholder="Введите описание задачи..."
                     disabled={!isEditing}
                   />
                 </div>
               </form>
-
               <div className="pop-new-card__calendar calendar">
                 <Calendar
-                  value={
-                    (isEditing ? draft?.date : viewTask?.date)
-                      ? new Date(isEditing ? draft.date : viewTask.date)
-                      : new Date()
-                  }
+                  value={draft.date || new Date()}
                   onChange={isEditing ? (d) => updateDraft("date", new Date(d)) : undefined}
                 />
               </div>
             </div>
 
+            {/* Категория */}
             <div className="theme-down__categories theme-down">
               <p className="categories__p subttl">Категория</p>
               <div className={`categories__theme _${taskCategoryColor} _active-category`}>
@@ -140,6 +174,7 @@ const PopBrowse = ({ task, onClose }) => {
               </div>
             </div>
 
+            {/* Кнопки */}
             <div className="pop-browse__btn-browse">
               <div className="btn-group">
                 {isEditing ? (

@@ -5,7 +5,6 @@ import {
 } from './Card.styled';
 
 export const Card = ({ task, onBrowseClick }) => {
-  console.log(task);
   const getCategoryKey = (topic) => {
     if (!topic) return "Без категории";
     const normalized = topic.trim().toLowerCase();
@@ -19,14 +18,14 @@ export const Card = ({ task, onBrowseClick }) => {
 
   const categoryKey = getCategoryKey(task.topic);
   const categoryColor = taskCategories[categoryKey] || 'gray';
-  console.log(task);
+  // console.log(task);
 
   return (
     <CardsItem>
       <CardsCard>
         <CardGroup>
           <CardTheme theme={categoryColor}>
-            <p>{task.topic}</p>
+            <p>{categoryKey}</p>
           </CardTheme>
           <CardBtn onClick={() => onBrowseClick(task)}>
             <div></div><div></div><div></div>
