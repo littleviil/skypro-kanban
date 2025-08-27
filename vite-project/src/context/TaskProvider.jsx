@@ -99,12 +99,19 @@ import {
     }, [token, refreshTasks]);
 
     const removeTask = async (id) => {
+      console.log("Удаляем задачу с id:", id);
       if (!id) {
         console.error("removeTask called with undefined id");
         return;
       }
-      await deleteKanbanTask(id);
-      setTasks((prev) => prev.filter((t) => String(t.id) !== String(id)));
+
+      try {
+        const result = await deleteKanbanTask(id);
+        console.log("Результат удаления с сервера:", result);
+        setTasks((prev) => prev.filter((t) => String(t.id) !== String(id)));
+      } catch (err) {
+        console.error("Ошибка при удалении задачи:", err);
+      }
     };
 
     const editTask = async (id, updatesUi) => {
