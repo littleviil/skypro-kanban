@@ -74,12 +74,12 @@ const PopBrowse = ({ task, onClose }) => {
               <div className="status__themes">
                 {isEditing
                   ? Object.values(STATUS_UI).map((st) => {
-                      const active = draft.status === st;
+                      const active = draft.statusUi === st;
                       return (
                         <div
                           key={st}
                           className={`status__theme ${active ? "_active" : ""}`}
-                          onClick={() => updateDraft("status", st)}
+                          onClick={() => updateDraft("statusUi", st)}
                         >
                           <p>{st}</p>
                         </div>
@@ -87,7 +87,7 @@ const PopBrowse = ({ task, onClose }) => {
                     })
                   : (
                     <div className="status__theme _active">
-                      <p>{viewTask?.status || STATUS_UI.NO_STATUS}</p>
+                      <p>{viewTask?.statusUi || STATUS_UI.NO_STATUS}</p>
                     </div>
                   )}
               </div>

@@ -114,7 +114,7 @@ export const TaskProvider = ({ children }) => {
     const updatesApi = {
       title: updatesUi.title?.trim() ?? "",
       description: updatesUi.description ?? "",
-      status: statusUiToApi(updatesUi.status),
+      status: statusUiToApi(updatesUi.statusUi),
       topic: categoryUiToApi(updatesUi.category),
       date: updatesUi.date ? new Date(updatesUi.date).toISOString() : undefined,
     };
