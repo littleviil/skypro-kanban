@@ -116,25 +116,6 @@ const PopBrowse = ({ task, onClose }) => {
               </div>
             </div>
 
-            {isEditing && (
-              <div className="pop-browse__categories categories">
-                <p className="categories__p subttl">Категория</p>
-                <div className="categories__themes">
-                  {Object.keys(taskCategories).map((category) => (
-                    <div
-                      key={category}
-                      className={`categories__theme _${taskCategories[category]} ${
-                        draft.category === category ? "_active-category" : ""
-                      }`}
-                      onClick={() => updateDraft("category", category)}
-                    >
-                      <p className={`_${taskCategories[category]}`}>{category}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
             <div className="pop-browse__btn-browse">
               <div className="btn-group">
                 {isEditing ? (

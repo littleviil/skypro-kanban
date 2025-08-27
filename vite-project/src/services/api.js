@@ -24,25 +24,21 @@ export async function createKanbanTask(taskData) {
   const token = localStorage.getItem("token");
   if (!token) throw new Error("Нет токена. Пользователь не авторизован.");
 
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: JSON.stringify(taskData),
-    });
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify(taskData),
+  });
 
-    const result = await response.json();
+  const result = await response.json();
 
-    if (!response.ok) {
-      throw new Error(result?.error || "Ошибка при создании задачи");
-    }
-
-    return result;
-  } catch (error) {
-    console.error("Ошибка при создании задачи:", error);
-    throw error;
+  if (!response.ok) {
+    throw new Error(result?.error || "Ошибка при создании задачи");
   }
+
+  return result.tasks;
 }
+
 
 export async function updateKanbanTask(taskId, updates) {
   const token = localStorage.getItem("token");

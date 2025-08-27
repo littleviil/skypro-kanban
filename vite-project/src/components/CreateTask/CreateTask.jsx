@@ -8,7 +8,7 @@ const CreateTask = ({ onCreated }) => {
   const [form, setForm] = useState({
     title: "",
     description: "",
-    status: STATUS_UI.TODO,
+    status: STATUS_UI.NO_STATUS,
     category: "Web Design",
     date: new Date(),
   });
