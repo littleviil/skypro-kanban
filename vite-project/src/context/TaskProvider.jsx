@@ -141,16 +141,33 @@ import {
       title: newTaskUi.title.trim(),
       description: newTaskUi.description ?? "",
       status: statusUiToApi(STATUS_UI.NO_STATUS),
-      topic: newTaskUi.category,
+      topic: newTaskUi.category,                
       date: newTaskUi.date
         ? new Date(newTaskUi.date).toISOString()
         : new Date().toISOString(),
     };
 
-    await createKanbanTask(payload);
+    const tempId = `temp-${Date.now()}`;
+    const optimisticTask = {
+      id: tempId,
+      title: payload.title,
+      description: payload.description,
+      statusApi: payload.status,
+      statusUi: STATUS_API_TO_UI[payload.status] || STATUS_UI.NO_STATUS,
+      topicApi: payload.topic,
+      categoryUi: normalizeCategory(payload.topic),
+      date: new Date(payload.date),
+    };
+    setTasks((prev) => [...prev, optimisticTask]);
 
-    const refreshedTasks = await refreshTasks();
-    return refreshedTasks[refreshedTasks.length - 1] || null;
+    try {
+      await createKanbanTask(payload);
+      const refreshedTasks = await refreshTasks();
+      return refreshedTasks[refreshedTasks.length - 1] || null;
+    } catch (e) {
+      setTasks((prev) => prev.filter((t) => t.id !== tempId));
+      throw e;
+    }
   };
 
   return (
