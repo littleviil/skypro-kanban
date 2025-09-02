@@ -1,9 +1,13 @@
-import React from 'react';
-import { MainColumn, ColumnTitle } from './Column.styled';
-import { Cards } from '../Card/Card.styled';
-import { Card } from '../Card/Card';
+import React, { useContext } from "react";
+import { MainColumn, ColumnTitle } from "./Column.styled";
+import { Cards } from "../Card/Card.styled";
+import { Card } from "../Card/Card";
+import { CardSkelet } from "../Card/CardSkelet.jsx";
+import { TaskContext } from "../../context/TaskContext";
 
 export const Column = ({ status, onBrowseClick, tasks = [], statusMap }) => {
+  const { loading } = useContext(TaskContext);
+
   const filteredTasks = tasks.filter(
     (task) => task.statusApi === statusMap[status]
   );
@@ -14,9 +18,15 @@ export const Column = ({ status, onBrowseClick, tasks = [], statusMap }) => {
         <p>{status}</p>
       </ColumnTitle>
       <Cards>
-        {filteredTasks.map((task, index) => (
-          <Card key={task.id ?? task._id ?? index} task={task} onBrowseClick={onBrowseClick} />
-        ))}
+        {loading
+          ? Array.from({ length: 3 }).map((_, i) => <CardSkelet key={i} />)
+          : filteredTasks.map((task, index) => (
+              <Card
+                key={task.id ?? task._id ?? index}
+                task={task}
+                onBrowseClick={onBrowseClick}
+              />
+            ))}
       </Cards>
     </MainColumn>
   );

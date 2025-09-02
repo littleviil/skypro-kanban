@@ -73,16 +73,17 @@ import {
     };
   };
 
-  export const TaskProvider = ({ children }) => {
+   export const TaskProvider = ({ children }) => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [initialLoadComplete, setInitialLoadComplete] = useState(false);
     const [error, setError] = useState("");
     const token = useMemo(() => localStorage.getItem("token"), []);
 
     const refreshTasks = useCallback(async () => {
       if (!token) return [];
+      setLoading(true);
       try {
-        setLoading(true);
         const data = await fetchKanbanTasks(token);
         const tasksArray = Array.isArray(data) ? data : data.tasks || [];
         const normalized = tasksArray.map(normalizeTaskFromApi);
@@ -95,6 +96,7 @@ import {
         return [];
       } finally {
         setLoading(false);
+        setInitialLoadComplete(true);
       }
     }, [token]);
 
@@ -157,20 +159,17 @@ import {
     };
 
     const tempId = `temp-${Date.now()}`;
-    const optimisticTask = [
-      ...tasks,
-      {
-        id: tempId,
-        title: payload.title,
-        description: payload.description,
-        statusApi: payload.status,
-        statusUi: STATUS_API_TO_UI[payload.status] || STATUS_UI.NO_STATUS,
-        topicApi: payload.topic,
-        categoryUi: normalizeCategory(payload.topic),
-        date: new Date(payload.date),
-      },
-    ];
-    setTasks(optimisticTask);
+    const optimisticTask = {
+      id: tempId,
+      title: payload.title,
+      description: payload.description,
+      statusApi: payload.status,
+      statusUi: STATUS_API_TO_UI[payload.status] || STATUS_UI.NO_STATUS,
+      topicApi: payload.topic,
+      categoryUi: normalizeCategory(payload.topic),
+      date: new Date(payload.date),
+    };
+    setTasks((prev) => [...prev, optimisticTask]);
 
     try {
       const createdTask = await createKanbanTask(payload);
@@ -192,6 +191,7 @@ import {
         tasks,
         setTasks,
         loading,
+        initialLoadComplete,
         error,
         refreshTasks,
         removeTask,
