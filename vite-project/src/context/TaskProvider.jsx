@@ -216,14 +216,10 @@ import {
     };
 
     try {
-      await createKanbanTask(payload);
-      const refreshedTasks = await refreshTasks();
-
-      const newTask = refreshedTasks.find(task => 
-        task.title === payload.title && 
-        task.description === payload.description
-      ) || refreshedTasks[refreshedTasks.length - 1];
-      return newTask;
+      const createdTask = await createKanbanTask(payload);
+      const normalizedCreatedTask = normalizeTaskFromApi(createdTask);
+      setTasks((prev) => [...prev, normalizedCreatedTask]);
+      return normalizedCreatedTask;
     } catch (e) {
       console.error("Ошибка при создании задачи:", e);
       throw e;
