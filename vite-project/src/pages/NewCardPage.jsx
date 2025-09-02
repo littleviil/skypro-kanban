@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PopNewCard from "../components/popus/PopNewCard/PopNewCard";
-import { createKanbanTask, fetchKanbanTasks } from '../services/api';
 
 const NewCardPage = () => {
   const navigate = useNavigate();
@@ -14,35 +13,16 @@ const NewCardPage = () => {
   });
 
   const refreshTasks = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) return [];
-    try {
-      const data = await fetchKanbanTasks(token);
-      return data;
-    } catch (error) {
-      console.error('Ошибка при загрузке задач:', error);
-      return [];
-    }
+    return [];
   };
 
   const handleClose = () => {
-    navigate(-1);
+    navigate('/');
   };
 
   const handleSubmit = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-
-    try {
-      await createKanbanTask(formData);
-      await refreshTasks();
-      navigate('/');
-    } catch (error) {
-      console.error('Ошибка создания задачи:', error.message);
-    }
+    console.log('Создание новой задачи:', formData);
+    navigate('/');
   };
 
   return (

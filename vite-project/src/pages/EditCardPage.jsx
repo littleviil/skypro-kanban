@@ -1,43 +1,44 @@
+import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import PopBrowse from '../components/popus/PopBrowse/PopBrowse';
-import { getTasks } from '../services/dataSource';
+import PopBrowse from "../components/popus/PopBrowse/PopBrowse";
+import { TaskContext } from '../context/TaskContext';
 
 const EditCardPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [task, setTask] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem('token');
+  const { tasks, refreshTasks } = useContext(TaskContext);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
-    const fetchTaskData = async () => {
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-      setLoading(true);
-      const tasks = await getTasks('EditCardPage', token);
-      const foundTask = tasks.find((t) => t.id === parseInt(id));
-      setTask(foundTask || null);
-      setLoading(false);
-    };
-    fetchTaskData();
-  }, [id, token, navigate]);
+    const task = tasks.find(task => task.id === parseInt(id) || task._id === id);
+    if (task) {
+      setSelectedTask(task);
+    } else {
+      navigate('/');
+    }
+  }, [id, tasks, navigate]);
 
   const handleClose = () => {
     navigate('/');
   };
 
-  if (loading) return <div>Загрузка...</div>;
-  if (!task) {
+  const handleTaskUpdate = async () => {
+    await refreshTasks();
     navigate('/');
-    return null;
+  };
+
+  if (!selectedTask) {
+    return <div>Загрузка...</div>;
   }
 
   return (
-    <div className="modal-overlay">
-      <PopBrowse task={task} onClose={handleClose} />
+    <div>
+      <PopBrowse
+        task={selectedTask}
+        onClose={handleClose}
+        onTaskUpdate={handleTaskUpdate}
+        isEditMode={true}
+      />
     </div>
   );
 };

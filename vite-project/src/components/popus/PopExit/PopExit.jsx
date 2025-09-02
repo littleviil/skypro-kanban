@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   PopExitPage,
   PopExitContainer,
@@ -7,26 +7,20 @@ import {
   PopExitFormGroup,
   PopExitYes,
   PopExitNo,
-} from './PopExit.styled';
+} from "./PopExit.styled";
 
-const PopExit = ({ onClose, onLogout }) => {
+const PopExit = ({ isOpen, onClose, onLogout }) => {
   return (
-    <PopExitPage id="popExit">
+    <PopExitPage $isOpen={isOpen}>
       <PopExitContainer>
         <PopExitBlock>
           <PopExitTtl>
             <h2>Выйти из аккаунта?</h2>
           </PopExitTtl>
-          <form id="formExit" action="#">
-            <PopExitFormGroup>
-              <PopExitYes id="exitYes" onClick={(e) => { e.preventDefault(); onLogout(); onClose(); }}>
-                <a href="#">Да, выйти</a>
-              </PopExitYes>
-              <PopExitNo id="exitNo" onClick={(e) => { e.preventDefault(); onClose(); }}>
-                <a href="#">Нет, остаться</a>
-              </PopExitNo>
-            </PopExitFormGroup>
-          </form>
+          <PopExitFormGroup>
+            <PopExitYes onClick={onLogout}>Да</PopExitYes>
+            <PopExitNo onClick={onClose}>Нет</PopExitNo>
+          </PopExitFormGroup>
         </PopExitBlock>
       </PopExitContainer>
     </PopExitPage>

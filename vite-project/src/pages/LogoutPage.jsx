@@ -1,26 +1,25 @@
 import PopExit from "../components/popus/PopExit/PopExit";
 import { useNavigate } from "react-router-dom";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 const ExitPage = ({ setIsAuth }) => {
   const navigate = useNavigate();
 
   const handleClose = () => {
-    navigate(-1);
+    navigate("/");
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
+
     setIsAuth(false);
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
-    <div>
-      <PopExit
-        onClose={handleClose}
-        onLogout={handleLogout}
-      />
-    </div>
+    <PopExit isOpen={true} onClose={handleClose} onLogout={handleLogout} />
   );
 };
 

@@ -16,23 +16,24 @@ const PopUser = ({ onClose, onExitClick }) => {
     setEmail(localStorage.getItem('email') || 'неизвестно');
   }, []);
 
+  const handleExitClick = () => {
+    onExitClick();
+  };
+
   return (
-    <PopUserSet id="popUserSet">
-      <PopUserSetName>{name}</PopUserSetName>
-      <PopUserSetMail>{email}</PopUserSetMail>
-      <PopUserSetTheme>
-        <p>Темная тема</p>
-        <input type="checkbox" />
-      </PopUserSetTheme>
-      <PopUserSetBtn
-        onClick={() => {
-          onExitClick();
-          onClose();
-        }}
-      >
-        Выйти
-      </PopUserSetBtn>
-    </PopUserSet>
+    <div className="pop-user-overlay" onClick={onClose}>
+      <PopUserSet id="popUserSet" onClick={(e) => e.stopPropagation()}>
+        <PopUserSetName>{name}</PopUserSetName>
+        <PopUserSetMail>{email}</PopUserSetMail>
+        <PopUserSetTheme>
+          <p>Темная тема</p>
+          <input type="checkbox" />
+        </PopUserSetTheme>
+        <PopUserSetBtn onClick={handleExitClick}>
+          Выйти
+        </PopUserSetBtn>
+      </PopUserSet>
+    </div>
   );
 };
 

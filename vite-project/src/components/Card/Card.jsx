@@ -14,7 +14,6 @@ import {
 export const Card = ({ task, onBrowseClick }) => {
   const categoryKey = task.categoryUi || "Без категории";
   const categoryColor = taskCategories[categoryKey] || 'gray';
-  // console.log(task);
 
   return (
     <CardsItem>
