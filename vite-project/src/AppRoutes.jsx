@@ -12,7 +12,7 @@ import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 
 function AppRoutes() {
-  const { isAuth, setIsAuth } = useContext(AuthContext);
+  const { isAuth } = useContext(AuthContext);
 
   return (
     <Routes>
@@ -20,13 +20,13 @@ function AppRoutes() {
         <Route path="/" element={<MainPage />}>
           <Route path="card/new" element={<NewCardPage />} />
           <Route path="card/:id" element={<EditCardPage />} />
-          <Route path="user" element={<UserPage setIsAuth={setIsAuth} />} />
-          <Route path="logout" element={<ExitPage setIsAuth={setIsAuth} />} />
+          <Route path="user" element={<UserPage />} />
+          <Route path="logout" element={<ExitPage />} />
         </Route>
       </Route>
 
-      <Route path="/login" element={<LoginPage setIsAuth={setIsAuth} />} />
-      <Route path="/register" element={<RegisterPage setIsAuth={setIsAuth} />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

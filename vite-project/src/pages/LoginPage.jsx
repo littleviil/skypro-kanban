@@ -5,7 +5,7 @@ import { signIn } from "../services/auth";
 import { AuthContext } from "../context/AuthContext";
 
 function LoginPage() {
-  const { isAuth, setIsAuth } = useContext(AuthContext);
+  const { isAuth, login } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
@@ -28,11 +28,7 @@ function LoginPage() {
 
     try {
       const user = await signIn({ login: email, password });
-      localStorage.setItem("token", user.token);
-      localStorage.setItem("name", user.name);
-      localStorage.setItem("email", email);
-
-      setIsAuth(true);
+      login(user.token, user.name, email);
     } catch (err) {
       setError(err.message || "Ошибка авторизации");
     }

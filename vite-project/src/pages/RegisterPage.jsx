@@ -5,7 +5,7 @@ import { signUp } from "../services/auth";
 import { AuthContext } from "../context/AuthContext";
 
 function RegisterPage() {
-  const { isAuth, setIsAuth } = useContext(AuthContext);
+  const { isAuth, login } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -60,11 +60,7 @@ function RegisterPage() {
         password: formData.password,
       });
 
-      localStorage.setItem("token", user.token);
-      localStorage.setItem("name", user.name);
-      localStorage.setItem("email", formData.email);
-
-      setIsAuth(true);
+      login(user.token, user.name, formData.email);
     } catch (err) {
       setError(err.message || "Не удалось зарегистрироваться");
       setErrorFields({

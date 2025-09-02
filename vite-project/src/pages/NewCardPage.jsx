@@ -1,19 +1,27 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PopNewCard from "../components/popus/PopNewCard/PopNewCard";
 
 const NewCardPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    category: "Web Design",
-    status: "Без статуса",
-    date: new Date().toISOString(),
+    title: '',
+    description: '',
+    category: 'Web Design',
+    status: 'Без статуса',
+    date: new Date().toLocaleDateString('ru-RU'),
   });
 
+  const refreshTasks = async () => {
+    return [];
+  };
+
   const handleClose = () => {
-    navigate("/");
+    navigate('/');
+  };
+
+  const handleSubmit = async () => {
+    navigate('/');
   };
 
   return (
@@ -22,6 +30,8 @@ const NewCardPage = () => {
         formData={formData}
         setFormData={setFormData}
         onClose={handleClose}
+        refreshTasks={refreshTasks}
+        onSubmit={handleSubmit}
       />
     </div>
   );

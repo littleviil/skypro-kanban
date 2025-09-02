@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { TaskContext } from "./TaskContext";
 import {
   fetchKanbanTasks,
@@ -47,7 +47,8 @@ import {
   const statusUiToApi = (uiStatus) => STATUS_UI_TO_API[uiStatus] ?? "no-status";
 
   const normalizeTaskFromApi = (task) => {
-    const statusApi = (task.status || "no-status").toLowerCase();
+    const statusFromServer = task.status || "no-status";
+    const statusApi = statusFromServer === "Без статуса" ? "no-status" : statusFromServer.toLowerCase();
     const statusUi = STATUS_API_TO_UI[statusApi] || STATUS_UI.NO_STATUS;
 
     const dateValue =
@@ -57,8 +58,14 @@ import {
         ? new Date(task.date)
         : new Date();
 
+    let taskId = task.id ?? task._id ?? "";
+    if (!taskId) {
+      taskId = `generated-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      console.warn("Задача получена без ID, сгенерирован новый:", taskId);
+    }
+
     return {
-      id: String(task.id ?? task._id ?? ""),
+      id: String(taskId),
       title: task.title ?? task.name ?? "",
       description: task.description ?? "",
       statusApi,
@@ -73,7 +80,7 @@ import {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const token = useMemo(() => localStorage.getItem("token"), []);
+    const [token, setToken] = useState(() => localStorage.getItem("token"));
 
     const refreshTasks = useCallback(async () => {
       if (!token) return [];
@@ -81,12 +88,24 @@ import {
         setLoading(true);
         const data = await fetchKanbanTasks(token);
         const tasksArray = Array.isArray(data) ? data : data.tasks || [];
+        
         const normalized = tasksArray.map(normalizeTaskFromApi);
-        setTasks(normalized);
+        const seenIds = new Set();
+        const uniqueTasks = [];
+        
+        for (const task of normalized) {
+          if (seenIds.has(task.id)) {
+            task.id = `duplicate-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          }
+          seenIds.add(task.id);
+          uniqueTasks.push(task);
+        }
+        
+        setTasks(uniqueTasks);
         setError("");
-        return normalized;
+        return uniqueTasks;
       } catch (err) {
-        console.error(err);
+        console.error("Ошибка при загрузке задач:", err);
         setError("Не удалось загрузить задачи");
         return [];
       } finally {
@@ -95,19 +114,46 @@ import {
     }, [token]);
 
     useEffect(() => {
-      if (token) refreshTasks();
+      const handleStorageChange = () => {
+        const newToken = localStorage.getItem("token");
+        setToken(newToken);
+      };
+      
+      const handleTokenChange = (event) => {
+        const newToken = event.detail.token;
+        setToken(newToken);
+      };
+      
+      window.addEventListener("storage", handleStorageChange);
+      window.addEventListener("tokenChanged", handleTokenChange);
+      
+      return () => {
+        window.removeEventListener("storage", handleStorageChange);
+        window.removeEventListener("tokenChanged", handleTokenChange);
+      };
+    }, []);
+
+    const updateToken = useCallback(() => {
+      const newToken = localStorage.getItem("token");
+      setToken(newToken);
+    }, []);
+
+    useEffect(() => {
+      if (token) {
+        refreshTasks();
+      } else {
+        setTasks([]);
+      }
     }, [token, refreshTasks]);
 
     const removeTask = async (id) => {
-      console.log("Удаляем задачу с id:", id);
       if (!id) {
         console.error("removeTask called with undefined id");
         return;
       }
 
       try {
-        const result = await deleteKanbanTask(id);
-        console.log("Результат удаления с сервера:", result);
+        await deleteKanbanTask(id);
         setTasks((prev) => prev.filter((t) => String(t.id) !== String(id)));
       } catch (err) {
         console.error("Ошибка при удалении задачи:", err);
@@ -130,13 +176,35 @@ import {
           : undefined,
       };
 
-      await updateKanbanTask(id, updatesApi);
-
-      const refreshedTasks = await refreshTasks();
-      return refreshedTasks.find((t) => String(t.id) === String(id)) || null;
+      try {
+        await updateKanbanTask(id, updatesApi);
+        
+        const updatedTask = {
+          id: String(id),
+          title: updatesUi.title?.trim() ?? "",
+          description: updatesUi.description ?? "",
+          statusApi: statusUiToApi(updatesUi.statusUi),
+          statusUi: updatesUi.statusUi,
+          topicApi: updatesUi.categoryUi,
+          categoryUi: normalizeCategory(updatesUi.categoryUi),
+          date: updatesUi.date ? new Date(updatesUi.date) : new Date(),
+        };
+        
+        setTasks((prev) => {
+          const updated = prev.map((task) => 
+            String(task.id) === String(id) ? { ...task, ...updatedTask } : task
+          );
+          return updated;
+        });
+        
+        return updatedTask;
+      } catch (error) {
+        console.error("Ошибка при обновлении задачи:", error);
+        throw error;
+      }
     };
 
-  const addTask = async (newTaskUi) => {
+  const addTask = async (newTaskUi) => {   
     const payload = {
       title: newTaskUi.title.trim(),
       description: newTaskUi.description ?? "",
@@ -147,28 +215,24 @@ import {
         : new Date().toISOString(),
     };
 
-    const tempId = `temp-${Date.now()}`;
-    const optimisticTask = {
-      id: tempId,
-      title: payload.title,
-      description: payload.description,
-      statusApi: payload.status,
-      statusUi: STATUS_API_TO_UI[payload.status] || STATUS_UI.NO_STATUS,
-      topicApi: payload.topic,
-      categoryUi: normalizeCategory(payload.topic),
-      date: new Date(payload.date),
-    };
-    setTasks((prev) => [...prev, optimisticTask]);
-
     try {
       await createKanbanTask(payload);
       const refreshedTasks = await refreshTasks();
-      return refreshedTasks[refreshedTasks.length - 1] || null;
+
+      const newTask = refreshedTasks.find(task => 
+        task.title === payload.title && 
+        task.description === payload.description
+      ) || refreshedTasks[refreshedTasks.length - 1];
+      return newTask;
     } catch (e) {
-      setTasks((prev) => prev.filter((t) => t.id !== tempId));
+      console.error("Ошибка при создании задачи:", e);
       throw e;
     }
   };
+
+  const clearTasks = useCallback(() => {
+    setTasks([]);
+  }, []);
 
   return (
     <TaskContext.Provider
@@ -181,6 +245,8 @@ import {
         removeTask,
         editTask,
         addTask,
+        clearTasks,
+        updateToken,
         STATUS_UI,
         CATEGORY_UI,
       }}

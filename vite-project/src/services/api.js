@@ -24,22 +24,46 @@ export async function createKanbanTask(taskData) {
   const token = localStorage.getItem("token");
   if (!token) throw new Error("Нет токена. Пользователь не авторизован.");
 
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${token}` },
-    body: JSON.stringify(taskData),
-  });
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { 
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(taskData),
+    });
 
-  const result = await response.json();
+    const result = await response.json();
 
-  if (!response.ok) {
-    throw new Error(result?.error || "Ошибка при создании задачи");
+    if (!response.ok) {
+      throw new Error(result?.error || "Ошибка при создании задачи");
+    }
+
+    let createdTask = null;
+    
+    if (result.task) {
+      createdTask = result.task;
+    } else if (result.tasks) {
+      if (Array.isArray(result.tasks)) {
+        createdTask = result.tasks[0];
+      } 
+    } else {
+      createdTask = result;
+    }
+
+    if (!createdTask) {
+      throw new Error("Сервер не вернул данные задачи");
+    }
+
+    if (!createdTask.id && !createdTask._id) {
+      console.warn("Задача создана без ID, сервер вернул:", createdTask);
+    }
+
+    return createdTask;
+  } catch (error) {
+    console.error("Ошибка при создании задачи:", error);
+    throw error;
   }
-
-  if (result.task) return result.task;
-  if (result.tasks) return Array.isArray(result.tasks) ? result.tasks[0] : result.tasks;
-
-  return result;
 }
 
 

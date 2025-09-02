@@ -10,7 +10,7 @@ import PopNewCard from "./components/popus/PopNewCard/PopNewCard";
 import { AuthContext } from "./context/AuthContext";
 
 function AppContent() {
-  const { isAuth, setIsAuth } = useContext(AuthContext);
+  const { isAuth } = useContext(AuthContext);
 
   const [authChecked, setAuthChecked] = useState(false);
   const [isPopNewCardOpen, setIsPopNewCardOpen] = useState(false);
@@ -27,12 +27,8 @@ function AppContent() {
     location.pathname === "/login" || location.pathname === "/register";
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
     setAuthChecked(true);
-    if (storedToken) {
-      setIsAuth(true);
-    }
-  }, [setIsAuth]);
+  }, []);
 
   if (!authChecked) return null;
 
@@ -53,7 +49,6 @@ function AppContent() {
             });
             setIsPopNewCardOpen(true);
           }}
-          setIsAuth={setIsAuth}
         />
       )}
 
