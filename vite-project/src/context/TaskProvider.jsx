@@ -18,15 +18,19 @@ import {
   export const CATEGORY_UI = ["Web Design", "Copywriting", "Research"];
 
   const STATUS_UI_TO_API = {
+    [STATUS_UI.DRAFT]: "draft",
     [STATUS_UI.NO_STATUS]: "no-status",
     [STATUS_UI.TODO]: "todo",
     [STATUS_UI.IN_PROGRESS]: "in-progress",
-    [STATUS_UI.TESTING]: "testing",
+    [STATUS_UI.TESTing]: "testing",
     [STATUS_UI.DONE]: "done",
   };
 
-  const STATUS_API_TO_UI = Object.fromEntries(
-    Object.entries(STATUS_UI_TO_API).map(([k, v]) => [v, k])
+  const STATUS_API_TO_UI = Object.assign(
+    {},
+    ...Object.entries(STATUS_UI_TO_API).map(([k, v]) => ({
+      [v]: k,
+    }))
   );
 
   const normalizeCategory = (topic) => {
@@ -106,8 +110,7 @@ import {
       }
 
       try {
-        const result = await deleteKanbanTask(id);
-        console.log("Результат удаления с сервера:", result);
+        await deleteKanbanTask(id);
         setTasks((prev) => prev.filter((t) => String(t.id) !== String(id)));
       } catch (err) {
         console.error("Ошибка при удалении задачи:", err);
@@ -132,8 +135,14 @@ import {
 
       await updateKanbanTask(id, updatesApi);
 
-      const refreshedTasks = await refreshTasks();
-      return refreshedTasks.find((t) => String(t.id) === String(id)) || null;
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          String(task.id) === String(id)
+            ? { ...task, ...normalizeTaskFromApi({ ...updatesApi, id }) }
+            : task
+        )
+      );
+      return tasks.find((t) => String(t.id) === String(id)) || null;
     };
 
   const addTask = async (newTaskUi) => {
@@ -148,22 +157,29 @@ import {
     };
 
     const tempId = `temp-${Date.now()}`;
-    const optimisticTask = {
-      id: tempId,
-      title: payload.title,
-      description: payload.description,
-      statusApi: payload.status,
-      statusUi: STATUS_API_TO_UI[payload.status] || STATUS_UI.NO_STATUS,
-      topicApi: payload.topic,
-      categoryUi: normalizeCategory(payload.topic),
-      date: new Date(payload.date),
-    };
-    setTasks((prev) => [...prev, optimisticTask]);
+    const optimisticTask = [
+      ...tasks,
+      {
+        id: tempId,
+        title: payload.title,
+        description: payload.description,
+        statusApi: payload.status,
+        statusUi: STATUS_API_TO_UI[payload.status] || STATUS_UI.NO_STATUS,
+        topicApi: payload.topic,
+        categoryUi: normalizeCategory(payload.topic),
+        date: new Date(payload.date),
+      },
+    ];
+    setTasks(optimisticTask);
 
     try {
-      await createKanbanTask(payload);
-      const refreshedTasks = await refreshTasks();
-      return refreshedTasks[refreshedTasks.length - 1] || null;
+      const createdTask = await createKanbanTask(payload);
+      setTasks((prev) =>
+        prev.map((task) =>
+          task.id === tempId ? normalizeTaskFromApi(createdTask) : task
+        )
+      );
+      return normalizeTaskFromApi(createdTask);
     } catch (e) {
       setTasks((prev) => prev.filter((t) => t.id !== tempId));
       throw e;

@@ -10,7 +10,7 @@ const EditCardPage = () => {
   const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
-    const task = tasks.find(task => task.id === parseInt(id) || task._id === id);
+    const task = tasks.find(task => String(task.id) === String(id) || String(task._id) === String(id));
     if (task) {
       setSelectedTask(task);
     } else {
