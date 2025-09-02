@@ -41,9 +41,6 @@ export const CardTheme = styled.div`
   align-items: flex-end;
 
   ${({ theme }) => {
-    console.log('CardTheme prop theme:', theme);
-    console.log('CardTheme imported themes:', themes);
-
     let selectedTheme = { color: '#333333' };
 
     if (themes) {
@@ -53,8 +50,6 @@ export const CardTheme = styled.div`
         selectedTheme = theme;
       }
     }
-
-    console.log('CardTheme selectedTheme:', selectedTheme);
 
     return `
       background-color: ${selectedTheme.background};

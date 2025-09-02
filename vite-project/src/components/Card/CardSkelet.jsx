@@ -15,7 +15,7 @@ export const CardSkelet = () => {
     <CardsItem>
       <CardsCard>
         <CardGroup>
-          <SkeletBox width="82px" height="20px" borderRadius="18px" />
+          <SkeletBox width="82px" height="20px"/>
           <CardBtn>
             <SkeletBox width="18px" height="4px"/>
           </CardBtn>

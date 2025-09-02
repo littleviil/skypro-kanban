@@ -27,10 +27,6 @@ const EditCardPage = () => {
     navigate('/');
   };
 
-  if (!selectedTask) {
-    return <div>Загрузка...</div>;
-  }
-
   return (
     <div>
       <PopBrowse

@@ -21,7 +21,6 @@ const NewCardPage = () => {
   };
 
   const handleSubmit = async () => {
-    console.log('Создание новой задачи:', formData);
     navigate('/');
   };
 

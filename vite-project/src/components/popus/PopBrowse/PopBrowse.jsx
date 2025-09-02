@@ -7,14 +7,14 @@ const PopBrowse = ({ task, onClose }) => {
   const { editTask, removeTask, STATUS_UI } = useContext(TaskContext);
 
   const [isEditing, setIsEditing] = useState(false);
-  const [viewTask, setViewTask] = useState(task);
-  const [draft, setDraft] = useState(task);
+  const [viewTask, setViewTask] = useState(task ?? {});
+  const [draft, setDraft] = useState(task ?? {});
 
   const taskId = task?.id ?? task?._id;
 
   useEffect(() => {
-    setViewTask(task);
-    setDraft(task);
+    setViewTask(task ?? {});
+    setDraft(task ?? {});
   }, [task]);
 
   const startEdit = () => {
@@ -99,7 +99,7 @@ const PopBrowse = ({ task, onClose }) => {
                   <textarea
                     className="form-browse__area"
                     id="textArea01"
-                    value={(isEditing ? draft.description : viewTask.description) || ""}
+                    value={(isEditing ? draft?.description : viewTask?.description) || ""}
                     onChange={(e) => updateDraft("description", e.target.value)}
                     placeholder="Введите описание задачи..."
                     disabled={!isEditing}
@@ -109,8 +109,14 @@ const PopBrowse = ({ task, onClose }) => {
 
               <div className="pop-new-card__calendar calendar">
                 <Calendar
-                  value={isEditing ? draft.date : viewTask.date ? new Date(viewTask.date) : new Date()}
-                  onChange={isEditing ? (d) => updateDraft("date", new Date(d)) : undefined}
+                  value={
+                    isEditing
+                      ? draft?.date ? new Date(draft.date) : new Date()
+                      : viewTask?.date ? new Date(viewTask.date) : new Date()
+                  }
+                  onChange={
+                    isEditing ? (d) => updateDraft("date", new Date(d)) : undefined
+                  }
                 />
               </div>
             </div>

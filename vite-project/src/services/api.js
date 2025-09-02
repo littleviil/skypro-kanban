@@ -36,7 +36,10 @@ export async function createKanbanTask(taskData) {
     throw new Error(result?.error || "Ошибка при создании задачи");
   }
 
-  return result.tasks;
+  if (result.task) return result.task;
+  if (result.tasks) return Array.isArray(result.tasks) ? result.tasks[0] : result.tasks;
+
+  return result;
 }
 
 
