@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { AuthContext } from "../../../context/AuthContext"; // ✅ путь проверь
+import { AuthContext } from "../../../context/AuthContext";
 import {
   PopUserSet,
   PopUserSetName,

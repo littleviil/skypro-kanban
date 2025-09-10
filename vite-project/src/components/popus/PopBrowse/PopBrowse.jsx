@@ -1,12 +1,11 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Calendar } from "../../Calendar/Calendar";
 import { TaskContext } from "../../../context/TaskContext";
 import { taskCategories, statusThemes } from "../../../tasks";
 
-const PopBrowse = ({ task, onClose, onTaskUpdate }) => {
+const PopBrowse = ({ task, onClose }) => {
   const { updateTask, removeTask } = useContext(TaskContext);
 
-  // Инициализация draft с дефолтными значениями
   const [draft, setDraft] = useState({
     title: "",
     description: "",
@@ -30,18 +29,12 @@ const PopBrowse = ({ task, onClose, onTaskUpdate }) => {
     }
   }, [task]);
 
-  const startEdit = () => setIsEditing(true);
-  const handleCancel = () => {
-    setDraft({ ...task });
-    setIsEditing(false);
-  };
   const updateDraft = (field, value) =>
     setDraft((prev) => ({ ...prev, [field]: value }));
 
   const handleSave = async () => {
     try {
-      const updated = await updateTask(task._id ?? task.id, draft);
-      if (updated && onTaskUpdate) onTaskUpdate();
+      await updateTask(task._id ?? task.id, draft);
       setIsEditing(false);
     } catch (err) {
       console.error("Ошибка сохранения задачи:", err);
@@ -51,7 +44,6 @@ const PopBrowse = ({ task, onClose, onTaskUpdate }) => {
   const handleDelete = async () => {
     try {
       await removeTask(task._id ?? task.id);
-      if (onTaskUpdate) onTaskUpdate();
       onClose();
     } catch (err) {
       console.error("Ошибка удаления задачи:", err);
@@ -67,8 +59,12 @@ const PopBrowse = ({ task, onClose, onTaskUpdate }) => {
           <div className="pop-browse__content">
             {/* Заголовок и категория */}
             <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">{draft.title || "Название задачи"}</h3>
-              <div className={`categories__theme theme-top _${categoryColor} _active-category`}>
+              <h3 className="pop-browse__ttl">
+                {draft.title || "Название задачи"}
+              </h3>
+              <div
+                className={`categories__theme theme-top _${categoryColor} _active-category`}
+              >
                 <p className={`_${categoryColor}`}>{draft.topic}</p>
               </div>
             </div>
@@ -81,27 +77,36 @@ const PopBrowse = ({ task, onClose, onTaskUpdate }) => {
                   ? Object.keys(statusThemes).map((st) => (
                       <div
                         key={st}
-                        className={`status__theme ${draft.status === st ? "_active" : ""}`}
+                        className={`status__theme ${
+                          draft.status === st ? "_active" : ""
+                        }`}
                         onClick={() => updateDraft("status", st)}
                       >
                         <p>{st}</p>
                       </div>
                     ))
-                  : <div className="status__theme _active"><p>{draft.status}</p></div>
-                }
+                  : (
+                    <div className="status__theme _active">
+                      <p>{draft.status}</p>
+                    </div>
+                  )}
               </div>
             </div>
 
-            {/* Описание и календарь */}
+            {/* Описание + календарь */}
             <div className="pop-browse__wrap">
               <form className="pop-browse__form form-browse">
                 <div className="form-browse__block">
-                  <label htmlFor="textArea01" className="subttl">Описание задачи</label>
+                  <label htmlFor="textArea01" className="subttl">
+                    Описание задачи
+                  </label>
                   <textarea
                     className="form-browse__area"
                     id="textArea01"
                     value={draft.description || ""}
-                    onChange={(e) => updateDraft("description", e.target.value)}
+                    onChange={(e) =>
+                      updateDraft("description", e.target.value)
+                    }
                     placeholder="Введите описание задачи..."
                     disabled={!isEditing}
                   />
@@ -110,7 +115,12 @@ const PopBrowse = ({ task, onClose, onTaskUpdate }) => {
               <div className="pop-new-card__calendar calendar">
                 <Calendar
                   value={draft.date ? new Date(draft.date) : new Date()}
-                  onChange={isEditing ? (d) => updateDraft("date", new Date(d).toISOString()) : undefined}
+                  onChange={
+                    isEditing
+                      ? (d) =>
+                          updateDraft("date", new Date(d).toISOString())
+                      : undefined
+                  }
                 />
               </div>
             </div>
@@ -120,18 +130,57 @@ const PopBrowse = ({ task, onClose, onTaskUpdate }) => {
               <div className="btn-group">
                 {isEditing ? (
                   <>
-                    <button type="button" className="btn-browse__edit _btn-bor _hover03" onClick={handleSave}>Сохранить</button>
-                    <button type="button" className="btn-browse__edit _btn-bor _hover03" onClick={handleCancel}>Отменить</button>
-                    <button type="button" className="btn-browse__delete _btn-bor _hover03" onClick={handleDelete}>Удалить задачу</button>
+                    <button
+                      type="button"
+                      className="btn-browse__edit _btn-bor _hover03"
+                      onClick={handleSave}
+                    >
+                      Сохранить
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-browse__edit _btn-bor _hover03"
+                      onClick={() => {
+                        setDraft({ ...task });
+                        setIsEditing(false);
+                      }}
+                    >
+                      Отменить
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-browse__delete _btn-bor _hover03"
+                      onClick={handleDelete}
+                    >
+                      Удалить задачу
+                    </button>
                   </>
                 ) : (
                   <>
-                    <button type="button" className="btn-browse__edit _btn-bor _hover03" onClick={startEdit}>Редактировать задачу</button>
-                    <button type="button" className="btn-browse__delete _btn-bor _hover03" onClick={handleDelete}>Удалить задачу</button>
+                    <button
+                      type="button"
+                      className="btn-browse__edit _btn-bor _hover03"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      Редактировать задачу
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-browse__delete _btn-bor _hover03"
+                      onClick={handleDelete}
+                    >
+                      Удалить задачу
+                    </button>
                   </>
                 )}
               </div>
-              <button type="button" className="btn-browse__close _btn-bg _hover01" onClick={onClose}>Закрыть</button>
+              <button
+                type="button"
+                className="btn-browse__close _btn-bg _hover01"
+                onClick={onClose}
+              >
+                Закрыть
+              </button>
             </div>
           </div>
         </div>

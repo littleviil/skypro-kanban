@@ -31,6 +31,7 @@ const PopNewCard = ({ formData, setFormData, onClose, onSubmit }) => {
     }
     setError("");
     onSubmit();
+    onClose();
   };
 
   return (

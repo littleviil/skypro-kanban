@@ -1,7 +1,5 @@
 const BASE_URL = "https://wedev-api.sky.pro/api";
 
-// === TASKS ===
-
 export async function fetchKanbanTasks(token) {
   if (!token) throw new Error("Нет токена. Пользователь не авторизован.");
   try {
@@ -66,7 +64,7 @@ export async function createKanbanTask(taskData, token) {
       throw new Error(data?.error || "Ошибка при создании задачи");
     }
 
-    return data.task; // сервер всегда возвращает task
+    return data.task;
   } catch (error) {
     console.error("Ошибка при создании задачи:", error);
     throw error;

@@ -7,10 +7,9 @@ function MainPage() {
   const navigate = useNavigate();
   const { tasks, fetchTasks, error } = useContext(TaskContext);
 
-  // ❌ НЕ добавляем fetchTasks в зависимости
   useEffect(() => {
-    fetchTasks(); // вызываем только один раз при монтировании
-  }, []); // пустой массив зависимостей
+    fetchTasks();
+  }, []);
 
   const openTaskEdit = (task) => navigate(`/card/${task._id ?? task.id}`);
 

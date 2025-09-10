@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
 
     if (token) {
       setIsAuth(true);
-      setUser({ token, name, email }); // ✅ теперь сохраняем токен в user
+      setUser({ token, name, email });
     }
   }, []);
 
@@ -31,7 +31,7 @@ export function AuthProvider({ children }) {
     localStorage.setItem("name", name);
     localStorage.setItem("email", email);
     setIsAuth(true);
-    setUser({ token, name, email }); // ✅ кладём токен в user
+    setUser({ token, name, email });
 
     window.dispatchEvent(new CustomEvent("tokenChanged", { detail: { token } }));
   }, []);

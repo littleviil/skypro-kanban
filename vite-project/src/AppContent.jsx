@@ -31,7 +31,7 @@ function AppContent() {
       {!isAuthPage && isAuth && (
         <Header
           onNewCardClick={() => {
-            navigate("/card/new"); // теперь через роутинг
+            navigate("/card/new");
           }}
         />
       )}

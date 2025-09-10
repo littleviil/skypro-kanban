@@ -1,7 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
-import { TaskContext } from "./TaskContext";
+import React, { useState, useContext } from "react";
 import { AuthContext } from "./AuthContext";
-import { fetchKanbanTasks, createKanbanTask, updateKanbanTask, deleteKanbanTask } from "../services/api";
+import { TaskContext } from "./TaskContext";
+import {
+  fetchKanbanTasks,
+  createKanbanTask,
+  updateKanbanTask,
+  deleteKanbanTask,
+} from "../services/api";
 import { taskCategories, statusThemes } from "../tasks";
 
 export const TaskProvider = ({ children }) => {
@@ -15,7 +20,7 @@ export const TaskProvider = ({ children }) => {
     setLoading(true);
     try {
       const fetched = await fetchKanbanTasks(user.token);
-      setTasks(fetched);
+      setTasks(fetched || []);
       setError(null);
     } catch (err) {
       setError(err.message || "Ошибка загрузки задач");
@@ -24,30 +29,35 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    fetchTasks();
-  }, [user?.token]);
-
   const addTask = async (taskData) => {
+    if (!user?.token) return;
     try {
       const payload = {
         ...taskData,
         topic: taskData.topic || "Web Design",
       };
       const created = await createKanbanTask(payload, user.token);
-      setTasks(prev => [...prev, created]);
+      setTasks((prev) => [...(prev || []), created]);
+      return created;
     } catch (err) {
       setError(err.message);
+      throw err;
     }
   };
 
   const updateTask = async (id, updates) => {
     if (!user?.token) return;
     try {
-      await updateKanbanTask(id, updates, user.token);
-      await fetchTasks(); // обновляем после редактирования
+      const updated = await updateKanbanTask(id, updates, user.token);
+      setTasks((prev) =>
+        (prev || [])
+          .map((task) => (task && task._id === id ? updated : task))
+          .filter(Boolean)
+      );
+      return updated;
     } catch (err) {
       setError(err.message || "Ошибка обновления задачи");
+      throw err;
     }
   };
 
@@ -55,9 +65,10 @@ export const TaskProvider = ({ children }) => {
     if (!user?.token) return;
     try {
       await deleteKanbanTask(id, user.token);
-      await fetchTasks(); // обновляем после удаления
+      setTasks((prev) => (prev || []).filter((task) => task && task._id !== id));
     } catch (err) {
       setError(err.message || "Ошибка удаления задачи");
+      throw err;
     }
   };
 

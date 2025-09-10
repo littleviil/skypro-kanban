@@ -6,46 +6,30 @@ import { TaskContext } from "../context/TaskContext";
 const EditCardPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { tasks, fetchTasks } = useContext(TaskContext);
+  const { tasks } = useContext(TaskContext);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadTask = async () => {
-      if (!tasks || tasks.length === 0) {
-        await fetchTasks();
-      }
-      const task = (tasks || []).find(
-        t => String(t._id ?? t.id) === String(id)
-      );
-      if (task) {
-        setSelectedTask(task);
-      } else {
-        navigate("/"); // если задача не найдена
-      }
-      setLoading(false);
-    };
+    const taskFound = (tasks || []).find(
+      t => t && String(t._id ?? t.id) === String(id)
+    );
 
-    loadTask();
-  }, [id, tasks, fetchTasks, navigate]);
+    if (taskFound) {
+      setSelectedTask(taskFound);
+    } else {
+      navigate("/");
+    }
+  }, [id, tasks, navigate]);
 
   const handleClose = () => navigate("/");
 
-  const handleTaskUpdate = async () => {
-    await fetchTasks(); // обновляем задачи после редактирования
-    navigate("/");
-  };
-
-  if (loading || !selectedTask) return null; // не рендерим пока задача не загружена
+  if (!selectedTask) return null;
 
   return (
-    <div>
-      <PopBrowse
-        task={selectedTask}
-        onClose={handleClose}
-        onTaskUpdate={handleTaskUpdate}
-      />
-    </div>
+    <PopBrowse
+      task={selectedTask}
+      onClose={handleClose}
+    />
   );
 };
 

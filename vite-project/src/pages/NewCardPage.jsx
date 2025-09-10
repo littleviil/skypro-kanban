@@ -1,4 +1,3 @@
-// pages/NewCardPage.jsx
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import PopNewCard from "../components/popus/PopNewCard/PopNewCard";
@@ -7,20 +6,34 @@ import { TaskContext } from "../context/TaskContext";
 const NewCardPage = () => {
   const navigate = useNavigate();
   const { addTask } = useContext(TaskContext);
-
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    category: "Web Design",
+    topic: "Web Design",
     status: "Без статуса",
     date: new Date().toISOString(),
   });
+  const [error, setError] = useState("");
 
   const handleClose = () => navigate("/");
 
   const handleSubmit = async () => {
-    await addTask(formData);
-    navigate("/"); // возврат на главную
+    if (!formData.title.trim()) {
+      setError("Введите название задачи");
+      return;
+    }
+    if (!formData.description.trim()) {
+      setError("Введите описание задачи");
+      return;
+    }
+    setError("");
+
+    try {
+      const createdTask = await addTask(formData);
+      navigate(`/card/${createdTask._id ?? createdTask.id}`);
+    } catch (err) {
+      setError(err.message || "Ошибка создания задачи");
+    }
   };
 
   return (
@@ -29,6 +42,7 @@ const NewCardPage = () => {
       setFormData={setFormData}
       onClose={handleClose}
       onSubmit={handleSubmit}
+      error={error}
     />
   );
 };

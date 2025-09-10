@@ -41,7 +41,6 @@ const CreateTask = ({ onCreated }) => {
         date: form.date instanceof Date ? form.date.toISOString() : form.date,
       });
 
-      // Сбрасываем форму
       setForm({
         title: "",
         description: "",
@@ -50,10 +49,8 @@ const CreateTask = ({ onCreated }) => {
         date: new Date(),
       });
 
-      // Обновляем список задач сразу
       await fetchTasks();
 
-      // Callback после создания
       if (onCreated) onCreated();
     } catch (err) {
       console.error("Ошибка создания задачи:", err);
