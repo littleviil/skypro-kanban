@@ -1,39 +1,35 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// pages/NewCardPage.jsx
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import PopNewCard from "../components/popus/PopNewCard/PopNewCard";
+import { TaskContext } from "../context/TaskContext";
 
 const NewCardPage = () => {
   const navigate = useNavigate();
+  const { addTask } = useContext(TaskContext);
+
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    category: 'Web Design',
-    status: 'Без статуса',
-    date: new Date().toLocaleDateString('ru-RU'),
+    title: "",
+    description: "",
+    category: "Web Design",
+    status: "Без статуса",
+    date: new Date().toISOString(),
   });
 
-  const refreshTasks = async () => {
-    return [];
-  };
-
-  const handleClose = () => {
-    navigate('/');
-  };
+  const handleClose = () => navigate("/");
 
   const handleSubmit = async () => {
-    navigate('/');
+    await addTask(formData);
+    navigate("/"); // возврат на главную
   };
 
   return (
-    <div>
-      <PopNewCard
-        formData={formData}
-        setFormData={setFormData}
-        onClose={handleClose}
-        refreshTasks={refreshTasks}
-        onSubmit={handleSubmit}
-      />
-    </div>
+    <PopNewCard
+      formData={formData}
+      setFormData={setFormData}
+      onClose={handleClose}
+      onSubmit={handleSubmit}
+    />
   );
 };
 

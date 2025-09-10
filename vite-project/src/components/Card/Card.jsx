@@ -12,15 +12,16 @@ import {
 } from './Card.styled';
 
 export const Card = ({ task, onBrowseClick }) => {
-  const categoryKey = task.categoryUi || "Без категории";
+  const categoryKey = task.topic || "Без категории";
   const categoryColor = taskCategories[categoryKey] || 'gray';
+  // console.log(task);
 
   return (
     <CardsItem>
       <CardsCard>
         <CardGroup>
           <CardTheme theme={categoryColor}>
-            <p>{categoryKey}</p>
+            <p className={`_${task.topic}`}>{task.topic}</p>
           </CardTheme>
           <CardBtn onClick={() => onBrowseClick(task)}>
             <div></div><div></div><div></div>

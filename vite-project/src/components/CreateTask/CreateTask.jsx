@@ -3,13 +3,13 @@ import { TaskContext } from "../../context/TaskContext";
 import { Calendar } from "../Calendar/Calendar";
 
 const CreateTask = ({ onCreated }) => {
-  const { addTask, STATUS_UI, CATEGORY_UI } = useContext(TaskContext);
+  const { addTask, STATUS_UI, CATEGORY_UI, fetchTasks } = useContext(TaskContext);
 
   const [form, setForm] = useState({
     title: "",
     description: "",
     status: STATUS_UI.NO_STATUS,
-    category: "Web Design",
+    topic: CATEGORY_UI[0] || "Web Design",
     date: new Date(),
   });
 
@@ -28,35 +28,33 @@ const CreateTask = ({ onCreated }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.title.trim()) {
-      setError("Введите название задачи");
+    if (!form.title.trim() || !form.description.trim()) {
+      setError("Заполните все поля");
       return;
     }
-    if (!form.description.trim()) {
-      setError("Введите описание задачи");
-      return;
-    }
+
+    setError("");
 
     try {
-      setError("");
-
       await addTask({
-        title: form.title.trim(),
-        description: form.description.trim(),
-        status: form.status,
-        category: form.category,
+        ...form,
         date: form.date instanceof Date ? form.date.toISOString() : form.date,
       });
 
+      // Сбрасываем форму
       setForm({
         title: "",
         description: "",
-        status: STATUS_UI.TODO,
-        category: "Web Design",
+        status: STATUS_UI.NO_STATUS,
+        topic: CATEGORY_UI[0] || "Web Design",
         date: new Date(),
       });
 
-      if (typeof onCreated === "function") onCreated();
+      // Обновляем список задач сразу
+      await fetchTasks();
+
+      // Callback после создания
+      if (onCreated) onCreated();
     } catch (err) {
       console.error("Ошибка создания задачи:", err);
       setError(err.message || "Не удалось создать задачу");
@@ -113,9 +111,9 @@ const CreateTask = ({ onCreated }) => {
           <div className="form-field">
             <label className="subttl">Категория</label>
             <select
-              name="category"
+              name="topic"
               className="form-select"
-              value={form.category}
+              value={form.topic}
               onChange={onChange}
             >
               {CATEGORY_UI.map((cat) => (

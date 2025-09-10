@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext"; // ✅ путь проверь
 import {
   PopExitPage,
   PopExitContainer,
@@ -9,7 +10,14 @@ import {
   PopExitNo,
 } from "./PopExit.styled";
 
-const PopExit = ({ isOpen, onClose, onLogout }) => {
+const PopExit = ({ isOpen, onClose }) => {
+  const { logout } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+    onClose();
+  };
+
   return (
     <PopExitPage $isOpen={isOpen}>
       <PopExitContainer>
@@ -18,7 +26,7 @@ const PopExit = ({ isOpen, onClose, onLogout }) => {
             <h2>Выйти из аккаунта?</h2>
           </PopExitTtl>
           <PopExitFormGroup>
-            <PopExitYes onClick={onLogout}>Да</PopExitYes>
+            <PopExitYes onClick={handleLogout}>Да</PopExitYes>
             <PopExitNo onClick={onClose}>Нет</PopExitNo>
           </PopExitFormGroup>
         </PopExitBlock>

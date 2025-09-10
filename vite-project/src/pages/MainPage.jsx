@@ -3,26 +3,16 @@ import { useNavigate, Outlet } from "react-router-dom";
 import Main from "../components/Main/Main";
 import { TaskContext } from "../context/TaskContext";
 
-
-
 function MainPage() {
   const navigate = useNavigate();
-  const { tasks, error, refreshTasks } = useContext(TaskContext);
+  const { tasks, fetchTasks, error } = useContext(TaskContext);
 
-  const token = localStorage.getItem("token");
-
+  // ❌ НЕ добавляем fetchTasks в зависимости
   useEffect(() => {
-    if (!token) {
-      navigate("/login");
-      return;
-    }
+    fetchTasks(); // вызываем только один раз при монтировании
+  }, []); // пустой массив зависимостей
 
-    refreshTasks();
-  }, [token, navigate, refreshTasks]);
-
-  const openTaskEdit = (task) => {
-    navigate(`/card/${task.id || task._id}`);
-  };
+  const openTaskEdit = (task) => navigate(`/card/${task._id ?? task.id}`);
 
   if (error) return <div>{error}</div>;
 

@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext"; // ✅ путь проверь
 import {
   PopUserSet,
   PopUserSetName,
   PopUserSetMail,
   PopUserSetTheme,
   PopUserSetBtn,
-} from './PopUser.styled';
+} from "./PopUser.styled";
 
-const PopUser = ({ onClose, onExitClick }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+const PopUser = ({ onClose }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const { logout } = useContext(AuthContext);
 
   useEffect(() => {
-    setName(localStorage.getItem('name') || 'Пользователь');
-    setEmail(localStorage.getItem('email') || 'неизвестно');
+    setName(localStorage.getItem("name") || "Пользователь");
+    setEmail(localStorage.getItem("email") || "неизвестно");
   }, []);
 
   const handleExitClick = () => {
-    onExitClick();
+    logout();
+    onClose();
   };
 
   return (
@@ -29,9 +32,7 @@ const PopUser = ({ onClose, onExitClick }) => {
           <p>Темная тема</p>
           <input type="checkbox" />
         </PopUserSetTheme>
-        <PopUserSetBtn onClick={handleExitClick}>
-          Выйти
-        </PopUserSetBtn>
+        <PopUserSetBtn onClick={handleExitClick}>Выйти</PopUserSetBtn>
       </PopUserSet>
     </div>
   );

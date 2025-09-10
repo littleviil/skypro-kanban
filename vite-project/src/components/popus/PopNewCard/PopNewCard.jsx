@@ -1,19 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Calendar } from "../../Calendar/Calendar";
 import { taskCategories } from "../../../tasks";
-import { TaskContext } from "../../../context/TaskContext";
 
-const PopNewCard = ({ onClose }) => {
-  const { addTask, STATUS_UI, CATEGORY_UI } = useContext(TaskContext);
-
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    status: STATUS_UI.TODO,
-    category: CATEGORY_UI[0],
-    date: new Date(),
-  });
-
+const PopNewCard = ({ formData, setFormData, onClose, onSubmit }) => {
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -21,18 +10,17 @@ const PopNewCard = ({ onClose }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCategorySelect = (category) => {
-    setFormData((prev) => ({ ...prev, category }));
+  const handleCategorySelect = (topic) => {
+    setFormData((prev) => ({ ...prev, topic }));
   };
 
   const handleDateChange = (date) => {
     if (!date) return;
-    setFormData((prev) => ({ ...prev, date: new Date(date) }));
+    setFormData((prev) => ({ ...prev, date: new Date(date).toISOString() }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!formData.title.trim()) {
       setError("Введите название задачи");
       return;
@@ -41,24 +29,8 @@ const PopNewCard = ({ onClose }) => {
       setError("Введите описание задачи");
       return;
     }
-
-    try {
-      setError("");
-
-      const newTaskUi = {
-        title: formData.title.trim(),
-        description: formData.description.trim(),
-        status: formData.status,
-        category: formData.category,
-        date: formData.date,
-      };
-
-      await addTask(newTaskUi);
-      onClose();
-    } catch (err) {
-      console.error("Ошибка создания задачи:", err);
-      setError(err.message || "Не удалось создать задачу");
-    }
+    setError("");
+    onSubmit();
   };
 
   return (
@@ -79,17 +51,11 @@ const PopNewCard = ({ onClose }) => {
             </a>
 
             <div className="pop-new-card__wrap">
-              <form
-                className="pop-new-card__form form-new"
-                id="formNewCard"
-                onSubmit={handleSubmit}
-              >
+              <form className="pop-new-card__form form-new" onSubmit={handleSubmit}>
                 {error && <p style={{ color: "red" }}>{error}</p>}
 
                 <div className="form-new__block">
-                  <label htmlFor="formTitle" className="subttl">
-                    Название задачи
-                  </label>
+                  <label htmlFor="formTitle" className="subttl">Название задачи</label>
                   <input
                     className="form-new__input"
                     type="text"
@@ -98,15 +64,12 @@ const PopNewCard = ({ onClose }) => {
                     value={formData.title}
                     onChange={handleChange}
                     placeholder="Введите название задачи..."
-                    autoFocus
                     required
                   />
                 </div>
 
                 <div className="form-new__block">
-                  <label htmlFor="textArea" className="subttl">
-                    Описание задачи
-                  </label>
+                  <label htmlFor="textArea" className="subttl">Описание задачи</label>
                   <textarea
                     className="form-new__area"
                     name="description"
@@ -120,22 +83,25 @@ const PopNewCard = ({ onClose }) => {
               </form>
 
               <div className="pop-new-card__calendar calendar">
-                <Calendar value={formData.date} onChange={handleDateChange} />
+                <Calendar
+                  value={formData.date ? new Date(formData.date) : new Date()}
+                  onChange={handleDateChange}
+                />
               </div>
             </div>
 
             <div className="pop-new-card__categories categories">
               <p className="categories__p subttl">Категория</p>
               <div className="categories__themes">
-                {CATEGORY_UI.map((category) => (
+                {Object.keys(taskCategories).map((cat) => (
                   <div
-                    key={category}
-                    className={`categories__theme _${taskCategories[category]} ${
-                      formData.category === category ? "_active-category" : ""
+                    key={cat}
+                    className={`categories__theme _${taskCategories[cat]} ${
+                      formData.topic === cat ? "_active-category" : ""
                     }`}
-                    onClick={() => handleCategorySelect(category)}
+                    onClick={() => handleCategorySelect(cat)}
                   >
-                    <p className={`_${taskCategories[category]}`}>{category}</p>
+                    <p className={`_${taskCategories[cat]}`}>{cat}</p>
                   </div>
                 ))}
               </div>
