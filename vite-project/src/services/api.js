@@ -23,29 +23,6 @@ export async function fetchKanbanTasks(token) {
   }
 }
 
-export async function fetchTaskById(taskId, token) {
-  if (!token) throw new Error("Нет токена. Пользователь не авторизован.");
-  try {
-    const response = await fetch(`${BASE_URL}/kanban/${taskId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data?.error || "Ошибка при получении задачи");
-    }
-
-    return data.task;
-  } catch (error) {
-    console.error("Ошибка при получении задачи:", error);
-    throw error;
-  }
-}
-
 export async function createKanbanTask(taskData, token) {
   if (!token) throw new Error("Нет токена. Пользователь не авторизован.");
 
@@ -64,7 +41,8 @@ export async function createKanbanTask(taskData, token) {
       throw new Error(data?.error || "Ошибка при создании задачи");
     }
 
-    return data.task;
+    // сервер возвращает сразу созданную задачу
+    return data || null;
   } catch (error) {
     console.error("Ошибка при создании задачи:", error);
     throw error;
@@ -89,7 +67,7 @@ export async function updateKanbanTask(taskId, updates, token) {
       throw new Error(data?.error || "Ошибка при обновлении задачи");
     }
 
-    return data.task;
+    return data || null;
   } catch (error) {
     console.error("Ошибка при обновлении задачи:", error);
     throw error;

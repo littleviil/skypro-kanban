@@ -36,9 +36,8 @@ export const TaskProvider = ({ children }) => {
         ...taskData,
         topic: taskData.topic || "Web Design",
       };
-      const created = await createKanbanTask(payload, user.token);
-      setTasks((prev) => [...(prev || []), created]);
-      return created;
+      await createKanbanTask(payload, user.token);
+      await fetchTasks();
     } catch (err) {
       setError(err.message);
       throw err;
@@ -48,13 +47,8 @@ export const TaskProvider = ({ children }) => {
   const updateTask = async (id, updates) => {
     if (!user?.token) return;
     try {
-      const updated = await updateKanbanTask(id, updates, user.token);
-      setTasks((prev) =>
-        (prev || [])
-          .map((task) => (task && task._id === id ? updated : task))
-          .filter(Boolean)
-      );
-      return updated;
+      await updateKanbanTask(id, updates, user.token);
+      await fetchTasks();
     } catch (err) {
       setError(err.message || "Ошибка обновления задачи");
       throw err;
