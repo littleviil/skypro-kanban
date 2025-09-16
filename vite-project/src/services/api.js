@@ -41,7 +41,6 @@ export async function createKanbanTask(taskData, token) {
       throw new Error(data?.error || "Ошибка при создании задачи");
     }
 
-    // сервер возвращает сразу созданную задачу
     return data || null;
   } catch (error) {
     console.error("Ошибка при создании задачи:", error);
