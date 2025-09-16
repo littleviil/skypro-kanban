@@ -32,12 +32,17 @@ export const TaskProvider = ({ children }) => {
   const addTask = async (taskData) => {
     if (!user?.token) return;
     try {
-      const payload = {
-        ...taskData,
-        topic: taskData.topic || "Web Design",
-      };
-      await createKanbanTask(payload, user.token);
-      await fetchTasks();
+      const created = await createKanbanTask(taskData, user.token);
+
+      if (created && created._id) {
+        setTasks((prev) => [...prev, created]);
+      } else {
+        const fakeTask = {
+          ...taskData,
+          _id: crypto.randomUUID(),
+        };
+        setTasks((prev) => [...prev, fakeTask]);
+      }
     } catch (err) {
       setError(err.message);
       throw err;
@@ -48,7 +53,14 @@ export const TaskProvider = ({ children }) => {
     if (!user?.token) return;
     try {
       await updateKanbanTask(id, updates, user.token);
-      await fetchTasks();
+
+      setTasks((prev) =>
+        prev.map((task) =>
+          task._id === id
+            ? { ...task, ...updates }
+            : task
+        )
+      );
     } catch (err) {
       setError(err.message || "Ошибка обновления задачи");
       throw err;
@@ -59,7 +71,7 @@ export const TaskProvider = ({ children }) => {
     if (!user?.token) return;
     try {
       await deleteKanbanTask(id, user.token);
-      setTasks((prev) => (prev || []).filter((task) => task && task._id !== id));
+      setTasks((prev) => prev.filter((task) => task._id !== id));
     } catch (err) {
       setError(err.message || "Ошибка удаления задачи");
       throw err;

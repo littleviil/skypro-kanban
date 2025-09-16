@@ -57,7 +57,6 @@ const PopBrowse = ({ task, onClose }) => {
       <div className="pop-browse__container">
         <div className="pop-browse__block">
           <div className="pop-browse__content">
-            {/* Заголовок и категория */}
             <div className="pop-browse__top-block">
               <h3 className="pop-browse__ttl">
                 {draft.title || "Название задачи"}
@@ -69,7 +68,6 @@ const PopBrowse = ({ task, onClose }) => {
               </div>
             </div>
 
-            {/* Статус */}
             <div className="pop-browse__status status">
               <p className="status__p subttl">Статус</p>
               <div className="status__themes">
@@ -93,7 +91,6 @@ const PopBrowse = ({ task, onClose }) => {
               </div>
             </div>
 
-            {/* Описание + календарь */}
             <div className="pop-browse__wrap">
               <form className="pop-browse__form form-browse">
                 <div className="form-browse__block">
@@ -125,7 +122,6 @@ const PopBrowse = ({ task, onClose }) => {
               </div>
             </div>
 
-            {/* Кнопки */}
             <div className="pop-browse__btn-browse">
               <div className="btn-group">
                 {isEditing ? (

@@ -3,7 +3,7 @@ import { TaskContext } from "../../context/TaskContext";
 import { Calendar } from "../Calendar/Calendar";
 
 const CreateTask = ({ onCreated }) => {
-  const { addTask, STATUS_UI, CATEGORY_UI, fetchTasks } = useContext(TaskContext);
+  const { addTask, STATUS_UI, CATEGORY_UI } = useContext(TaskContext);
 
   const [form, setForm] = useState({
     title: "",
@@ -48,8 +48,6 @@ const CreateTask = ({ onCreated }) => {
         topic: CATEGORY_UI[0] || "Web Design",
         date: new Date(),
       });
-
-      await fetchTasks();
 
       if (onCreated) onCreated();
     } catch (err) {
