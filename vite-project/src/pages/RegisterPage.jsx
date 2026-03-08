@@ -1,16 +1,18 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AuthForm from '../components/AuthForm';
-import { signUp } from '../services/auth';
+import { useState, useContext } from "react";
+import { Navigate } from "react-router-dom";
+import AuthForm from "../components/AuthForm";
+import { signUp } from "../services/auth";
+import { AuthContext } from "../context/AuthContext";
 
-function RegisterPage({ setIsAuth }) {
-  const navigate = useNavigate();
+function RegisterPage() {
+  const { isAuth, login } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [errorFields, setErrorFields] = useState({});
 
   const handleChange = (e) => {
@@ -20,7 +22,7 @@ function RegisterPage({ setIsAuth }) {
       [name]: value,
     }));
     setErrorFields((prev) => ({ ...prev, [name]: false }));
-    setError('');
+    setError("");
   };
 
   const validateEmail = (email) => {
@@ -30,20 +32,20 @@ function RegisterPage({ setIsAuth }) {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setErrorFields({});
 
     let newErrorFields = {};
     if (!formData.name) {
-      setError('Пожалуйста, введите имя');
+      setError("Пожалуйста, введите имя");
       newErrorFields.name = true;
     }
     if (!validateEmail(formData.email)) {
-      setError('Некорректный адрес электронной почты');
+      setError("Некорректный адрес электронной почты");
       newErrorFields.email = true;
     }
     if (!formData.password || formData.password.length < 6) {
-      setError('Пароль должен содержать минимум 6 символов');
+      setError("Пароль должен содержать минимум 6 символов");
       newErrorFields.password = true;
     }
     if (Object.keys(newErrorFields).length > 0) {
@@ -58,14 +60,9 @@ function RegisterPage({ setIsAuth }) {
         password: formData.password,
       });
 
-      localStorage.setItem('token', user.token);
-      localStorage.setItem('name', user.name);
-      localStorage.setItem('email', formData.email);
-
-      setIsAuth(true);
-      navigate('/');
+      login(user.token, user.name, formData.email);
     } catch (err) {
-      setError(err.message || 'Не удалось зарегистрироваться');
+      setError(err.message || "Не удалось зарегистрироваться");
       setErrorFields({
         name: true,
         email: true,
@@ -74,10 +71,11 @@ function RegisterPage({ setIsAuth }) {
     }
   };
 
+  if (isAuth) return <Navigate to="/" replace />;
+
   return (
     <AuthForm
       isSignUp={true}
-      setIsAuth={setIsAuth}
       formData={formData}
       onChange={handleChange}
       error={error}

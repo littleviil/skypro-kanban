@@ -1,31 +1,23 @@
-import PopUser from "../components/popus/PopUser";
 import { useNavigate } from "react-router-dom";
-import PropTypes from 'prop-types';
+import PopUser from "../components/popus/PopUser/PopUser";
 
-const UserPage = ({ setIsAuth }) => {
+const UserPage = () => {
   const navigate = useNavigate();
 
   const handleClose = () => {
-    navigate(-1);
+    navigate("/");
   };
 
-  const handleLogout = () => {
-    setIsAuth(false);
-    navigate('/login');
+  const handleExitClick = () => {
+    navigate("/logout");
   };
 
   return (
-    <div>
-      <PopUser
-        onClose={handleClose}
-        onLogout={handleLogout}
-      />
-    </div>
+    <PopUser
+      onClose={handleClose}
+      onExitClick={handleExitClick}
+    />
   );
-};
-
-UserPage.propTypes = {
-  setIsAuth: PropTypes.func.isRequired,
 };
 
 export default UserPage;

@@ -1,19 +1,11 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { Navigate, Outlet } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
-function PrivateRoute({ isAuth }) {
-  const [isChecked, setIsChecked] = useState(false);
-  const [auth, setAuth] = useState(isAuth);
+function PrivateRoute() {
+  const { isAuth } = useContext(AuthContext);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    setAuth(!!token);
-    setIsChecked(true);
-  }, [isAuth]);
-
-  if (!isChecked) return null;
-
-  return auth ? <Outlet /> : <Navigate to="/login" />;
+  return isAuth ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
 export default PrivateRoute;

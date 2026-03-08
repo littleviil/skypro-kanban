@@ -1,15 +1,8 @@
 import React, { useState } from "react";
 import { Calendar } from "../../Calendar/Calendar";
 import { taskCategories } from "../../../tasks";
-import { createKanbanTask } from "../../../services/api";
-import { formatISO } from "date-fns";
 
-const PopNewCard = ({
-  formData,
-  setFormData,
-  onClose,
-  refreshTasks,
-}) => {
+const PopNewCard = ({ formData, setFormData, onClose, onSubmit }) => {
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -17,48 +10,28 @@ const PopNewCard = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCategorySelect = (category) => {
-    setFormData((prev) => ({ ...prev, category }));
+  const handleCategorySelect = (topic) => {
+    setFormData((prev) => ({ ...prev, topic }));
   };
 
-  const handleDateChange = (selectedDate) => {
-    setFormData((prev) => ({
-      ...prev,
-      date: selectedDate
-    }));
+  const handleDateChange = (date) => {
+    if (!date) return;
+    setFormData((prev) => ({ ...prev, date: new Date(date).toISOString() }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!formData.title.trim()) {
       setError("Введите название задачи");
       return;
     }
-
     if (!formData.description.trim()) {
       setError("Введите описание задачи");
       return;
     }
-
-    try {
-      setError("");
-
-      const payload = {
-        title: formData.title.trim(),
-        description: formData.description.trim(),
-        category: formData.category,
-        status: formData.status,
-        date: formatISO(new Date(formData.date)),
-      };
-
-      await createKanbanTask(payload);
-      await refreshTasks();
-      onClose();
-    } catch (error) {
-      console.error("Ошибка создания задачи:", error);
-      setError(error.message || "Не удалось создать задачу");
-    }
+    setError("");
+    onSubmit();
+    onClose();
   };
 
   return (
@@ -79,17 +52,11 @@ const PopNewCard = ({
             </a>
 
             <div className="pop-new-card__wrap">
-              <form
-                className="pop-new-card__form form-new"
-                id="formNewCard"
-                onSubmit={handleSubmit}
-              >
+              <form className="pop-new-card__form form-new" onSubmit={handleSubmit}>
                 {error && <p style={{ color: "red" }}>{error}</p>}
 
                 <div className="form-new__block">
-                  <label htmlFor="formTitle" className="subttl">
-                    Название задачи
-                  </label>
+                  <label htmlFor="formTitle" className="subttl">Название задачи</label>
                   <input
                     className="form-new__input"
                     type="text"
@@ -98,14 +65,12 @@ const PopNewCard = ({
                     value={formData.title}
                     onChange={handleChange}
                     placeholder="Введите название задачи..."
-                    autoFocus
+                    required
                   />
                 </div>
 
                 <div className="form-new__block">
-                  <label htmlFor="textArea" className="subttl">
-                    Описание задачи
-                  </label>
+                  <label htmlFor="textArea" className="subttl">Описание задачи</label>
                   <textarea
                     className="form-new__area"
                     name="description"
@@ -113,13 +78,14 @@ const PopNewCard = ({
                     value={formData.description}
                     onChange={handleChange}
                     placeholder="Введите описание задачи..."
+                    required
                   />
                 </div>
               </form>
 
               <div className="pop-new-card__calendar calendar">
                 <Calendar
-                  value={formData.date}
+                  value={formData.date ? new Date(formData.date) : new Date()}
                   onChange={handleDateChange}
                 />
               </div>
@@ -128,23 +94,23 @@ const PopNewCard = ({
             <div className="pop-new-card__categories categories">
               <p className="categories__p subttl">Категория</p>
               <div className="categories__themes">
-                {Object.keys(taskCategories).map((category) => (
+                {Object.keys(taskCategories).map((cat) => (
                   <div
-                    key={category}
-                    className={`categories__theme _${taskCategories[category]} ${
-                      formData.category === category ? "_active-category" : ""
+                    key={cat}
+                    className={`categories__theme _${taskCategories[cat]} ${
+                      formData.topic === cat ? "_active-category" : ""
                     }`}
-                    onClick={() => handleCategorySelect(category)}
+                    onClick={() => handleCategorySelect(cat)}
                   >
-                    <p className={`_${taskCategories[category]}`}>{category}</p>
+                    <p className={`_${taskCategories[cat]}`}>{cat}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             <button
+              type="submit"
               className="form-new__create _hover01"
-              id="btnCreate"
               onClick={handleSubmit}
             >
               Создать задачу

@@ -1,60 +1,49 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import PopNewCard from "../components/popus/PopNewCard/PopNewCard";
-import { createKanbanTask, fetchKanbanTasks } from '../services/api';
+import { TaskContext } from "../context/TaskContext";
 
 const NewCardPage = () => {
   const navigate = useNavigate();
+  const { addTask } = useContext(TaskContext);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    category: 'Web Design',
-    status: 'Без статуса',
-    date: new Date().toLocaleDateString('ru-RU'),
+    title: "",
+    description: "",
+    topic: "Web Design",
+    status: "Без статуса",
+    date: new Date().toISOString(),
   });
+  const [error, setError] = useState("");
 
-  const refreshTasks = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) return [];
-    try {
-      const data = await fetchKanbanTasks(token);
-      return data;
-    } catch (error) {
-      console.error('Ошибка при загрузке задач:', error);
-      return [];
-    }
-  };
-
-  const handleClose = () => {
-    navigate(-1);
-  };
+  const handleClose = () => navigate("/");
 
   const handleSubmit = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
+    if (!formData.title.trim()) {
+      setError("Введите название задачи");
       return;
     }
+    if (!formData.description.trim()) {
+      setError("Введите описание задачи");
+      return;
+    }
+    setError("");
 
     try {
-      await createKanbanTask(formData);
-      await refreshTasks();
-      navigate('/');
-    } catch (error) {
-      console.error('Ошибка создания задачи:', error.message);
+      const createdTask = await addTask(formData);
+      navigate(`/card/${createdTask._id ?? createdTask.id}`);
+    } catch (err) {
+      setError(err.message || "Ошибка создания задачи");
     }
   };
 
   return (
-    <div>
-      <PopNewCard
-        formData={formData}
-        setFormData={setFormData}
-        onClose={handleClose}
-        refreshTasks={refreshTasks}
-        onSubmit={handleSubmit}
-      />
-    </div>
+    <PopNewCard
+      formData={formData}
+      setFormData={setFormData}
+      onClose={handleClose}
+      onSubmit={handleSubmit}
+      error={error}
+    />
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   HeaderPage,
   HeaderBlock,
@@ -6,32 +6,31 @@ import {
   HeaderNav,
   HeaderBtnMainNew,
   HeaderUser,
-} from './Header.styled';
-import { Container } from '../../App.styled';
-import PopUser from '../popus/PopUser/PopUser';
+} from './Header.styled'
+import { Container } from '../../App.styled'
+import PopUser from '../popus/PopUser/PopUser'
+import { useNavigate } from 'react-router-dom'
 
-export const Header = ({ onNewCardClick, setIsAuth }) => {
-  const [isPopUserOpen, setIsPopUserOpen] = useState(false);
-  const [userName, setUserName] = useState('Пользователь');
+export const Header = ({ onNewCardClick }) => {
+  const [isPopUserOpen, setIsPopUserOpen] = useState(false)
+  const [userName, setUserName] = useState('Пользователь')
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const name = localStorage.getItem('name');
+    const name = localStorage.getItem('name')
     if (name) {
-      setUserName(name);
+      setUserName(name)
     }
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('name');
-    localStorage.removeItem('email');
-    setIsAuth(false);
-  };
+  }, [])
 
   const togglePopUser = (e) => {
-    e.preventDefault();
-    setIsPopUserOpen((prev) => !prev);
-  };
+    e.preventDefault()
+    setIsPopUserOpen((prev) => !prev)
+  }
+
+  const handleExitClick = () => {
+    navigate('/logout')
+  }
 
   return (
     <HeaderPage>
@@ -61,12 +60,12 @@ export const Header = ({ onNewCardClick, setIsAuth }) => {
             {isPopUserOpen && (
               <PopUser
                 onClose={() => setIsPopUserOpen(false)}
-                onExitClick={handleLogout}
+                onExitClick={handleExitClick}
               />
             )}
           </HeaderNav>
         </HeaderBlock>
       </Container>
     </HeaderPage>
-  );
-};
+  )
+}

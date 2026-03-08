@@ -1,31 +1,27 @@
 import PopExit from "../components/popus/PopExit/PopExit";
 import { useNavigate } from "react-router-dom";
-import PropTypes from 'prop-types';
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { TaskContext } from "../context/TaskContext";
 
-const ExitPage = ({ setIsAuth }) => {
+const ExitPage = () => {
   const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
+  const { clearTasks } = useContext(TaskContext);
 
   const handleClose = () => {
-    navigate(-1);
+    navigate("/");
   };
 
   const handleLogout = () => {
-    setIsAuth(false);
-    navigate('/login');
+    logout();
+    clearTasks();
+    navigate("/login");
   };
 
   return (
-    <div>
-      <PopExit
-        onClose={handleClose}
-        onLogout={handleLogout}
-      />
-    </div>
+    <PopExit isOpen={true} onClose={handleClose} onLogout={handleLogout} />
   );
-};
-
-ExitPage.propTypes = {
-  setIsAuth: PropTypes.func.isRequired,
 };
 
 export default ExitPage;

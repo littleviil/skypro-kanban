@@ -1,56 +1,44 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AuthForm from '../components/AuthForm';
-import { signIn } from '../services/auth';
+import { useState, useContext } from "react";
+import { Navigate } from "react-router-dom";
+import AuthForm from "../components/AuthForm";
+import { signIn } from "../services/auth";
+import { AuthContext } from "../context/AuthContext";
 
-function LoginPage({ setIsAuth }) {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-  const [error, setError] = useState('');
+function LoginPage() {
+  const { isAuth, login } = useContext(AuthContext);
+
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    setError(''); 
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setError("");
   };
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  setError('');
+    e.preventDefault();
+    setError("");
 
-  const { email, password } = formData;
-  if (!email || !password) {
-    setError('Пожалуйста, заполните все поля');
-    return;
-  }
+    const { email, password } = formData;
+    if (!email || !password) {
+      setError("Пожалуйста, заполните все поля");
+      return;
+    }
 
-  try {
-    const user = await signIn({
-      login: email,
-      password,
-    });
+    try {
+      const user = await signIn({ login: email, password });
+      login(user.token, user.name, email);
+    } catch (err) {
+      setError(err.message || "Ошибка авторизации");
+    }
+  };
 
-    localStorage.setItem('token', user.token);
-    localStorage.setItem('name', user.name);
-    localStorage.setItem('email', email);
-
-    setIsAuth(true);
-    navigate('/');
-  } catch (err) {
-    setError(err.message || 'Ошибка авторизации');
-  }
-};
+  if (isAuth) return <Navigate to="/" replace />;
 
   return (
     <AuthForm
       isSignUp={false}
-      setIsAuth={setIsAuth}
       formData={formData}
       onChange={handleChange}
       error={error}

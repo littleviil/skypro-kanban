@@ -1,8 +1,8 @@
-import styled from 'styled-components';
-import { themes } from '../../../themes';
+import styled from "styled-components";
+import { theme } from "../../../themes";
 
 export const PopExitPage = styled.div`
-  display: none;
+  display: ${({ $isOpen }) => ($isOpen ? "block" : "none")};
   width: 100%;
   height: 100%;
   min-width: 320px;
@@ -11,10 +11,6 @@ export const PopExitPage = styled.div`
   top: 0;
   left: 0;
   z-index: 5;
-
-  &:target {
-    display: block;
-  }
 `;
 
 export const PopExitContainer = styled.div`
@@ -32,12 +28,12 @@ export const PopExitContainer = styled.div`
 export const PopExitBlock = styled.div`
   display: block;
   margin: 0 auto;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   max-width: 370px;
   width: 100%;
   padding: 50px 60px;
   border-radius: 10px;
-  border: 0.7px solid #D4DBE5;
+  border: 0.7px solid #d4dbe5;
   box-shadow: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
 
   @media only screen and (max-width: 375px) {
@@ -70,7 +66,7 @@ export const PopExitFormGroup = styled.div`
 export const PopExitYes = styled.button`
   width: 153px;
   height: 30px;
-  background-color: ${themes.primaryButtonColor};
+  background-color: ${theme.primaryButtonColor};
   border-radius: 4px;
   border: none;
   outline: none;
@@ -81,17 +77,8 @@ export const PopExitYes = styled.button`
   line-height: 21px;
   font-weight: 500;
   letter-spacing: -0.14px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-right: 10px;
-
-  a {
-    width: 100%;
-    height: 100%;
-    color: #FFFFFF;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 
   @media only screen and (max-width: 375px) {
     width: 100%;
@@ -101,7 +88,7 @@ export const PopExitYes = styled.button`
   }
 
   &:hover {
-    background-color: ${themes.hoverBgColor};
+    background-color: ${theme.hoverBgColor};
   }
 `;
 
@@ -110,7 +97,7 @@ export const PopExitNo = styled.button`
   height: 30px;
   background-color: transparent;
   border-radius: 4px;
-  border: 0.7px solid ${themes.primaryButtonColor};
+  border: 0.7px solid ${theme.primaryButtonColor};
   outline: none;
   display: flex;
   align-items: center;
@@ -119,16 +106,7 @@ export const PopExitNo = styled.button`
   line-height: 21px;
   font-weight: 500;
   letter-spacing: -0.14px;
-  color:${themes.primaryButtonColor};
-
-  a {
-    width: 100%;
-    height: 100%;
-    color:${themes.primaryButtonColor};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  color: ${theme.primaryButtonColor};
 
   @media only screen and (max-width: 375px) {
     width: 100%;
