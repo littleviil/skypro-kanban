@@ -1,12 +1,95 @@
-# React + Vite
+1. Назначение проекта
+   Веб-приложение «Канбан-доска» предназначено для визуальной организации задач по методологии Kanban.
+   Приложение позволяет пользователям создавать задачи, перемещать их между колонками и отслеживать статус выполнения в реальном времени.
+   Цель: упростить управление личными и командными задачами, повысить прозрачность процесса и минимизировать потерю задач.
+2. Общие сведения
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Тип приложения: одностраничное веб-приложение (SPA).
+Целевая аудитория: разработчики, студенты, небольшие команды.
+Платформа: веб-браузер (Chrome, Firefox, Safari, Edge).
+Версия: 1.0 (актуально на март 2026).
+Разработчик: [твоё имя / littleviil].
 
-Currently, two official plugins are available:
+3. Функциональные требования (полнота + однозначность)
+   Приложение должно реализовывать следующие функции:
+   FR-1. Просмотр доски
+   Пользователь видит 3 колонки:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+«Без статуса»
+«Нужно сделать»
+«В работе»
+«Тестирование»
+«Готово»
 
-## Expanding the ESLint configuration
+FR-2. Создание задачи
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Обязательные поля: заголовок (строка 3–100 символов), описание (текст).
+Опционально: дата дедлайна (формат ДД.ММ.ГГГГ, используется date-fns).
+После создания задача автоматически попадает в колонку «Без статуса».
+
+FR-3. Перемещение задач (Drag & Drop)
+Пользователь может перетаскивать задачу между колонками с помощью мыши. Состояние сохраняется автоматически.
+FR-4. Редактирование и удаление
+
+Клик по задаче открывает форму редактирования (заголовок + описание).
+Кнопка «Удалить» полностью удаляет задачу.
+
+FR-5. Сохранение данных
+Все задачи сохраняются автоматически через сервис (axios + localStorage / mock-API). При перезагрузке страницы данные восстанавливаются.
+FR-6. Навигация
+
+Главная страница — доска (маршрут /).
+Дополнительные страницы (через react-router-dom): авторизация (если реализована), настройки темы.
+
+FR-7. Темизация
+Приложение поддерживает светлую и тёмную тему (styled-components + themes.js). 4. Нефункциональные требования
+
+Производительность: время отклика на drag-and-drop ≤ 100 мс.
+Совместимость: работает на всех современных браузерах (последние 2 версии).
+Доступность: контраст текста ≥ 4.5:1 (WCAG AA).
+Хранение данных: не более 500 задач (ограничение localStorage).
+Безопасность: данные хранятся только на стороне клиента (нет передачи на сервер).
+UX/UI: адаптивный дизайн (мобильные устройства ≥ 320 px).
+
+5. Технологический стек (актуальность)
+
+Frontend: React 19, JSX
+Стили: styled-components + GlobalStyles
+Роутинг: react-router-dom 7
+HTTP-запросы: axios
+Даты: date-fns
+Сборка: Vite 6
+Состояние: React Context + services
+Хранение: localStorage + mock-API (services/)
+
+6. Архитектура приложения (структурированность)
+   textsrc/
+   ├── components/ → Task, Column, Board
+   ├── context/ → TaskContext (глобальное состояние)
+   ├── pages/ → KanbanPage
+   ├── services/ → api.js (axios)
+   ├── utils/ → helpers
+   ├── tasks.js → начальные данные и типы
+   ├── App.jsx → корневой компонент
+   ├── AppRoutes.jsx → маршруты
+7. Глоссарий
+
+Task — задача (объект с id, title, description, status, deadline).
+Column — колонка Kanban (статус: todo / in-progress / done).
+Drag & Drop — механизм перетаскивания задач.
+Context — механизм передачи состояния без props drilling.
+
+8. Требования к тестированию (тестируемость)
+   Для проверки завершенности разработки должны быть выполнены:
+
+Smoke-тесты: открытие доски, создание задачи.
+Функциональные тесты: drag-and-drop, сохранение/загрузка.
+Негативные тесты: пустой заголовок, слишком длинный текст.
+Тесты на граничные значения (длина заголовка 3 и 100 символов).
+
+Все требования однозначны и могут быть проверены вручную или автотестами. 9. Установка и запуск
+Bashgit clone https://github.com/littleviil/skypro-kanban.git
+cd vite-project
+npm install
+npm run dev
+Открыть в браузере: http://localhost:5173
