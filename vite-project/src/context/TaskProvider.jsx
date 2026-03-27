@@ -51,17 +51,18 @@ export const TaskProvider = ({ children }) => {
 
   const updateTask = async (id, updates) => {
     if (!user?.token) return;
+    const snapshot = [...tasks];
+
+    setTasks((prev) =>
+      prev.map((task) =>
+        task._id === id ? { ...task, ...updates } : task
+      )
+    );
+
     try {
       await updateKanbanTask(id, updates, user.token);
-
-      setTasks((prev) =>
-        prev.map((task) =>
-          task._id === id
-            ? { ...task, ...updates }
-            : task
-        )
-      );
     } catch (err) {
+      setTasks(snapshot);
       setError(err.message || "Ошибка обновления задачи");
       throw err;
     }

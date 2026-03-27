@@ -35,8 +35,9 @@ const GlobalStyles = createGlobalStyle`
     width: 100%;
     height: 100%;
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
-    color: #000000;
-    background-color: #EAEEF6
+    color: ${({ theme }) => theme.textColor || '#000000'};
+    background-color: ${({ theme }) => theme.bg || '#EAEEF6'};
+    transition: background-color 0.3s, color 0.3s;
   }
   
   ._hover01:hover {

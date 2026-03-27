@@ -28,13 +28,14 @@ export const PopExitContainer = styled.div`
 export const PopExitBlock = styled.div`
   display: block;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.modalBg || '#ffffff'};
   max-width: 370px;
   width: 100%;
   padding: 50px 60px;
   border-radius: 10px;
-  border: 0.7px solid #d4dbe5;
-  box-shadow: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
+  border: 0.7px solid ${({ theme }) => theme.borderColor || '#d4dbe5'};
+  box-shadow: 0px 4px 67px -12px ${({ theme }) => theme.popupShadow || 'rgba(0, 0, 0, 0.13)'};
+  transition: background-color 0.3s;
 
   @media only screen and (max-width: 375px) {
     padding: 50px 20px;
@@ -49,6 +50,7 @@ export const PopExitTtl = styled.div`
     line-height: 30px;
     letter-spacing: -0.4px;
     margin-bottom: 20px;
+    color: ${({ theme }) => theme.textColor || '#000000'};
   }
 `;
 
@@ -97,7 +99,7 @@ export const PopExitNo = styled.button`
   height: 30px;
   background-color: transparent;
   border-radius: 4px;
-  border: 0.7px solid ${theme.primaryButtonColor};
+  border: 0.7px solid ${({ theme }) => theme.textColor || theme.primaryButtonColor};
   outline: none;
   display: flex;
   align-items: center;
@@ -106,7 +108,7 @@ export const PopExitNo = styled.button`
   line-height: 21px;
   font-weight: 500;
   letter-spacing: -0.14px;
-  color: ${theme.primaryButtonColor};
+  color: ${({ theme }) => theme.textColor || theme.primaryButtonColor};
 
   @media only screen and (max-width: 375px) {
     width: 100%;

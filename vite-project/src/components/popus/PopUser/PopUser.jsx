@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext";
+import { ThemeContext } from "../../../context/ThemeContext";
 import {
   PopUserSet,
   PopUserSetName,
@@ -12,6 +13,7 @@ const PopUser = ({ onClose }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const { logout } = useContext(AuthContext);
+  const { isDark, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     setName(localStorage.getItem("name") || "Пользователь");
@@ -30,7 +32,7 @@ const PopUser = ({ onClose }) => {
         <PopUserSetMail>{email}</PopUserSetMail>
         <PopUserSetTheme>
           <p>Темная тема</p>
-          <input type="checkbox" />
+          <input type="checkbox" checked={isDark} onChange={toggleTheme} />
         </PopUserSetTheme>
         <PopUserSetBtn onClick={handleExitClick}>Выйти</PopUserSetBtn>
       </PopUserSet>

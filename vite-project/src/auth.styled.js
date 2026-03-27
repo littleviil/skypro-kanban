@@ -6,15 +6,17 @@ const GlobalAuthStyles = createGlobalStyle`
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #EAEEF6;
+    background-color: ${({ theme }) => theme.bg || '#EAEEF6'};
+    transition: background-color 0.3s;
   }
 
   .modal {
-    background: #FFFFFF;
+    background: ${({ theme }) => theme.modalBg || '#FFFFFF'};
     padding: 50px 60px;
     border-radius: 10px;
-    box-shadow: 0 4px 67px -12px rgba(0, 0, 0, 0.13);
-    border: 0.7px solid #D4DBE5;
+    box-shadow: 0 4px 67px -12px ${({ theme }) => theme.popupShadow || 'rgba(0, 0, 0, 0.13)'};
+    border: 0.7px solid ${({ theme }) => theme.borderColor || '#D4DBE5'};
+    transition: background-color 0.3s;
     width: 100%;
     max-width: 368px;
     height: 329px;
@@ -45,7 +47,7 @@ const GlobalAuthStyles = createGlobalStyle`
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
-    color: #333;
+    color: ${({ theme }) => theme.textColor || '#333'};
   }
 
   .form {
@@ -63,13 +65,15 @@ const GlobalAuthStyles = createGlobalStyle`
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    border: 1px solid #94A6BE66;
+    border: 1px solid ${({ theme }) => theme.borderColor || '#94A6BE66'};
     border-radius: 8px;
     font-size: 14px;
     font-weight: 400;
     line-height: 150%;
     height: 30px;
     box-sizing: border-box;
+    background: ${({ theme }) => theme.inputBg || '#FFFFFF'};
+    color: ${({ theme }) => theme.textColor || '#000000'};
   }
 
   .auth-input::placeholder {

@@ -11,12 +11,12 @@ export const CalendarTtl = styled.div`
 `;
 
 export const CalendarP = styled.p`
-  color: #94A6BE;
+  color: ${({ theme }) => theme.textSecondary || '#94A6BE'};
   font-size: 10px;
   line-height: 1;
 
   span {
-    color: #000000;
+    color: ${({ theme }) => theme.textColor || '#000000'};
   }
 `;
 
@@ -24,7 +24,7 @@ export const DateEnd = styled(CalendarP)`
 `;
 
 export const DateControl = styled.span`
-  color: #000000;
+  color: ${({ theme }) => theme.textColor || '#000000'};
 `;
 
 export const CalendarBlock = styled.div`
@@ -100,8 +100,8 @@ export const CalendarCell = styled.div`
   }}
 
   &:hover {
-    color: #94A6BE;
-    background-color: #EAEEF6;
+    color: ${({ theme }) => theme.textSecondary || '#94A6BE'};
+    background-color: ${({ theme }) => theme.cardHoverBg || '#EAEEF6'};
   }
 `;
 

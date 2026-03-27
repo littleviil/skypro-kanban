@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   HeaderPage,
   HeaderBlock,
@@ -10,11 +10,13 @@ import {
 import { Container } from '../../App.styled'
 import PopUser from '../popus/PopUser/PopUser'
 import { useNavigate } from 'react-router-dom'
+import { ThemeContext } from '../../context/ThemeContext'
 
 export const Header = ({ onNewCardClick }) => {
   const [isPopUserOpen, setIsPopUserOpen] = useState(false)
   const [userName, setUserName] = useState('Пользователь')
   const navigate = useNavigate()
+  const { isDark } = useContext(ThemeContext)
 
   useEffect(() => {
     const name = localStorage.getItem('name')
@@ -36,14 +38,9 @@ export const Header = ({ onNewCardClick }) => {
     <HeaderPage>
       <Container>
         <HeaderBlock>
-          <HeaderLogo className="_show _light">
+          <HeaderLogo>
             <a href="/" target="_self">
-              <img src="images/logo.png" alt="logo" />
-            </a>
-          </HeaderLogo>
-          <HeaderLogo className="_dark">
-            <a href="/" target="_self">
-              <img src="images/logo_dark.png" alt="logo" />
+              <img src={isDark ? "images/logo_dark.png" : "images/logo.png"} alt="logo" />
             </a>
           </HeaderLogo>
           <HeaderNav style={{ position: 'relative' }}>

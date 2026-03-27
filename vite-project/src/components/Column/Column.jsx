@@ -6,12 +6,30 @@ import { CardSkelet } from "../Card/CardSkelet.jsx";
 import { TaskContext } from "../../context/TaskContext";
 
 const Column = ({ status, onBrowseClick, tasks = [] }) => {
-  const { loading } = useContext(TaskContext);
+  const { loading, updateTask } = useContext(TaskContext);
 
   const filteredTasks = tasks.filter(task => task && task.status === status);
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("taskId");
+    const fromStatus = e.dataTransfer.getData("taskStatus");
+    const taskExists = tasks.some((t) => (t._id ?? t.id) === taskId);
+    if (taskId && taskExists && fromStatus !== status) {
+      updateTask(taskId, { status });
+    }
+  };
+
   return (
-    <MainColumn>
+    <MainColumn
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
       <ColumnTitle><p>{status}</p></ColumnTitle>
       <Cards>
         {loading

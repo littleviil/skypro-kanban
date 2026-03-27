@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export const MainPage = styled.div`
   width: 100%;
-  background-color: #EAEEF6;
+  background-color: ${({ theme }) => theme.bg || '#EAEEF6'};
+  transition: background-color 0.3s;
 `;
 
 export const MainBlock = styled.div`

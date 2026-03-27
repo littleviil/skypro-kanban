@@ -18,7 +18,8 @@ export const Wrapper = styled.div`
   width: 100vw;
   min-height: 100vh;
   overflow: hidden;
-  background-color: #EAEEF6;
+  background-color: ${({ theme }) => theme.bg || '#EAEEF6'};
+  transition: background-color 0.3s;
 `;
 
 export const Loading = styled.div`
@@ -182,9 +183,9 @@ export const CategoriesTheme = styled.div`
   margin-right: 7px;
   opacity: 0.4;
 
-  ${({ theme }) => theme && `
-    background-color: ${themes[theme].background};
-    color: ${themes[theme].color};
+  ${({ $category }) => $category && themes[$category] && `
+    background-color: ${themes[$category].background};
+    color: ${themes[$category].color};
   `}
 
   p {

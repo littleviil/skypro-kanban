@@ -4,7 +4,8 @@ import { theme } from '../../themes';
 export const HeaderPage = styled.header`
   width: 100%;
   margin: 0 auto;
-  background-color: #FFFFFF;
+  background-color: ${({ theme }) => theme.headerBg || '#FFFFFF'};
+  transition: background-color 0.3s;
 `;
 
 export const HeaderBlock = styled.div`
@@ -72,26 +73,26 @@ export const HeaderUser = styled.a`
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
-  color: ${theme.primaryButtonColor};
+  color: ${({ theme }) => theme.textColor || '#565EEF'};
 
   &::after {
     content: '';
     display: block;
     width: 6px;
     height: 6px;
-    border-left: 1.5px solid #000;
-    border-bottom: 1.5px solid #000;
+    border-left: 1.5px solid ${({ theme }) => theme.textColor || '#000'};
+    border-bottom: 1.5px solid ${({ theme }) => theme.textColor || '#000'};
     transform: rotate(-45deg);
     margin-left: 8px;
     margin-top: 2px;
   }
 
   &:hover {
-    color: ${theme.hoverBgColor};
+    color: ${({ theme }) => theme.hoverBgColor || '#33399b'};
 
     &::after {
-      border-left-color: ${theme.hoverBgColor};
-      border-bottom-color: ${theme.hoverBgColor};
+      border-left-color: ${({ theme }) => theme.hoverBgColor || '#33399b'};
+      border-bottom-color: ${({ theme }) => theme.hoverBgColor || '#33399b'};
     }
   }
   @media screen and (max-width: 495px) {

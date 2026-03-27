@@ -4,6 +4,12 @@ import { themes } from '../../themes';
 export const CardsItem = styled.div`
   width: 100%;
   margin-bottom: 10px;
+  cursor: grab;
+  transition: opacity 0.2s;
+
+  &:active {
+    cursor: grabbing;
+  }
 `;
 
 export const CardsCard = styled.div`
@@ -11,14 +17,15 @@ export const CardsCard = styled.div`
   height: 130px;
   padding: 10px 10px 10px 14px;
   border-radius: 10px;
-  background: #ffffff;
+  background: ${({ theme }) => theme.cardBg || '#ffffff'};
   display: flex;
   flex-direction: column;
   justify-content: center;
+  transition: background-color 0.3s;
 
   &:hover {
     cursor: pointer;
-    background: #f5f5f5;
+    background: ${({ theme }) => theme.cardHoverBg || '#f5f5f5'};
   }
 `;
 
@@ -40,14 +47,14 @@ export const CardTheme = styled.div`
   justify-content: center;
   align-items: flex-end;
 
-  ${({ theme }) => {
+  ${({ $category }) => {
     let selectedTheme = { color: '#333333' };
 
     if (themes) {
-      if (typeof theme === 'string' && themes[theme]) {
-        selectedTheme = themes[theme];
-      } else if (typeof theme === 'object' && theme !== null && theme.background && theme.color) {
-        selectedTheme = theme;
+      if (typeof $category === 'string' && themes[$category]) {
+        selectedTheme = themes[$category];
+      } else if (typeof $category === 'object' && $category !== null && $category.background && $category.color) {
+        selectedTheme = $category;
       }
     }
 
@@ -92,7 +99,7 @@ export const CardTitle = styled.div`
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
-  color: #000000;
+  color: ${({ theme }) => theme.textColor || '#000000'};
   margin-bottom: 10px;
 `;
 
@@ -109,7 +116,7 @@ export const CardDate = styled.div`
   p {
     font-size: 10px;
     line-height: 13px;
-    color: #94A6BE;
+    color: ${({ theme }) => theme.textSecondary || '#94A6BE'};
     letter-spacing: 0.2px;
   }
 `;
