@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { taskCategories } from '../../tasks';
 import { ThemeContext } from '../../context/ThemeContext';
-import { darkCategoryThemes, themes } from '../../themes';
+import { darkCategoryThemes } from '../../themes';
 import {
   CardsItem,
   CardsCard,
@@ -33,6 +33,8 @@ export const Card = ({ task, onBrowseClick }) => {
   return (
     <CardsItem
       draggable
+      data-task-id={task._id ?? task.id}
+      data-task-status={task.status}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >

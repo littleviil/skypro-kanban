@@ -5,15 +5,13 @@ import { TaskContext } from "../context/TaskContext";
 
 function MainPage() {
   const navigate = useNavigate();
-  const { tasks, fetchTasks, error } = useContext(TaskContext);
+  const { tasks, fetchTasks } = useContext(TaskContext);
 
   useEffect(() => {
     fetchTasks();
   }, []);
 
   const openTaskEdit = (task) => navigate(`/card/${task._id ?? task.id}`);
-
-  if (error) return <div>{error}</div>;
 
   return (
     <div className="container">

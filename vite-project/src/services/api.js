@@ -1,98 +1,65 @@
+import axios from "axios";
+
 const BASE_URL = "https://wedev-api.sky.pro/api";
+
+const api = axios.create({
+  baseURL: BASE_URL,
+});
 
 export async function fetchKanbanTasks(token) {
   if (!token) throw new Error("Нет токена. Пользователь не авторизован.");
   try {
-    const response = await fetch(`${BASE_URL}/kanban`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const { data } = await api.get("/kanban", {
+      headers: { Authorization: `Bearer ${token}` },
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data?.error || "Ошибка при загрузке задач");
-    }
-
     return data.tasks || [];
   } catch (error) {
-    console.error("Ошибка при получении задач:", error);
-    throw error;
+    const msg = error.response?.data?.error || error.message || "Ошибка при загрузке задач";
+    throw new Error(msg);
   }
 }
 
 export async function createKanbanTask(taskData, token) {
   if (!token) throw new Error("Нет токена. Пользователь не авторизован.");
-
   try {
-    const response = await fetch(`${BASE_URL}/kanban`, {
-      method: "POST",
+    const { data } = await api.post("/kanban", JSON.stringify(taskData), {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "",
       },
-      body: JSON.stringify(taskData),
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data?.error || "Ошибка при создании задачи");
-    }
-
     return data || null;
   } catch (error) {
-    console.error("Ошибка при создании задачи:", error);
-    throw error;
+    const msg = error.response?.data?.error || error.message || "Ошибка при создании задачи";
+    throw new Error(msg);
   }
 }
 
 export async function updateKanbanTask(taskId, updates, token) {
   if (!token) throw new Error("Нет токена. Пользователь не авторизован.");
-
   try {
-    const response = await fetch(`${BASE_URL}/kanban/${taskId}`, {
-      method: "PUT",
+    const { data } = await api.put(`/kanban/${taskId}`, JSON.stringify(updates), {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "",
       },
-      body: JSON.stringify(updates),
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data?.error || "Ошибка при обновлении задачи");
-    }
-
     return data || null;
   } catch (error) {
-    console.error("Ошибка при обновлении задачи:", error);
-    throw error;
+    const msg = error.response?.data?.error || error.message || "Ошибка при обновлении задачи";
+    throw new Error(msg);
   }
 }
 
 export async function deleteKanbanTask(taskId, token) {
   if (!token) throw new Error("Нет токена. Пользователь не авторизован.");
-
   try {
-    const response = await fetch(`${BASE_URL}/kanban/${taskId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    await api.delete(`/kanban/${taskId}`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data?.error || "Ошибка при удалении задачи");
-    }
-
     return true;
   } catch (error) {
-    console.error("Ошибка при удалении задачи:", error);
-    throw error;
+    const msg = error.response?.data?.error || error.message || "Ошибка при удалении задачи";
+    throw new Error(msg);
   }
 }

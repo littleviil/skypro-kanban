@@ -29,8 +29,7 @@ const NewCardPage = () => {
     setError("");
 
     try {
-      const createdTask = await addTask(formData);
-      navigate(`/card/${createdTask._id ?? createdTask.id}`);
+      await addTask(formData);
     } catch (err) {
       setError(err.message || "Ошибка создания задачи");
     }
